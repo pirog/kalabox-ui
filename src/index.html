@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Kalabox</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS files -->
+    <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="lib/vendor/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- Vendor files -->
+    <script src="lib/vendor/jquery/dist/jquery.js"></script>
+    <script src="lib/vendor/d3/d3.js"></script>
+    <script src="lib/vendor/angular/angular.js"></script>
+    <script src="lib/vendor/angular-route/angular-route.js"></script>
+    <script src="lib/vendor/angular-bootstrap/ui-bootstrap.js"></script>
+
+    <!-- App files -->
+    <script src="modules/nodewrappers/nodewrappers.js"></script>
+    <script src="modules/dashboard/dashboard.js"></script>
+    <script src="app.js"></script>
+
+  </head>
+  <body ng-app="app">
+    <div id="main" role="main">
+      <div id="content" class="container" ng-view=""></div>
+    </div>
+  </body>
+</html>
