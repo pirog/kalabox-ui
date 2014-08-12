@@ -22,26 +22,26 @@ angular.module('kalabox.installer', [])
       title: 'Checking Prerequisites',
       detail: 'Testing Firewall',
       step_progress: 5
-    }
+    };
   })
   .controller('InstallerDownloadCtrl', function ($scope) {
     $scope.ui = {
       title: 'Downloading Files',
       detail: '',
       step_progress: 5
-    }
+    };
   })
   .controller('InstallerVBoxCtrl', function ($scope) {
     $scope.ui = {
       title: 'Installing VirtualBox',
       detail: '',
       step_progress: 5
-    }
+    };
   })
   .controller('InstallerDockerCtrl', function ($scope) {
     $scope.ui = {
       title: 'Installing Docker',
       detail: '',
       step_progress: 5
-    }
+    };
   });
