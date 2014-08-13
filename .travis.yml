@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+  - "0.11"
+before_install:
+  - npm install -g grunt-cli bower
+  - bower install
+script: grunt test
+cache:
+  directories:
+    - node_modules
+notifications:
+  slack:
+    rooms:
+      - kalamuna:dP7cYTtQ5mOBCp9cpyHHnUYN#kalabox
+  irc:
+    - "chat.freenode.net#kalabox"
+  email:
+    recipients:
+      - mike@kalamuna.com
+      - alec@kalamuna.com
+      - coder1@gmail.com
+    on_success: always
