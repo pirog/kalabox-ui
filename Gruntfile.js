@@ -24,6 +24,7 @@ module.exports = function(grunt) {
         ]
       }
     },
+
     bower: {
       install: {
         options: {
@@ -37,6 +38,12 @@ module.exports = function(grunt) {
         reporter: require('jshint-stylish')
       },
       all: ['Gruntfile.js', '<%= files.js.src %>']
+    },
+    jscs: {
+      src: '<%= files.js.src %>',
+      options: {
+        config: '.jscsrc'
+      }
     },
     less: {
       options: {
@@ -103,6 +110,6 @@ module.exports = function(grunt) {
 
   // create workflows
   grunt.registerTask('default', ['bower', 'jshint', 'less:dev', 'watch']);
-  grunt.registerTask('test', ['jshint']);
+  grunt.registerTask('test', ['jshint', 'jscs']);
   grunt.registerTask('build', ['clean', 'bower', 'jshint', 'less:dist', 'copy', 'nodewebkit']);
 };
