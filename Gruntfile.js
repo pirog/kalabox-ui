@@ -95,7 +95,8 @@ module.exports = function(grunt) {
   grunt.initConfig(config);
 
   // load local tasks
-  grunt.loadTasks('tasks');
+  // Comment this out until we actually have local tasks
+  // grunt.loadTasks('tasks');
 
   // loads all grunt-* tasks based on package.json definitions
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
