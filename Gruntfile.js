@@ -96,5 +96,6 @@ module.exports = function(grunt) {
 
   // create workflows
   grunt.registerTask('default', ['bower', 'jshint', 'less:dev', 'watch']);
+  grunt.registerTask('test', ['jshint']);
   grunt.registerTask('build', ['clean', 'bower', 'jshint', 'less:dist', 'copy', 'nodewebkit']);
 };
