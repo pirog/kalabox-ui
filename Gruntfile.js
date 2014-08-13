@@ -24,6 +24,60 @@ module.exports = function(grunt) {
         ]
       }
     },
+    compress: {
+      win: {
+        options: {
+          archive: 'built/kalabox-win-dev.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/Kalabox/win/',
+            src: ['**'],
+            dest: 'Kalabox/'
+          }
+        ]
+      },
+      osx: {
+        options: {
+          archive: 'built/kalabox-osx-dev.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/Kalabox/osx/',
+            src: ['**'],
+            dest: 'Kalabox/'
+          }
+        ]
+      },
+      linux32: {
+        options: {
+          archive: 'built/kalabox-linux32-dev.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/Kalabox/linux32/',
+            src: ['**'],
+            dest: 'Kalabox/'
+          }
+        ]
+      },
+      linux64: {
+        options: {
+          archive: 'built/kalabox-linux64-dev.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/Kalabox/linux64/',
+            src: ['**'],
+            dest: 'Kalabox/'
+          }
+        ]
+      }
+    },
     bower: {
       install: {
         options: {
@@ -37,6 +91,12 @@ module.exports = function(grunt) {
         reporter: require('jshint-stylish')
       },
       all: ['Gruntfile.js', '<%= files.js.src %>']
+    },
+    jscs: {
+      src: ['Gruntfile.js', '<%= files.js.src %>'],
+      options: {
+        config: '.jscsrc'
+      }
     },
     less: {
       options: {
@@ -78,13 +138,13 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      workspaces: ['dist', 'generated', 'src/downloads']
+      workspaces: ['built', 'dist', 'generated', 'src/downloads']
     },
     nodewebkit: {
       options: {
         // Versions listed here: http://dl.node-webkit.org/
         version: 'v0.10.1',
-        platforms: ['win','osx', 'linux32', 'linux64'],
+        platforms: ['win', 'osx', 'linux32', 'linux64'],
         buildDir: 'dist'
       },
       src: ['generated/**/**']
@@ -95,13 +155,36 @@ module.exports = function(grunt) {
   grunt.initConfig(config);
 
   // load local tasks
-  grunt.loadTasks('tasks');
+  // Comment this out until we actually have local tasks
+  // grunt.loadTasks('tasks');
 
   // loads all grunt-* tasks based on package.json definitions
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   // create workflows
-  grunt.registerTask('default', ['bower', 'jshint', 'less:dev', 'watch']);
-  grunt.registerTask('test', ['jshint']);
-  grunt.registerTask('build', ['clean', 'bower', 'jshint', 'less:dist', 'copy', 'nodewebkit']);
+  grunt.registerTask('default', [
+    'bower',
+    'jshint',
+    'less:dev',
+    'watch'
+  ]);
+
+  grunt.registerTask('test', [
+    'jshint',
+    'jscs'
+  ]);
+
+  grunt.registerTask('build', [
+    'clean',
+    'bower',
+    'jshint',
+    'jscs',
+    'less:dist',
+    'copy',
+    'nodewebkit',
+    'compress:win',
+    'compress:osx',
+    'compress:linux32',
+    'compress:linux64'
+  ]);
 };
