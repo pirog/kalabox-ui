@@ -40,7 +40,7 @@ module.exports = function(grunt) {
       all: ['Gruntfile.js', '<%= files.js.src %>']
     },
     jscs: {
-      src: '<%= files.js.src %>',
+      src: ['Gruntfile.js', '<%= files.js.src %>'],
       options: {
         config: '.jscsrc'
       }
@@ -91,7 +91,7 @@ module.exports = function(grunt) {
       options: {
         // Versions listed here: http://dl.node-webkit.org/
         version: 'v0.10.1',
-        platforms: ['win','osx', 'linux32', 'linux64'],
+        platforms: ['win', 'osx', 'linux32', 'linux64'],
         buildDir: 'dist'
       },
       src: ['generated/**/**']
@@ -109,7 +109,24 @@ module.exports = function(grunt) {
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   // create workflows
-  grunt.registerTask('default', ['bower', 'jshint', 'less:dev', 'watch']);
-  grunt.registerTask('test', ['jshint', 'jscs']);
-  grunt.registerTask('build', ['clean', 'bower', 'jshint', 'less:dist', 'copy', 'nodewebkit']);
+  grunt.registerTask('default', [
+    'bower',
+    'jshint',
+    'less:dev',
+    'watch'
+  ]);
+
+  grunt.registerTask('test', [
+    'jshint',
+    'jscs'
+  ]);
+
+  grunt.registerTask('build', [
+    'clean',
+    'bower',
+    'jshint',
+    'less:dist',
+    'copy',
+    'nodewebkit'
+  ]);
 };
