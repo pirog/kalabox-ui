@@ -23,6 +23,9 @@ module.exports = function(grunt) {
     },
     bower: {
       install: {
+        options: {
+          targetDir: './src/lib/vendor'
+        }
       }
     },
     jshint: {
