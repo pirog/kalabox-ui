@@ -1,3 +1,5 @@
+'use strict';
+
 angular.
   module('kalabox.nodewrappers', [])
   .factory('fs', [function() {

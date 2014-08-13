@@ -1,5 +1,8 @@
+'use strict';
+
 module.exports = function(grunt) {
-  var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
+  // commenting this out for now until used
+  //var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
   var config = {
     pkg: grunt.file.readJSON('package.json'),
     files: {
@@ -26,6 +29,10 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
+      options: {
+        jshintrc: '.jshintrc',
+        reporter: require('jshint-stylish')
+      },
       all: ['Gruntfile.js', '<%= files.js.src %>']
     },
     less: {
@@ -92,5 +99,6 @@ module.exports = function(grunt) {
 
   // create workflows
   grunt.registerTask('default', ['bower', 'jshint', 'less:dev', 'watch']);
+  grunt.registerTask('test', ['jshint']);
   grunt.registerTask('build', ['clean', 'bower', 'jshint', 'less:dist', 'copy', 'nodewebkit']);
 };
