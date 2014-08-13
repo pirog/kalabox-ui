@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('kalabox.installer', [])
   .config(function ($routeProvider) {
     $routeProvider.when('/installer', {
@@ -21,27 +23,27 @@ angular.module('kalabox.installer', [])
     $scope.ui = {
       title: 'Checking Prerequisites',
       detail: 'Testing Firewall',
-      step_progress: 5
+      stepProgress: 5
     };
   })
   .controller('InstallerDownloadCtrl', function ($scope) {
     $scope.ui = {
       title: 'Downloading Files',
       detail: '',
-      step_progress: 5
+      stepProgress: 5
     };
   })
   .controller('InstallerVBoxCtrl', function ($scope) {
     $scope.ui = {
       title: 'Installing VirtualBox',
       detail: '',
-      step_progress: 5
+      stepProgress: 5
     };
   })
   .controller('InstallerDockerCtrl', function ($scope) {
     $scope.ui = {
       title: 'Installing Docker',
       detail: '',
-      step_progress: 5
+      stepProgress: 5
     };
   });

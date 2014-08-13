@@ -1,5 +1,8 @@
+'use strict';
+
 module.exports = function(grunt) {
-  var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
+  // commenting this out for now until used
+  //var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
   var config = {
     pkg: grunt.file.readJSON('package.json'),
     files: {

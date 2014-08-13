@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('kalabox.dashboard', [])
   .config(function ($routeProvider) {
     $routeProvider.when('/dashboard', {
