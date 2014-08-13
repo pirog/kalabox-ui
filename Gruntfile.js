@@ -24,7 +24,60 @@ module.exports = function(grunt) {
         ]
       }
     },
-
+    compress: {
+      win: {
+        options: {
+          archive: 'built/kalabox-win-dev.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/Kalabox/win/',
+            src: ['**'],
+            dest: 'Kalabox/'
+          }
+        ]
+      },
+      osx: {
+        options: {
+          archive: 'built/kalabox-osx-dev.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/Kalabox/osx/',
+            src: ['**'],
+            dest: 'Kalabox/'
+          }
+        ]
+      },
+      linux32: {
+        options: {
+          archive: 'built/kalabox-linux32-dev.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/Kalabox/linux32/',
+            src: ['**'],
+            dest: 'Kalabox/'
+          }
+        ]
+      },
+      linux64: {
+        options: {
+          archive: 'built/kalabox-linux64-dev.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/Kalabox/linux64/',
+            src: ['**'],
+            dest: 'Kalabox/'
+          }
+        ]
+      }
+    },
     bower: {
       install: {
         options: {
@@ -85,7 +138,7 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      workspaces: ['dist', 'generated', 'src/downloads']
+      workspaces: ['built', 'dist', 'generated', 'src/downloads']
     },
     nodewebkit: {
       options: {
@@ -125,8 +178,13 @@ module.exports = function(grunt) {
     'clean',
     'bower',
     'jshint',
+    'jscs',
     'less:dist',
     'copy',
-    'nodewebkit'
+    'nodewebkit',
+    'compress:win',
+    'compress:osx',
+    'compress:linux32',
+    'compress:linux64'
   ]);
 };
