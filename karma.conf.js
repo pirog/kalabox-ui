@@ -50,8 +50,22 @@ module.exports = function(config) {
       'karma-phantomjs-launcher',
       'karma-jasmine',
       'karma-chrome-launcher',
+      'karma-coverage'
     ],
 
+
+    // Preprocess tools
+    preprocessors: {
+      'src/modules/**/*.js': 'coverage'
+    },
+
+
+    reporters: ['coverage'],
+
+    coverageReporter: {
+      type : 'html',
+      dir : 'coverage/'
+    },
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
     singleRun: false,
@@ -68,5 +82,6 @@ module.exports = function(config) {
     // },
     // URL root prevent conflicts with the site root
     // urlRoot: '_karma_'
+
   });
 };

@@ -9,3 +9,4 @@ generated
 node_modules
 vendor
 style.css
+coverage
