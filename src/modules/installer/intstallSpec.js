@@ -2,10 +2,10 @@
 
 'use strict';
 
-describe('Controller: MainCtrl', function () {
+describe('Controller: InstallerCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('kalabox.installer'));
+  beforeEach(module('app','templates'));
 
   var InstallerCtrl,
     scope;

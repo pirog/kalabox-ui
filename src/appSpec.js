@@ -15,7 +15,7 @@ describe('Kalabox Angular app', function () {
   });
 
   beforeEach(function() {
-    module('app');
+    module('app', 'templates');
     tester = ngMidwayTester('app');
   });
   it('redirects paths to "/installer"', function (done) {
