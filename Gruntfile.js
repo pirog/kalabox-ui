@@ -92,6 +92,27 @@ module.exports = function(grunt) {
         config: '.jscsrc'
       }
     },
+    protractor: {
+      e2e: {
+        options: {
+          configFile: './test/protractor.conf.js',
+        }
+      }
+    },
+    /**
+     * Simple server for testing and dev.
+     */
+    connect: {
+      options: {
+        base: './src'
+      },
+      serve: {},
+      keepAlive: {
+        options: {
+          keepalive: true,
+        }
+      }
+    },
     less: {
       options: {
         paths: ['src/css'],
@@ -208,6 +229,11 @@ module.exports = function(grunt) {
     'compress:osx',
     'compress:linux32',
     'compress:linux64'
+  ]);
+
+  grunt.registerTask('e2e', [
+    'connect:serve',
+    'protractor:e2e'
   ]);
 
 };
