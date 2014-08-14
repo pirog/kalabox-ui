@@ -61,6 +61,7 @@ module.exports = function(config) {
       'src/modules/**/*.html': 'ng-html2js'
     },
 
+    reporters: ['progress', 'coverage'],
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
