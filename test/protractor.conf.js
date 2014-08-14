@@ -5,5 +5,5 @@ exports.config = {
   ],
   baseUrl: 'http://localhost:8000',
   chromeDriver:
-    '../node_modules/grunt-protractor-runner/node_modules/protractor/selenium/chromedriver'
+    '../node_modules/protractor/selenium/chromedriver'
 };
