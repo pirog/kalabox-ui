@@ -1,5 +1,5 @@
 'use strict';
-
+var fs = require('fs');
 module.exports = function(grunt) {
   // commenting this out for now until used
   //var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
@@ -148,6 +148,22 @@ module.exports = function(grunt) {
         buildDir: 'dist'
       },
       src: ['generated/**/**']
+    },
+    /**
+     * Karma unit test runner.
+     */
+    karma: {
+      options: {
+        configFile: './karma.conf.js'
+      },
+      // Required by grunt, can override later.
+      unit: {},
+      ci: {
+        options: {
+          singleRun: true,
+          browsers: ['PhantomJS']
+        }
+      }
     }
   };
 
@@ -155,8 +171,8 @@ module.exports = function(grunt) {
   grunt.initConfig(config);
 
   // load local tasks
-  // Comment this out until we actually have local tasks
-  // grunt.loadTasks('tasks');
+  if (fs.exists('tasks.js')) { grunt.loadTasks('tasks'); }
+
 
   // loads all grunt-* tasks based on package.json definitions
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
@@ -165,13 +181,17 @@ module.exports = function(grunt) {
   grunt.registerTask('default', [
     'bower',
     'jshint',
+    'karma:unit',
     'less:dev',
     'watch'
   ]);
 
   grunt.registerTask('test', [
+    'bower',
     'jshint',
-    'jscs'
+    'jscs',
+    'jscs',
+    'karma:ci'
   ]);
 
   grunt.registerTask('build', [
