@@ -5,7 +5,7 @@
 describe('Controller: InstallerCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('app','templates'));
+  beforeEach(module('app', 'templates'));
 
   var InstallerCtrl,
     scope;
