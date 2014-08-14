@@ -1,4 +1,4 @@
-# Kalabox Seed
+# Kalabox 2
 ===============
 
 ## AngularJS modules
