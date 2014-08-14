@@ -12,6 +12,10 @@
     "position": "center",
     "resizeable": "false"
   },
+  "scripts": {
+    "install": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update",
+    "test": "grunt test"
+  },
   "dependencies": {
     "lodash": "~2.4.1"
   },
@@ -21,13 +25,16 @@
     "grunt-bower-task": "~0.4.0",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-compress": "^0.10.0",
+    "grunt-contrib-connect": "^0.8.0",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-less": "~0.11.4",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-jscs": "^0.6.2",
     "grunt-node-webkit-builder": "~0.2.1",
+    "grunt-protractor-runner": "^1.1.0",
     "jshint-stylish": "^0.4.0",
-    "matchdep": "~0.3.0"
+    "matchdep": "~0.3.0",
+    "protractor": "^1.0.0"
   }
 }
