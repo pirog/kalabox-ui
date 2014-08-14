@@ -1,8 +1,9 @@
 'use strict';
-var fs = require('fs');
+
 module.exports = function(grunt) {
   // commenting this out for now until used
   //var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
+
   var config = {
     pkg: grunt.file.readJSON('package.json'),
     files: {
@@ -76,13 +77,6 @@ module.exports = function(grunt) {
             dest: 'Kalabox/'
           }
         ]
-      }
-    },
-    bower: {
-      install: {
-        options: {
-          targetDir: './src/lib/vendor'
-        }
       }
     },
     jshint: {
@@ -164,21 +158,30 @@ module.exports = function(grunt) {
           browsers: ['PhantomJS']
         }
       }
-    }
+    },
+    bowerInstall: {
+      ci: {
+        options: {
+          interacitve: false
+        }
+      }
+    },
   };
 
   // initialize task config
   grunt.initConfig(config);
 
   // load local tasks
-  if (fs.exists('tasks.js')) { grunt.loadTasks('tasks'); }
+  if (grunt.file.exists('./tasks')) {
+    grunt.loadTasks('./tasks');
+  }
 
   // loads all grunt-* tasks based on package.json definitions
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   // create workflows
   grunt.registerTask('default', [
-    'bower',
+    'bowerInstall',
     'jshint',
     'karma:unit',
     'less:dev',
@@ -186,6 +189,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('test', [
+    'bowerInstall',
     'jshint',
     'jscs',
     'karma:ci'
@@ -196,6 +200,7 @@ module.exports = function(grunt) {
     'bower',
     'jshint',
     'jscs',
+    'karma:unit',
     'less:dist',
     'copy',
     'nodewebkit',

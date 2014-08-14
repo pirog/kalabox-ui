@@ -22,7 +22,7 @@ module.exports = function(config) {
       './src/lib/vendor/angular-mocks/angular-mocks.js',
       './src/lib/vendor/ngMidwayTester/src/ngMidwayTester.js',
       './src/app*.js',
-      './src/modules/**/*.js',
+      './src/modules/**/*.{js,html}',
     ],
 
     // list of files / patterns to exclude
@@ -50,8 +50,23 @@ module.exports = function(config) {
       'karma-phantomjs-launcher',
       'karma-jasmine',
       'karma-chrome-launcher',
+      'karma-coverage',
+      'karma-ng-html2js-preprocessor'
     ],
 
+
+    // Preprocess tools
+    preprocessors: {
+      'src/modules/**/*.js': 'coverage',
+      'src/modules/**/*.html': 'ng-html2js'
+    },
+
+    reporters: ['coverage'],
+
+    coverageReporter: {
+      type : 'html',
+      dir : 'coverage/'
+    },
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
     singleRun: false,
@@ -68,5 +83,19 @@ module.exports = function(config) {
     // },
     // URL root prevent conflicts with the site root
     // urlRoot: '_karma_'
+
+
+
+    ngHtml2JsPreprocessor: {
+      // strip this from the file path
+      stripPrefix: 'src',
+      // prepend this to the
+      // prependPrefix: 'served/',
+
+
+      // setting this option will create only a single module that contains templates
+      // from all the files, so you can load them all with module('foo')
+      moduleName: 'templates'
+    }
   });
 };
