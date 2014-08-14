@@ -171,10 +171,7 @@ module.exports = function(grunt) {
   grunt.initConfig(config);
 
   // load local tasks
-  if(fs.exists('tasks.js')) { grunt.loadTasks('tasks'); }
-
-
-
+  if (fs.exists('tasks.js')) { grunt.loadTasks('tasks'); }
 
   // loads all grunt-* tasks based on package.json definitions
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
@@ -191,7 +188,7 @@ module.exports = function(grunt) {
   grunt.registerTask('test', [
     'jshint',
     'jscs',
-    'karma:unit'
+    'karma:ci'
   ]);
 
   grunt.registerTask('build', [
