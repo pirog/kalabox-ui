@@ -24,6 +24,7 @@ module.exports = function(grunt) {
         ]
       }
     },
+
     bower: {
       install: {
         options: {
@@ -37,6 +38,12 @@ module.exports = function(grunt) {
         reporter: require('jshint-stylish')
       },
       all: ['Gruntfile.js', '<%= files.js.src %>']
+    },
+    jscs: {
+      src: ['Gruntfile.js', '<%= files.js.src %>'],
+      options: {
+        config: '.jscsrc'
+      }
     },
     less: {
       options: {
@@ -84,7 +91,7 @@ module.exports = function(grunt) {
       options: {
         // Versions listed here: http://dl.node-webkit.org/
         version: 'v0.10.1',
-        platforms: ['win','osx', 'linux32', 'linux64'],
+        platforms: ['win', 'osx', 'linux32', 'linux64'],
         buildDir: 'dist'
       },
       src: ['generated/**/**']
@@ -95,13 +102,31 @@ module.exports = function(grunt) {
   grunt.initConfig(config);
 
   // load local tasks
-  grunt.loadTasks('tasks');
+  // Comment this out until we actually have local tasks
+  // grunt.loadTasks('tasks');
 
   // loads all grunt-* tasks based on package.json definitions
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
   // create workflows
-  grunt.registerTask('default', ['bower', 'jshint', 'less:dev', 'watch']);
-  grunt.registerTask('test', ['jshint']);
-  grunt.registerTask('build', ['clean', 'bower', 'jshint', 'less:dist', 'copy', 'nodewebkit']);
+  grunt.registerTask('default', [
+    'bower',
+    'jshint',
+    'less:dev',
+    'watch'
+  ]);
+
+  grunt.registerTask('test', [
+    'jshint',
+    'jscs'
+  ]);
+
+  grunt.registerTask('build', [
+    'clean',
+    'bower',
+    'jshint',
+    'less:dist',
+    'copy',
+    'nodewebkit'
+  ]);
 };
