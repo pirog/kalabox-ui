@@ -61,12 +61,8 @@ module.exports = function(config) {
       'src/modules/**/*.html': 'ng-html2js'
     },
 
-    reporters: ['coverage'],
+    reporters: ['progress', 'coverage'],
 
-    coverageReporter: {
-      type : 'html',
-      dir : 'coverage/'
-    },
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
     singleRun: false,
