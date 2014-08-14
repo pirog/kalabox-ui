@@ -1,22 +1,56 @@
 language: node_js
 node_js:
-  - "0.11"
+- '0.11'
+before_install:
+- cp travis-ci.sh $HOME/
+- chmod +x $HOME/travis-ci.sh
 before_script:
-  - npm install -g grunt-cli bower
-  - bower install
-script: grunt test
+- $HOME/travis-ci.sh before-script
+script:
+- $HOME/travis-ci.sh script
+after_script:
+- $HOME/travis-ci.sh after-script
+after_success:
+- $HOME/travis-ci.sh after-success
+before_deploy:
+- $HOME/travis-ci.sh before-deploy
+- cd built
+deploy:
+  - provider: releases
+    api_key:
+      secure: ej3cDUpdrxLbG5gAyOVbVCBGS8c0gPLp46XaU6/iS+aQuNHseyTLUM8Ttd4n3dFeFHmsIXcP+jCVXRlsJwUa+SDGepCmvMtaHzWjfex/GImRz706sj+s1hggs05wvmZjWurwngWk5GhBBdsgJRg8+kfuZ4iOKM3UFSnCfodURbw=
+    file:
+    - 'kalabox-win-$TRAVIS_TAG.zip'
+    - 'kalabox-osx-$TRAVIS_TAG.zip'
+    - 'kalabox-linux32-$TRAVIS_TAG.zip'
+    - 'kalabox-linux64-$TRAVIS_TAG.zip'
+    skip_cleanup: true
+    on:
+      repo: kalabox/kalabox
+      all_branches: true
+      tags: true
+  - provider: cloudfiles
+    username: kalamuna
+    api_key:
+      secure: F0zPNBS1Zf77z2eAuWYwtCKSkqS1/Ml0aewHTeqzt4ZpoSf/KdAaZd8Ot+gUaoOGoNhvhKZbhv5BUdaZZB/H88hRH0Cyp50n9Y1uuCe7bdQyHzQ8xZ7rkq2p1q0SMhSXX1LUJfUGhgLzc6RN2sKHiTxrmn7AaIGx+1nRkKP+J0g=
+    region: ord
+    container: kb2
+    skip_cleanup: true
+    on:
+      repo: kalabox/kalabox
+      branch: master
 cache:
   directories:
-    - node_modules
+  - node_modules
 notifications:
   slack:
     rooms:
-      - kalamuna:dP7cYTtQ5mOBCp9cpyHHnUYN#kalabox
+    - kalamuna:dP7cYTtQ5mOBCp9cpyHHnUYN#kalabox
   irc:
-    - "chat.freenode.net#kalabox"
+  - chat.freenode.net#kalabox
   email:
     recipients:
-      - mike@kalamuna.com
-      - alec@kalamuna.com
-      - coder1@gmail.com
+    - mike@kalamuna.com
+    - alec@kalamuna.com
+    - coder1@gmail.com
     on_success: always
