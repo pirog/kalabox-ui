@@ -197,6 +197,7 @@ module.exports = function(grunt) {
     'bower',
     'jshint',
     'jscs',
+    'karma:unit',
     'less:dist',
     'copy',
     'nodewebkit',
