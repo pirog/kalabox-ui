@@ -21,6 +21,7 @@ describe('Kalabox Angular app', function () {
   it('redirects paths to "/installer"', function (done) {
     tester.visit('/', function() {
       expect(tester.path()).to.equal('/installer');
+      done();
     });
   });
 });

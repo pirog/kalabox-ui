@@ -180,13 +180,18 @@ module.exports = function(grunt) {
         }
       }
     },
-    bowerInstall: {
+    /**
+     * Basic bower task that uses
+     * Bower's API's directly.
+     */
+    'bower-install-simple' : {
+      install: {},
       ci: {
         options: {
-          interacitve: false
+          insteractive: false
         }
       }
-    },
+    }
   };
 
   // initialize task config
@@ -202,7 +207,7 @@ module.exports = function(grunt) {
 
   // create workflows
   grunt.registerTask('default', [
-    'bowerInstall',
+    'bower-install-simple:install',
     'jshint',
     'karma:ci',
     'less:dev',
@@ -210,15 +215,15 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('test', [
-    'bowerInstall',
     'jshint',
     'jscs',
+    'bower-install-simple:ci',
     'karma:ci'
   ]);
 
   grunt.registerTask('build', [
     'clean',
-    'bowerInstall',
+    'bower-install-simple:install',
     'jshint',
     'jscs',
     'karma:ci',
