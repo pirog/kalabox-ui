@@ -204,7 +204,7 @@ module.exports = function(grunt) {
   grunt.registerTask('default', [
     'bowerInstall',
     'jshint',
-    'karma:unit',
+    'karma:ci',
     'less:dev',
     'watch'
   ]);
@@ -218,10 +218,10 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'clean',
-    'bower',
+    'bowerInstall',
     'jshint',
     'jscs',
-    'karma:unit',
+    'karma:ci',
     'less:dist',
     'copy',
     'nodewebkit',
