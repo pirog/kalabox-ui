@@ -16,30 +16,29 @@ before_deploy:
 - $HOME/travis-ci.sh before-deploy
 - cd built
 deploy:
-  matrix:
-  - provider: releases
-    api_key:
-      secure: PHYaRPogtbjY8y5eoEJLPZzrEuGZ4yDsVlrF0jhiZmWpTdxWIEJOZf0peixvNGE9erBzNfQAn0Ubh2JZXB6lYKaDVua7XsPFfEOJPrlY+f14o6m5kC9O7yRlPY6ezEZbZjCGq86A0/l6uaHLScyCCvodeSZReDP+7xJXQHuEkJw=
-    file:
-    - kalabox-win-$TRAVIS_TAG.zip
-    - kalabox-osx-$TRAVIS_TAG.zip
-    - kalabox-linux32-$TRAVIS_TAG.zip
-    - kalabox-linux64-$TRAVIS_TAG.zip
-    skip_cleanup: true
-    on:
-      repo: kalabox/kalabox
-      all_branches: true
-      tags: true
-  - provider: cloudfiles
-    username: kalamuna
-    api_key:
-      secure: kZ1n6iNPWbs9ENeH4bJoEwKoJ0jn/V1tY+BwNXMeVsf86theVeePZTqRKaAz76IpHVRwZnFVPbzjzdYKEm8Qnz45rUnfwyBDsn+/RC/76i09AnZ/oeX+21h9IoabA5N7cMg4Gu10eFmjQDvJKm8z1v+jZB6A1tP1sXyi+Q2xazQ=
-    region: ord
-    container: kb2
-    skip_cleanup: true
-    on:
-      repo: kalabox/kalabox
-      branch: master
+- provider: releases
+  api_key:
+    secure: PHYaRPogtbjY8y5eoEJLPZzrEuGZ4yDsVlrF0jhiZmWpTdxWIEJOZf0peixvNGE9erBzNfQAn0Ubh2JZXB6lYKaDVua7XsPFfEOJPrlY+f14o6m5kC9O7yRlPY6ezEZbZjCGq86A0/l6uaHLScyCCvodeSZReDP+7xJXQHuEkJw=
+  file:
+  - kalabox-win-$TRAVIS_TAG.zip
+  - kalabox-osx-$TRAVIS_TAG.zip
+  - kalabox-linux32-$TRAVIS_TAG.zip
+  - kalabox-linux64-$TRAVIS_TAG.zip
+  skip_cleanup: true
+  on:
+    repo: kalabox/kalabox
+    all_branches: true
+    tags: true
+- provider: cloudfiles
+  username: kalamuna
+  api_key:
+    secure: kZ1n6iNPWbs9ENeH4bJoEwKoJ0jn/V1tY+BwNXMeVsf86theVeePZTqRKaAz76IpHVRwZnFVPbzjzdYKEm8Qnz45rUnfwyBDsn+/RC/76i09AnZ/oeX+21h9IoabA5N7cMg4Gu10eFmjQDvJKm8z1v+jZB6A1tP1sXyi+Q2xazQ=
+  region: ord
+  container: kb2
+  skip_cleanup: true
+  on:
+    repo: kalabox/kalabox
+    branch: master
 cache:
   directories:
   - node_modules
