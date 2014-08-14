@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "compression": "~1.0.9",
-    "grunt": "~0.4.5",
+    "grunt": "^0.4.5",
     "grunt-bower-task": "~0.4.0",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-compress": "^0.10.0",
@@ -26,8 +26,13 @@
     "grunt-contrib-less": "~0.11.4",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-jscs": "^0.6.2",
+    "grunt-karma": "^0.8.3",
     "grunt-node-webkit-builder": "~0.2.1",
     "jshint-stylish": "^0.4.0",
-    "matchdep": "~0.3.0"
+    "karma": "^0.12.21",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "matchdep": "~0.3.0",
   }
 }
