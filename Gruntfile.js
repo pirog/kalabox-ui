@@ -41,7 +41,8 @@ module.exports = function(grunt) {
       },
       osx: {
         options: {
-          archive: 'built/kalabox-osx-dev.zip'
+          archive: 'built/kalabox-osx-dev.tar.gz',
+          mode: 'tgz'
         },
         files: [
           {
@@ -54,7 +55,8 @@ module.exports = function(grunt) {
       },
       linux32: {
         options: {
-          archive: 'built/kalabox-linux32-dev.zip'
+          archive: 'built/kalabox-linux32-dev.tar.gz',
+          mode: 'tgz'
         },
         files: [
           {
@@ -67,7 +69,8 @@ module.exports = function(grunt) {
       },
       linux64: {
         options: {
-          archive: 'built/kalabox-linux64-dev.zip'
+          archive: 'built/kalabox-linux64-dev.tar.gz',
+          mode: 'tgz'
         },
         files: [
           {
