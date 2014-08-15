@@ -21,9 +21,9 @@ deploy:
     secure: PHYaRPogtbjY8y5eoEJLPZzrEuGZ4yDsVlrF0jhiZmWpTdxWIEJOZf0peixvNGE9erBzNfQAn0Ubh2JZXB6lYKaDVua7XsPFfEOJPrlY+f14o6m5kC9O7yRlPY6ezEZbZjCGq86A0/l6uaHLScyCCvodeSZReDP+7xJXQHuEkJw=
   file:
   - kalabox-win-$TRAVIS_TAG.zip
-  - kalabox-osx-$TRAVIS_TAG.zip
-  - kalabox-linux32-$TRAVIS_TAG.zip
-  - kalabox-linux64-$TRAVIS_TAG.zip
+  - kalabox-osx-$TRAVIS_TAG.tar.gz
+  - kalabox-linux32-$TRAVIS_TAG.tar.gz
+  - kalabox-linux64-$TRAVIS_TAG.tar.gz
   skip_cleanup: true
   on:
     repo: kalabox/kalabox
