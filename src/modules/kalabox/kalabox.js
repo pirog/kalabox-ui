@@ -11,4 +11,5 @@ angular.module('kalabox', [
   $routeProvider.otherwise({
     redirectTo: '/installer'
   });
-});
+})
+.value('version', '2.0');
