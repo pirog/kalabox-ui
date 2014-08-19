@@ -98,7 +98,7 @@ module.exports = function(grunt) {
     protractor: {
       e2e: {
         options: {
-          configFile: './test/protractor.conf.js',
+          configFile: 'test/protractor.conf.js'
         }
       }
     },
@@ -107,12 +107,12 @@ module.exports = function(grunt) {
      */
     connect: {
       options: {
-        base: './src'
+        base: 'src'
       },
       serve: {},
       keepAlive: {
         options: {
-          keepalive: true,
+          keepalive: true
         }
       }
     },
@@ -172,7 +172,7 @@ module.exports = function(grunt) {
      */
     karma: {
       options: {
-        configFile: './karma.conf.js'
+        configFile: 'test/karma.conf.js'
       },
       // Required by grunt, can override later.
       unit: {},
@@ -201,8 +201,8 @@ module.exports = function(grunt) {
   grunt.initConfig(config);
 
   // load local tasks
-  if (grunt.file.exists('./tasks')) {
-    grunt.loadTasks('./tasks');
+  if (grunt.file.exists('tasks')) {
+    grunt.loadTasks('tasks');
   }
 
   // loads all grunt-* tasks based on package.json definitions
