@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app', [
+angular.module('kalabox', [
   'ngRoute',
   'kalabox.nodewrappers',
   'kalabox.dashboard',
