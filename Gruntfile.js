@@ -25,6 +25,9 @@ module.exports = function(grunt) {
         ]
       }
     },
+    bump: {
+      files: ['package.json', 'bower.json', 'npm-shrinkwrap.json']
+    },
     compress: {
       win: {
         options: {
