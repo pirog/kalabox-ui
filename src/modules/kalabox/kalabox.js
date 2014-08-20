@@ -2,14 +2,17 @@
 
 angular.module('kalabox', [
   'ngRoute',
-  'kalabox.nodewrappers',
+  'kalabox.boot2docker',
   'kalabox.dashboard',
+  'kalabox.initialize',
   'kalabox.installer',
+  'kalabox.nodewrappers',
+  'kalabox.virtualbox',
   'ui.bootstrap'
 ])
 .config(function ($routeProvider) {
   $routeProvider.otherwise({
-    redirectTo: '/installer'
+    redirectTo: '/initialize'
   });
 })
 .value('version', '2.0');
