@@ -14,20 +14,19 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      './src/lib/vendor/jquery/dist/jquery.js',
-      './src/lib/vendor/d3/d3.js',
-      './src/lib/vendor/angular/angular.js',
-      './src/lib/vendor/angular-route/angular-route.js',
-      './src/lib/vendor/angular-bootstrap/ui-bootstrap.js',
-      './src/lib/vendor/angular-mocks/angular-mocks.js',
-      './src/lib/vendor/ngMidwayTester/src/ngMidwayTester.js',
-      './src/app*.js',
-      './src/modules/**/*.{js,html}',
+      '../src/lib/vendor/jquery/dist/jquery.js',
+      '../src/lib/vendor/d3/d3.js',
+      '../src/lib/vendor/angular/angular.js',
+      '../src/lib/vendor/angular-route/angular-route.js',
+      '../src/lib/vendor/angular-bootstrap/ui-bootstrap.js',
+      '../src/lib/vendor/angular-mocks/angular-mocks.js',
+      '../src/lib/vendor/ngMidwayTester/src/ngMidwayTester.js',
+      '../src/modules/**/*.{js,html}',
     ],
 
     // list of files / patterns to exclude
     exclude: [
-      './src/modules/**/e2e/**/*.js'
+      '../src/modules/**/e2e/**/*.js'
     ],
 
     // web server port
@@ -57,8 +56,8 @@ module.exports = function(config) {
 
     // Preprocess tools
     preprocessors: {
-      'src/modules/**/*.js': 'coverage',
-      'src/modules/**/*.html': 'ng-html2js'
+      '../src/modules/**/*.js': 'coverage',
+      '../src/modules/**/*.html': 'ng-html2js'
     },
 
     reporters: ['progress', 'coverage'],

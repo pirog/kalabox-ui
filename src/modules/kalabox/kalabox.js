@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app', [
+angular.module('kalabox', [
   'ngRoute',
   'kalabox.nodewrappers',
   'kalabox.dashboard',
@@ -11,4 +11,5 @@ angular.module('app', [
   $routeProvider.otherwise({
     redirectTo: '/installer'
   });
-});
+})
+.value('version', '2.0');
