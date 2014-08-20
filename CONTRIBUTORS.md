@@ -1,4 +1,6 @@
-Kalabox would like to thank the following people/organizations for their generous contributions:
+```
+Kalabox would like to thank the following people/organizations for their generous 
+contributions:
 
 Pantheon Systems, Inc.
 
@@ -98,3 +100,4 @@ Jim McGee
 Gary Caseman
 David Lanier
 Shane Yakely
+```
