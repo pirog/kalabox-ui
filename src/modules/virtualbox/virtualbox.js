@@ -20,14 +20,9 @@ angular.module('kalabox.virtualbox', [])
       return deferred.promise;
     }
 
-    var installed = function() {
-
-    };
-
     return {
       downloadPath: downloadPath,
       getVersion: getVersion,
-      installed: installed,
       version: '4.3.6'
     };
 

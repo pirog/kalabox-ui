@@ -11,76 +11,70 @@ angular.module('kalabox.initialize', [])
   ['$scope', '$location', '_', 'VirtualBox', 'Boot2Docker',
     function ($scope, $location, _, VirtualBox, Boot2Docker) {
       // Best practices is to manage our data in a scope object
-      $scope.ui = {};
+      $scope.ui = {
+        messageText: 'Testing dependencies...'
+      };
 
       // Setup the dependency array
       $scope.ui.dependencies = [
         {
           key: 'virtualbox',
           name: 'VirtualBox',
+          service: VirtualBox,
+          checked: false,
+          pass: false,
           status: '',
-          version: '',
-          pass: false
+          version: ''
         },
         {
           key: 'boot2docker',
           name: 'Boot2Docker',
+          service: Boot2Docker,
+          checked: false,
+          pass: false,
           status: '',
-          version: '',
-          pass: false
+          version: ''
         }
       ];
 
-      // reduce callback, returns false if any deps failed
-      var passFail = function(result, dependency) {
+      // reduce callback, returns true if all deps have been checked
+      var depChecked = function(result, dependency) {
+        return !(!result || !dependency.checked);
+      };
+
+      // reduce callback, returns true if all deps passed
+      var depPassed = function(result, dependency) {
         return !(!result || !dependency.pass);
       };
 
-      // Check VirtualBox
-      $scope.ui.messageText = 'Checking VirtualBox';
-      VirtualBox.getVersion()
-      .then(function(version) {
+      // map callback to test dependency
+      var depInstalled = function(dependency) {
+        dependency.service.getVersion().then(function(version) {
+          dependency.checked = true;
+          if (version !== false) {
+            dependency.pass = true;
+            dependency.status = 'OK';
+            dependency.version = version;
+          }
+          else {
+            dependency.status = 'Failed';
+            dependency.version = 'N/A';
+          }
 
-        if (version !== false) {
-          $scope.ui.messageText = 'VirtualBox OK';
-          $scope.ui.dependencies[0].pass = true;
-          $scope.ui.dependencies[0].status = 'OK';
-          $scope.ui.dependencies[0].version = version;
-        }
-        else {
-          $scope.ui.messageText = 'VirtualBox Failed';
-          $scope.ui.dependencies[0].status = 'Failed';
-          $scope.ui.dependencies[0].version = 'N/A';
-        }
-      })
-      // Check Boot2Docker
-      .then(function() {
-        $scope.ui.messageText = 'Checking Boot2Docker';
-        Boot2Docker.getVersion()
-          .then(function(version) {
-
-            if (version !== false) {
-              $scope.ui.messageText = 'Boot2Docker OK';
-              $scope.ui.dependencies[1].status = 'OK';
-              $scope.ui.dependencies[1].pass = true;
-              $scope.ui.dependencies[1].version = version;
+          // check if all deps have been checked
+          if (_.reduce($scope.ui.dependencies, depChecked, true)) {
+            // if so, redirect based on if they have all passed or not
+            if (_.reduce($scope.ui.dependencies, depPassed, true)) {
+              $location.path('/dashboard');
             }
             else {
-              $scope.ui.messageText = 'Boot2Docker Failed';
-              $scope.ui.dependencies[1].status = 'Failed';
-              $scope.ui.dependencies[1].version = 'N/A';
+              $location.path('/installer');
             }
+          }
+        });
+      };
 
-            // Set value if all dependencies passed
-            var allPassed = _.reduce($scope.ui.dependencies, passFail, true);
-            if (allPassed) {
-              $scope.ui.messageText = 'Dependencies OK';
-              //$location.path( "/dashboard" );
-            }
-            else {
-              $scope.ui.messageText = 'Dependencies Failed';
-              //$location.path( "/installer" );
-            }
-          });
-      });
+      // run the dependency install checks.
+      _.map($scope.ui.dependencies, depInstalled);
+
     }]);

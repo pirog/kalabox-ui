@@ -20,14 +20,9 @@ angular.module('kalabox.boot2docker', [])
       return deferred.promise;
     }
 
-    var installed = function() {
-
-    };
-
     return {
       downloadPath: downloadPath,
       getVersion: getVersion,
-      installed: installed,
       version: '1.1.1'
     };
 
