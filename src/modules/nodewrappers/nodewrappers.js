@@ -1,7 +1,9 @@
 'use strict';
 
-angular.
-  module('kalabox.nodewrappers', [])
+angular.module('kalabox.nodewrappers', [])
+  .factory('exec', [function() {
+    return require('child_process').exec;
+  }])
   .factory('fs', [function() {
     return require('fs');
   }])
