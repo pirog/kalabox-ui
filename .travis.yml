@@ -2,8 +2,10 @@ language: node_js
 node_js:
 - '0.11'
 before_install:
-- cp travis-ci.sh $HOME/
+- cp scripts/travis-ci.sh $HOME/
 - chmod +x $HOME/travis-ci.sh
+- cp scripts/cfindex.sh $HOME/
+- chmod +x $HOME/cfindex.sh
 before_script:
 - $HOME/travis-ci.sh before-script
 script:
