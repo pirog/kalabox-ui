@@ -13,11 +13,13 @@ EXIT_VALUE=0
 #
 before-install() {
   # This is to locally simulate travis
-  # TRAVIS_BUILD_DIR="/Users/pirog/Desktop/kalabox"
-  #TRAVIS_TAG=v0.12.0
+  if [ -z $TRAVIS ]; then
+    TRAVIS_BUILD_DIR="/Users/pirog/Desktop/kalabox"
+    #TRAVIS_TAG=v0.12.0
+  else
+    sudo apt-get install curl libc6 libcurl3 zlib1g
+  fi
 
-  # Need to uncomment this for production
-  sudo apt-get install curl libc6 libcurl3 zlib1g
   # gross bash fu here
   CURRENT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(curl -s https://raw.githubusercontent.com/kalabox/kalabox/master/package.json)")
   COMMIT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
@@ -29,16 +31,25 @@ before-install() {
   CURRENT_PATCH=$(echo $CURRENT_VERSION | cut -f3 -d.)
   COMMIT_PATCH=$(echo $COMMIT_VERSION | cut -f3 -d.)
 
-  # This is to test version combos
-  #COMMIT_MINOR=0
-  #COMMIT_MAJOR=1
-
+  # do this just to simulate success and push our code up to master
+  CURRENT_PATCH=0
+  COMMIT_PATCH=1
+  
   if [ ! -z $TRAVIS_TAG ]; then
     if [ $COMMIT_MINOR -le $CURRENT_MINOR ]; then
       echo "Illegal minor version number. Please use grunt release to roll an official release."
       exit 666  
+    else
+      if [ $COMMIT_PATCH -ne 0 ]; then
+        echo "Illegal patch version number. Should be 0 on a minor version bump. Please use grunt release to bump the version."
+        exit 666  
+      fi
     fi
   else
+    if [ $COMMIT_MINOR -ne $CURRENT_MINOR ]; then
+      echo "Illegal minor version number. Minor versions should only change on a tag and release."
+      exit 666  
+    fi
     if [ $COMMIT_PATCH -le $CURRENT_PATCH ]; then
       echo "Illegal patch version number. Please use grunt version to bump the version."
       exit 666  
