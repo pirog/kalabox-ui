@@ -63,7 +63,7 @@ before-deploy() {
 #
 # Clean up after the tests.
 #
-before-deploy() {
+after-deploy() {
   $HOME/cfindex.sh kalamuna $CF_API_KEY kb2
 }
 
