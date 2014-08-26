@@ -224,14 +224,17 @@ module.exports = function(grunt) {
     'karma:ci'
   ]);
 
-  grunt.registerTask('build', [
+  grunt.registerTask('prepare', [
     'clean',
     'bower-install-simple:install',
     'jshint',
     'jscs',
     'karma:ci',
     'less:dist',
-    'copy',
+    'copy'
+  ]);
+
+  grunt.registerTask('build', [
     'nodewebkit',
     'compress:win',
     'compress:osx',

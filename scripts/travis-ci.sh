@@ -12,7 +12,7 @@ EXIT_VALUE=0
 # Setup Drupal to run the tests.
 #
 before-script() {
-  sudo apt-get install httpie jq
+  sudo apt-get install jq
   npm install -g grunt-cli bower
   bower install
 }
@@ -38,7 +38,11 @@ after-script() {
 # Clean up after the tests.
 #
 after-success() {
+  grunt prepare
+  cd $TRAVIS_BUILD_DIR/generated
+  npm install --production --ignore-scripts
   grunt build
+  cd $TRAVIS_BUILD_DIR
 }
 
 # before-deploy
