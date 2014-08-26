@@ -8,12 +8,8 @@ AUTH='{ "auth": { "RAX-KSKEY:apiKeyCredentials": { "username": "'${1}'", "apiKey
 
 TOKENS=`echo ${AUTH} | http POST https://${ENDPOINT}/v2.0/tokens`
 
-#echo ${TOKENS}
-
 AUTHTOKEN=`echo ${TOKENS} | jq -r '.access.token.id'`
-echo ${AUTHTOKEN}
 PUBLICURL=`echo ${TOKENS} | jq -r '.access.serviceCatalog[] | select(.name == "cloudFiles").endpoints[] | select(.region == "ORD").publicURL'`
-echo ${PUBLICURL}
 
 HTML="<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
 HTML+="<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">\n"
@@ -46,6 +42,6 @@ HTML+="\t\t<div><br /><i>Generated on `date`</i></div>\n"
 HTML+="\t</body>\n"
 HTML+="</html>"
 
-http DELETE ${PUBLICURL}/${3}/index.html X-Auth-Token:${AUTHTOKEN} Content-Type:text/html
+http DELETE ${PUBLICURL}/${3}/index.html X-Auth-Token:${AUTHTOKEN}
 echo -e ${HTML} | http PUT ${PUBLICURL}/${3}/index.html X-Auth-Token:${AUTHTOKEN} Content-Type:text/html
-http POST ${PUBLICURL}/${3} X-Auth-Token:${AUTHTOKEN} X-Container-Meta-Web-Index: index.html
+http POST ${PUBLICURL}/${3} X-Auth-Token:${AUTHTOKEN} X-Container-Meta-Web-Index:index.html
