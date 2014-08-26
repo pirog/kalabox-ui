@@ -111,10 +111,10 @@ if [ ! -z $TRAVIS_TAG ]; then
   mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-$TRAVIS_TAG.tar.gz
   mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-$TRAVIS_TAG.tar.gz
 else
-  mv built/kalabox-win-dev.zip built/kalabox2-win-dev-$BUILD_VERSION.zip
-  mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-dev-$BUILD_VERSION.tar.gz
-  mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-dev-$BUILD_VERSION.tar.gz
-  mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-dev-$BUILD_VERSION.tar.gz
+  mv built/kalabox-win-dev.zip built/kalabox2-win-$BUILD_VERSION-dev.zip
+  mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-$BUILD_VERSION-dev.tar.gz
+  mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-$BUILD_VERSION-dev.tar.gz
+  mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-$BUILD_VERSION-dev.tar.gz
 fi
 }
 
