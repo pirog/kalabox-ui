@@ -12,7 +12,7 @@ EXIT_VALUE=0
 # Setup Drupal to run the tests.
 #
 before-script() {
-  apt-get install httpie jq
+  sudo apt-get install httpie jq
   npm install -g grunt-cli bower
   bower install
 }
