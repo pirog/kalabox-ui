@@ -3,6 +3,18 @@
 COMMAND=$1
 EXIT_VALUE=0
 
+CURRENT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(curl -s https://raw.githubusercontent.com/kalabox/kalabox/master/package.json)")
+COMMIT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
+
+CURRENT_MAJOR=$(echo $CURRENT_VERSION | cut -f1 -d.)
+COMMIT_MAJOR=$(echo $COMMIT_VERSION | cut -f1 -d.)
+CURRENT_MINOR=$(echo $CURRENT_VERSION | cut -f2 -d.)
+COMMIT_MINOR=$(echo $COMMIT_VERSION | cut -f2 -d.)
+CURRENT_PATCH=$(echo $CURRENT_VERSION | cut -f3 -d.)
+COMMIT_PATCH=$(echo $COMMIT_VERSION | cut -f3 -d.)
+
+BUILD_VERSION=v$COMMIT_MAJOR.$COMMIT_MINOR.$COMMIT_PATCH
+
 ##
 # SCRIPT COMMANDS
 ##
@@ -20,21 +32,6 @@ before-install() {
     sudo apt-get install curl libc6 libcurl3 zlib1g
   fi
 
-  # gross bash fu here
-  CURRENT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(curl -s https://raw.githubusercontent.com/kalabox/kalabox/master/package.json)")
-  COMMIT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
-  
-  CURRENT_MAJOR=$(echo $CURRENT_VERSION | cut -f1 -d.)
-  COMMIT_MAJOR=$(echo $COMMIT_VERSION | cut -f1 -d.)
-  CURRENT_MINOR=$(echo $CURRENT_VERSION | cut -f2 -d.)
-  COMMIT_MINOR=$(echo $COMMIT_VERSION | cut -f2 -d.)
-  CURRENT_PATCH=$(echo $CURRENT_VERSION | cut -f3 -d.)
-  COMMIT_PATCH=$(echo $COMMIT_VERSION | cut -f3 -d.)
-
-  # do this just to simulate success and push our code up to master
-  CURRENT_PATCH=0
-  COMMIT_PATCH=1
-  
   if [ ! -z $TRAVIS_TAG ]; then
     if [ $COMMIT_MINOR -le $CURRENT_MINOR ]; then
       echo "Illegal minor version number. Please use grunt release to roll an official release."
@@ -55,10 +52,6 @@ before-install() {
       exit 666  
     fi
   fi 
-
-  # BUILD VERSION
-  export BUILD_VERSION=v$COMMIT_MAJOR.$COMMIT_MINOR.$COMMIT_PATCH
-  echo $BUILD_VERSION
 }
 
 #$ node -pe 'JSON.parse(process.argv[1]).foo' "$(cat foobar.json)"
