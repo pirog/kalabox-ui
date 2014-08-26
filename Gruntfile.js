@@ -25,6 +25,19 @@ module.exports = function(grunt) {
         ]
       }
     },
+    bump: {
+      options: {
+        files: ['package.json', 'bower.json'],
+        updateConfigs: [],
+        commit: true,
+        commitMessage: 'Release v%VERSION%',
+        commitFiles: ['package.json', 'bower.json', 'npm-shrinkwrap.json'],
+        createTag: true,
+        tagName: 'v%VERSION%',
+        tagMessage: 'Version %VERSION%',
+        push: false
+      }
+    },
     compress: {
       win: {
         options: {
@@ -245,6 +258,15 @@ module.exports = function(grunt) {
   grunt.registerTask('e2e', [
     'connect:serve',
     'protractor:e2e'
+  ]);
+
+  grunt.registerTask('version', [
+    'bump-only:patch',
+  ]);
+
+  grunt.registerTask('release', [
+    'bump-only:minor',
+    'bump-commit'
   ]);
 
 };
