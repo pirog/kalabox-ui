@@ -12,6 +12,7 @@ EXIT_VALUE=0
 # Setup Drupal to run the tests.
 #
 before-script() {
+  apt-get install httpie jq
   npm install -g grunt-cli bower
   bower install
 }
@@ -40,7 +41,7 @@ after-success() {
   grunt build
 }
 
-# after-success
+# before-deploy
 #
 # Clean up after the tests.
 #
@@ -56,6 +57,14 @@ before-deploy() {
     mv built/kalabox-linux32-dev.tar.gz built/kalabox-linux32-dev-$TRAVIS_BUILD_NUMBER.tar.gz
     mv built/kalabox-linux64-dev.tar.gz built/kalabox-linux64-dev-$TRAVIS_BUILD_NUMBER.tar.gz
   fi
+}
+
+# after-deploy
+#
+# Clean up after the tests.
+#
+before-deploy() {
+  $HOME/cfindex.sh kalamuna $CF_API_KEY kb2
 }
 
 ##
@@ -119,6 +128,10 @@ case $COMMAND in
 
   before-deploy)
     run_command before-deploy
+    ;;
+
+  after-deploy)
+    run_command after-deploy
     ;;
 esac
 
