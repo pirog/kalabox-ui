@@ -6,6 +6,8 @@ before_install:
 - chmod +x $HOME/travis-ci.sh
 - cp scripts/cfindex.sh $HOME/
 - chmod +x $HOME/cfindex.sh
+- cp scripts/index-gen.sh $HOME/
+- chmod +x $HOME/index-gen.sh
 before_script:
 - $HOME/travis-ci.sh before-script
 script:

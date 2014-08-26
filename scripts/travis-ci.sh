@@ -71,7 +71,7 @@ before-deploy() {
 # Clean up after the tests.
 #
 after-deploy() {
-  $HOME/cfindex.sh kalamuna $CF_API_KEY kb2 >/dev/null
+  $HOME/index-gen.sh >/dev/null
 }
 
 ##
