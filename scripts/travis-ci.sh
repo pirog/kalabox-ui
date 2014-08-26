@@ -13,6 +13,8 @@ EXIT_VALUE=0
 #
 before-script() {
   sudo apt-get install jq
+  sudo apt-get install python-pip
+  sudo pip install --upgrade httpie
   npm install -g grunt-cli bower
   bower install
 }
@@ -43,6 +45,7 @@ after-success() {
   npm install --production --ignore-scripts
   grunt build
   cd $TRAVIS_BUILD_DIR
+
 }
 
 # before-deploy
