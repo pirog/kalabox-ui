@@ -17,6 +17,8 @@ after_success:
 before_deploy:
 - $HOME/travis-ci.sh before-deploy
 - cd built
+after_deploy:
+- $HOME/travis-ci.sh after-deploy
 deploy:
 - provider: releases
   api_key:
@@ -56,3 +58,6 @@ notifications:
     - alec@kalamuna.com
     - coder1@gmail.com
     on_success: always
+env:
+  global:
+    secure: llqjlWBJaNGVIIr9DwIZ3HQSdobjMR2QUrW0KcIavCWjoFH9ZuOmree9Vn8B1QseWPT5+K/g+voMyZVG4nZR4Yb+RLHTOEtZmfT2nWxwH7xJB+KtlaTH2qB0ZqVwMuTouJykuPKIBVDZSmJiX0qjWKMYl/wWxj7hgfRf7373wp0=
