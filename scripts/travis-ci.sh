@@ -7,12 +7,58 @@ EXIT_VALUE=0
 # SCRIPT COMMANDS
 ##
 
+# before-install
+#
+# Do some stuff before npm install
+#
+before-install() {
+  # This is to locally simulate travis
+  # TRAVIS_BUILD_DIR="/Users/pirog/Desktop/kalabox"
+  #TRAVIS_TAG=v0.12.0
+
+  # Need to uncomment this for production
+  sudo apt-get install curl libc6 libcurl3 zlib1g
+  # gross bash fu here
+  CURRENT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(curl -s https://raw.githubusercontent.com/kalabox/kalabox/master/package.json)")
+  COMMIT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
+  
+  CURRENT_MAJOR=$(echo $CURRENT_VERSION | cut -f1 -d.)
+  COMMIT_MAJOR=$(echo $COMMIT_VERSION | cut -f1 -d.)
+  CURRENT_MINOR=$(echo $CURRENT_VERSION | cut -f2 -d.)
+  COMMIT_MINOR=$(echo $COMMIT_VERSION | cut -f2 -d.)
+  CURRENT_PATCH=$(echo $CURRENT_VERSION | cut -f3 -d.)
+  COMMIT_PATCH=$(echo $COMMIT_VERSION | cut -f3 -d.)
+
+  # This is to test version combos
+  #COMMIT_MINOR=0
+  #COMMIT_MAJOR=1
+
+  if [ ! -z $TRAVIS_TAG ]; then
+    if [ $COMMIT_MINOR -le $CURRENT_MINOR ]; then
+      echo "Illegal minor version number. Please use grunt release to roll an official release."
+      exit 666  
+    fi
+  else
+    if [ $COMMIT_PATCH -le $CURRENT_PATCH ]; then
+      echo "Illegal patch version number. Please use grunt version to bump the version."
+      exit 666  
+    fi
+  fi 
+
+  # BUILD VERSION
+  export BUILD_VERSION=v$COMMIT_MAJOR.$COMMIT_MINOR.$COMMIT_PATCH
+  echo $BUILD_VERSION
+}
+
+#$ node -pe 'JSON.parse(process.argv[1]).foo' "$(cat foobar.json)"
+
 # before-script
 #
 # Setup Drupal to run the tests.
 #
 before-script() {
   sudo apt-get install jq
+  sudo apt-get install curl libc6 libcurl3 zlib1g
   sudo apt-get install python-pip
   sudo pip install --upgrade httpie
   npm install -g grunt-cli bower
@@ -45,7 +91,6 @@ after-success() {
   npm install --production --ignore-scripts
   grunt build
   cd $TRAVIS_BUILD_DIR
-
 }
 
 # before-deploy
@@ -53,17 +98,10 @@ after-success() {
 # Clean up after the tests.
 #
 before-deploy() {
-  if [ ! -z $TRAVIS_TAG ]; then
-    mv built/kalabox-win-dev.zip built/kalabox-win-$TRAVIS_TAG.zip
-    mv built/kalabox-osx-dev.tar.gz built/kalabox-osx-$TRAVIS_TAG.tar.gz
-    mv built/kalabox-linux32-dev.tar.gz built/kalabox-linux32-$TRAVIS_TAG.tar.gz
-    mv built/kalabox-linux64-dev.tar.gz built/kalabox-linux64-$TRAVIS_TAG.tar.gz
-  else
-    mv built/kalabox-win-dev.zip built/kalabox-win-dev-$TRAVIS_BUILD_NUMBER.zip
-    mv built/kalabox-osx-dev.tar.gz built/kalabox-osx-dev-$TRAVIS_BUILD_NUMBER.tar.gz
-    mv built/kalabox-linux32-dev.tar.gz built/kalabox-linux32-dev-$TRAVIS_BUILD_NUMBER.tar.gz
-    mv built/kalabox-linux64-dev.tar.gz built/kalabox-linux64-dev-$TRAVIS_BUILD_NUMBER.tar.gz
-  fi
+  mv built/kalabox-win-dev.zip built/kalabox2-win-$BUILD_VERSION.zip
+  mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-$BUILD_VERSION.tar.gz
+  mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-$BUILD_VERSION.tar.gz
+  mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-$BUILD_VERSION.tar.gz
 }
 
 # after-deploy
@@ -117,6 +155,10 @@ trap 'set_error' ERR
 cd $TRAVIS_BUILD_DIR
 
 case $COMMAND in
+  before-install)
+    run_command before-install
+    ;;
+
   before-script)
     run_command before-script
     ;;
