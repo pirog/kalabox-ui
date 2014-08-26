@@ -46,4 +46,5 @@ HTML+="\t\t<div><br /><i>Generated on `date`</i></div>\n"
 HTML+="\t</body>\n"
 HTML+="</html>"
 
+http DELETE ${PUBLICURL}/${3}/index.html X-Auth-Token:${AUTHTOKEN} Content-Type:text/html
 echo -e ${HTML} | http PUT ${PUBLICURL}/${3}/index.html X-Auth-Token:${AUTHTOKEN} Content-Type:text/html
