@@ -48,3 +48,4 @@ HTML+="</html>"
 
 http DELETE ${PUBLICURL}/${3}/index.html X-Auth-Token:${AUTHTOKEN} Content-Type:text/html
 echo -e ${HTML} | http PUT ${PUBLICURL}/${3}/index.html X-Auth-Token:${AUTHTOKEN} Content-Type:text/html
+http POST ${PUBLICURL}/${3} X-Auth-Token:${AUTHTOKEN} X-Container-Meta-Web-Index: index.html
