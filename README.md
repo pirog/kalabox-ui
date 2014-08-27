@@ -84,7 +84,7 @@ cd $HOME/kalabox
 npm install
 bower install
 grunt test
-nw . # On Windows this will be `nodewebkit` not `nw`
+nodewebkit .
 ```
 
 If you want to try this with new code just return to `$HOME/kalabox` and run `git pull`. You can also replace $HOME if you have a preferred location for project code. We are using $HOME because it should be cross-OS compatible. 
@@ -97,6 +97,8 @@ We assume you've downloaded your kalabox source into `$HOME/kalabox`.
 cd $HOME/kalabox
 npm install
 grunt prepare
+cd $HOME/kalabox/generated
+npm install --production --ignore-scripts
 grunt build --force
 ```
 
