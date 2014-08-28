@@ -42,6 +42,8 @@
     "karma-jasmine": "^0.1.5",
     "karma-ng-html2js-preprocessor": "^0.1.0",
     "karma-phantomjs-launcher": "^0.1.4",
-    "matchdep": "~0.3.0"
+    "matchdep": "~0.3.0",
+    "karma-nodewebkit-launcher": "https://github.com/nDmitry/karma-nodewebkit-launcher/tarball/master",
+    "nodewebkit": "~0.10.2"
   }
 }
