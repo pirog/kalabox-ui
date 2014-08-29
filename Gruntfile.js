@@ -4,6 +4,16 @@ module.exports = function(grunt) {
   // commenting this out for now until used
   //var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
 
+  // Set platform to darwin, win32, or linux
+  var platform = require('os').platform();
+  var nwExecutable = 'node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit';
+  if (platform === 'win32') {
+    nwExecutable = '';
+  }
+  else if (platform === 'linux') {
+    nwExecutable = '';
+  }
+
   var config = {
     pkg: grunt.file.readJSON('package.json'),
     files: {
@@ -93,6 +103,11 @@ module.exports = function(grunt) {
             dest: 'Kalabox/'
           }
         ]
+      }
+    },
+    shell: {
+      nw: {
+        command: nwExecutable + ' .'
       }
     },
     jshint: {
@@ -230,9 +245,13 @@ module.exports = function(grunt) {
   grunt.registerTask('default', [
     'bower-install-simple:install',
     'jshint',
-    'karma:ci',
     'less:dev',
     'watch'
+  ]);
+
+  grunt.registerTask('run', [
+    'bower-install-simple:install',
+    'shell:nw'
   ]);
 
   grunt.registerTask('test', [
