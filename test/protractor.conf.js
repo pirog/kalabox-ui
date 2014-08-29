@@ -1,9 +1,24 @@
+'use strict';
+
+var path = require('path');
+var baseUrl = 'file://'+ path.resolve('../src/index.html') + '#';
+
 exports.config = {
+
+  chromeDriver: './support/chromedriver',
+  chromeOnly: true,
+
   specs: [
     './e2e/**/*.spec.js',
     '../src/modules/*/test/e2e/**/*.spec.js'
   ],
-  baseUrl: 'http://localhost:8000',
-  chromeDriver:
-    '../node_modules/protractor/selenium/chromedriver'
+
+  baseUrl: baseUrl,
+  rootElement: 'body',
+
+  onPrepare: function() {
+    browser.resetUrl = 'file://';
+    browser.driver.get('file://');
+  }
+
 };
