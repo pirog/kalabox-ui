@@ -188,11 +188,16 @@ module.exports = function(grunt) {
         configFile: 'test/karma.conf.js'
       },
       // Required by grunt, can override later.
-      unit: {},
+      unit: {
+        options: {
+          singleRun: true,
+          browsers: ['NodeWebkit']
+        }
+      },
       ci: {
         options: {
           singleRun: true,
-          browsers: ['PhantomJS']
+          browsers: ['NodeWebkit']
         }
       }
     },

@@ -41,14 +41,15 @@ module.exports = function(config) {
     // - PhantomJS
     // - IE (only Windows)
     browsers: [
-      'Chrome'
+      'NodeWebkit'
     ],
 
     // Which plugins to enable
     plugins: [
+      'karma-chrome-launcher',
+      'karma-nodewebkit-launcher',
       'karma-phantomjs-launcher',
       'karma-jasmine',
-      'karma-chrome-launcher',
       'karma-coverage',
       'karma-ng-html2js-preprocessor'
     ],
