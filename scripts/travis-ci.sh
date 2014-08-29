@@ -33,7 +33,7 @@ before-install() {
   fi
 
   # We only check on a PR 
-  if [ -z $TRAVIS_PULL_REQUEST ]; then
+  if [ $TRAVIS_PULL_REQUEST != "false" ]; then
     if [ ! -z $TRAVIS_TAG ]; then
       if [ $COMMIT_MINOR -le $CURRENT_MINOR ]; then
         echo "Illegal minor version number. Please use grunt release to roll an official release."
