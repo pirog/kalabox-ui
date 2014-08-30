@@ -4,15 +4,14 @@ module.exports = function(grunt) {
   // commenting this out for now until used
   //var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
 
-  // Set platform to darwin, win32, or linux
+  // Set platform for nw binary selection.
+  var path = require('path');
   var platform = require('os').platform();
-  var nwExecutable = 'node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit';
-  if (platform === 'win32') {
-    nwExecutable = '';
-  }
-  else if (platform === 'linux') {
-    nwExecutable = '';
-  }
+  var nwBinaries = {
+    linux: path.normalize('node_modules/nodewebkit/nodewebkit/nw'),
+    darwin: path.normalize('node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit'),
+    win32: path.normalize('node_modules/nodewebkit/nodewebkit/nw.exe')
+  };
 
   var config = {
     pkg: grunt.file.readJSON('package.json'),
@@ -107,7 +106,7 @@ module.exports = function(grunt) {
     },
     shell: {
       nw: {
-        command: nwExecutable + ' .'
+        command: nwBinaries[platform] + ' .'
       }
     },
     jshint: {
