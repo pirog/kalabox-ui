@@ -30,31 +30,34 @@ before-install() {
     #TRAVIS_TAG=v0.12.0
   else
     sudo apt-get install curl
+    export DISPLAY=:99.0
+    sh -e /etc/init.d/xvfb start +extension RANDR
+    sleep 5
   fi
 
-  # We only check on a PR 
+  # We only check on a PR
   if [ $TRAVIS_PULL_REQUEST != "false" ]; then
     if [ ! -z $TRAVIS_TAG ]; then
       if [ $COMMIT_MINOR -le $CURRENT_MINOR ]; then
         echo "Illegal minor version number. Please use grunt release to roll an official release."
-        exit 666  
+        exit 666
       else
         if [ $COMMIT_PATCH -ne 0 ]; then
           echo "Illegal patch version number. Should be 0 on a minor version bump. Please use grunt release to bump the version."
-          exit 666  
+          exit 666
         fi
       fi
     else
       if [ $COMMIT_MINOR -ne $CURRENT_MINOR ]; then
         echo "Illegal minor version number. Minor versions should only change on a tag and release."
-        exit 666  
+        exit 666
       fi
       if [ $COMMIT_PATCH -le $CURRENT_PATCH ]; then
         echo "Illegal patch version number. Please use grunt version to bump the version."
-        exit 666  
+        exit 666
       fi
-    fi 
-  fi 
+    fi
+  fi
 }
 
 #$ node -pe 'JSON.parse(process.argv[1]).foo' "$(cat foobar.json)"
@@ -65,7 +68,6 @@ before-install() {
 #
 before-script() {
   sudo apt-get install jq
-  sudo apt-get install curl libc6 libcurl3 zlib1g
   sudo apt-get install python-pip
   sudo pip install --upgrade httpie
   npm install -g grunt-cli bower
@@ -77,7 +79,7 @@ before-script() {
 # Run the tests.
 #
 script() {
-  grunt test
+  DISPLAY=:99.0 grunt test
 }
 
 # after-script
