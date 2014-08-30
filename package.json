@@ -1,10 +1,6 @@
 {
   "name": "Kalabox",
-<<<<<<< HEAD
   "version": "0.1.2",
-=======
-  "version": "0.1.1",
->>>>>>> 28c61c8a129bb2128d0dbb320688eb7b3ff2ed66
   "main": "src/index.html",
   "private": true,
   "window": {
