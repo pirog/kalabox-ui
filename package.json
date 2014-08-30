@@ -46,6 +46,7 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "matchdep": "~0.3.0",
     "nodewebkit": "~0.10.1",
-    "protractor": "https://github.com/kalabox/protractor/tarball/master"
+    "protractor": "https://github.com/kalabox/protractor/tarball/master",
+    "unzip": "~0.1.9"
   }
 }
