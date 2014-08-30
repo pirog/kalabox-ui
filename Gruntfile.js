@@ -209,7 +209,7 @@ module.exports = function(grunt) {
       install: {},
       ci: {
         options: {
-          insteractive: false
+          interactive: false
         }
       }
     }
