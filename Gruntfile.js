@@ -123,11 +123,16 @@ module.exports = function(grunt) {
       }
     },
     protractor: {
-      e2e: {
-        options: {
-          configFile: 'test/protractor.conf.js'
+      options: {
+        configFile: 'test/protractor.conf.js',
+        args: {
+          chromeDriver: 'test/support/chromedriver',
+          chromeOnly: true,
+          baseUrl: 'file://' + path.resolve('src/index.html') + '#',
+          rootElement: 'body'
         }
-      }
+      },
+      default: {}
     },
     /**
      * Simple server for testing and dev.
@@ -279,8 +284,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('e2e', [
-    'connect:serve',
-    'protractor:e2e'
+    'protractor'
   ]);
 
   grunt.registerTask('version', [
