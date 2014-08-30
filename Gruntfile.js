@@ -4,14 +4,8 @@ module.exports = function(grunt) {
   // commenting this out for now until used
   //var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
 
-  // Set platform for nw binary selection.
   var path = require('path');
-  var platform = require('os').platform();
-  var nwBinaries = {
-    linux: path.normalize('node_modules/nodewebkit/nodewebkit/nw'),
-    darwin: path.normalize('node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit'),
-    win32: path.normalize('node_modules/nodewebkit/nodewebkit/nw.exe')
-  };
+  var pconfig = require('./src/lib/pconfig');
 
   var config = {
     pkg: grunt.file.readJSON('package.json'),
@@ -106,7 +100,7 @@ module.exports = function(grunt) {
     },
     shell: {
       nw: {
-        command: nwBinaries[platform] + ' .'
+        command: pconfig.devBinary + ' .'
       }
     },
     jshint: {
@@ -132,7 +126,12 @@ module.exports = function(grunt) {
           rootElement: 'body'
         }
       },
-      default: {}
+      default: {
+        specs: [
+          'test/e2e/**/*.spec.js',
+          'src/modules/*/test/e2e/**/*.spec.js'
+        ]
+      }
     },
     /**
      * Simple server for testing and dev.
@@ -284,7 +283,8 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('e2e', [
-    'protractor'
+    'protractor-setup',
+    'protractor:default'
   ]);
 
   grunt.registerTask('version', [
