@@ -1,6 +1,10 @@
 {
   "name": "Kalabox",
+<<<<<<< HEAD
+  "version": "0.1.2",
+=======
   "version": "0.1.1",
+>>>>>>> 28c61c8a129bb2128d0dbb320688eb7b3ff2ed66
   "main": "src/index.html",
   "private": true,
   "window": {
@@ -35,6 +39,7 @@
     "grunt-karma": "^0.8.3",
     "grunt-node-webkit-builder": "~0.2.2",
     "grunt-protractor-runner": "^1.1.0",
+    "grunt-shell": "~1.0.1",
     "jshint-stylish": "^0.4.0",
     "karma": "^0.12.21",
     "karma-chrome-launcher": "^0.1.4",

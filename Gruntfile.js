@@ -4,6 +4,15 @@ module.exports = function(grunt) {
   // commenting this out for now until used
   //var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
 
+  // Set platform for nw binary selection.
+  var path = require('path');
+  var platform = require('os').platform();
+  var nwBinaries = {
+    linux: path.normalize('node_modules/nodewebkit/nodewebkit/nw'),
+    darwin: path.normalize('node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit'),
+    win32: path.normalize('node_modules/nodewebkit/nodewebkit/nw.exe')
+  };
+
   var config = {
     pkg: grunt.file.readJSON('package.json'),
     files: {
@@ -93,6 +102,11 @@ module.exports = function(grunt) {
             dest: 'Kalabox/'
           }
         ]
+      }
+    },
+    shell: {
+      nw: {
+        command: nwBinaries[platform] + ' .'
       }
     },
     jshint: {
@@ -230,9 +244,13 @@ module.exports = function(grunt) {
   grunt.registerTask('default', [
     'bower-install-simple:install',
     'jshint',
-    'karma:ci',
     'less:dev',
     'watch'
+  ]);
+
+  grunt.registerTask('run', [
+    'bower-install-simple:install',
+    'shell:nw'
   ]);
 
   grunt.registerTask('test', [
