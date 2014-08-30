@@ -6,7 +6,7 @@ Kalabox is a free, integrated workflow solution for [Drupal](http://drupal.org) 
 
 **Use Your Tools, Faster**
 
-Bassed on [Docker](http://docker.io) so devs with custom virtual environments can easily adapt their tools to Kalabox. Deploy your tools to everyone and enjoy the blazing-fast performance, configurability and portability of containers!
+Based on [Docker](http://docker.io) so devs with custom virtual environments can easily adapt their tools to Kalabox. Deploy your tools to everyone and enjoy the blazing-fast performance, configurability and portability of containers!
 
 **Cross Platform**
 
@@ -26,7 +26,7 @@ Get advanced dev tools for yourself -- and help others get them, too -- for free
 
 ## Downloads
 
-We aim for [official releases](https://github.com/kalabox/kalabox/releases) every two weeks, automatically packaged and ready to go but if you live on the wild side we roll [development releases](http://builds.kalabox.me/index.html) for every code commit. 
+We aim for [official releases](https://github.com/kalabox/kalabox/releases) every two weeks, automatically packaged and ready to go but if you live on the wild side we roll [development releases](http://builds.kalabox.me/index.html) for every code commit.
 
 ## Quick Start for Developers
 
@@ -35,7 +35,7 @@ empower developers both novice and elite. For a complete rundown of the goals, u
 
 ### Installing dependencies
 
-In order to get started you will need to install the underlying dependencies required. 
+In order to get started you will need to install the underlying dependencies required.
 
 **On MacOSX**
 
@@ -44,7 +44,6 @@ If you don't have homebrew already installed go [here](http://brew.sh/) or run `
 ```
 cd $HOME
 brew install node
-npm install -g nodewebkit@0.10.1
 npm install -g grunt-cli bower
 ```
 
@@ -55,7 +54,6 @@ You will want to start by downloading and installing [git for windows](http://gi
 ```
 cd $HOME
 mkdir AppData/Roaming/npm #*
-npm install -g nodewebkit@0.10.1
 npm install -g grunt-cli bower
 ```
 *http://stackoverflow.com/questions/25093276/nodejs-windows-error-enoent-stat-c-users-rt-appdata-roaming-npm
@@ -70,7 +68,6 @@ sudo apt-get update
 sudo apt-get install nodejs
 npm config set prefix ~/npm
 echo 'export PATH="$PATH:$HOME/npm/bin"' >> ~/.bashrc && source ~/.bashrc
-npm install -g nodewebkit@0.10.1
 npm install -g grunt-cli bower
 ```
 
@@ -82,12 +79,10 @@ Windows users will want to run this from a bash shell like `git bash` not `comma
 git clone https://github.com/kalabox/kalabox.git $HOME/kalabox
 cd $HOME/kalabox
 npm install
-bower install
-grunt test
-nodewebkit .
+grunt run
 ```
 
-If you want to try this with new code just return to `$HOME/kalabox` and run `git pull`. You can also replace $HOME if you have a preferred location for project code. We are using $HOME because it should be cross-OS compatible. 
+If you want to try this with new code just return to `$HOME/kalabox` and run `git pull`. You can also replace $HOME if you have a preferred location for project code. We are using $HOME because it should be cross-OS compatible.
 
 ### Building binaries from source
 
@@ -107,7 +102,7 @@ If you want to try this with new code just return to` $HOME/kalabox` and run `gi
 
 ### Contributing code
 
-Kalabox uses a [github flow variant](https://github.com/kalabox/kalabox/wiki/Contributing-to-Kalabox#github-flow) for code contribution which focues heavily on [testing](https://github.com/kalabox/kalabox/wiki/Contributing-to-Kalabox#emphasis) and continuous integration/deployment. Users will handle version bumping based on these [guidelines](https://github.com/kalabox/kalabox/wiki/Contributing-to-Kalabox#versioning). Generally we try to follow [agile methodologies](https://github.com/kalabox/kalabox/wiki/Contributing-to-Kalabox#issue-prioritization) regarding issue resolution. 
+Kalabox uses a [github flow variant](https://github.com/kalabox/kalabox/wiki/Contributing-to-Kalabox#github-flow) for code contribution which focues heavily on [testing](https://github.com/kalabox/kalabox/wiki/Contributing-to-Kalabox#emphasis) and continuous integration/deployment. Users will handle version bumping based on these [guidelines](https://github.com/kalabox/kalabox/wiki/Contributing-to-Kalabox#versioning). Generally we try to follow [agile methodologies](https://github.com/kalabox/kalabox/wiki/Contributing-to-Kalabox#issue-prioritization) regarding issue resolution.
 
 An example workflow for contributing code to a particular issue is something like this:
 
@@ -129,15 +124,15 @@ git push origin issuenumber-someonesbug
 
 ## Community
 
-You can chat with us on IRC in the ##kalabox channel on irc.freenode.net  
+You can chat with us on IRC in the ##kalabox channel on irc.freenode.net
 
 ## License
 
-`kalabox`'s code in this repo uses the MIT license, see our `LICENSE.txt` file. 
+`kalabox`'s code in this repo uses the MIT license, see our `LICENSE.txt` file.
 
 ## Sponsors
 
-The work is being sponsored by:  
+The work is being sponsored by:
 * [Kalamuna](http://www.kalamuna.com)
 * [Pantheon](http://getpantheon.com)
 * [Microsoft Azure](http://http://azure.microsoft.com)
