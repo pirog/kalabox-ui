@@ -192,7 +192,7 @@ module.exports = function(grunt) {
     nodewebkit: {
       options: {
         // Versions listed here: http://dl.node-webkit.org/
-        version: 'v0.10.1',
+        version: 'v0.10.2',
         platforms: ['win', 'osx', 'linux32', 'linux64'],
         buildDir: 'dist'
       },
@@ -284,6 +284,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'copy',
     'nodewebkit',
     'compress:win',
     'compress:osx',
