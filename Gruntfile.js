@@ -211,12 +211,6 @@ module.exports = function(grunt) {
           singleRun: true,
           browsers: ['NodeWebkit']
         }
-      },
-      ci: {
-        options: {
-          singleRun: true,
-          browsers: ['NodeWebkit']
-        }
       }
     },
     /**
@@ -261,7 +255,22 @@ module.exports = function(grunt) {
     'jshint',
     'jscs',
     'bower-install-simple:ci',
-    'karma:ci'
+    'test:unit',
+    'test:e2e'
+  ]);
+
+  grunt.registerTask('test:js', [
+    'jshint',
+    'jscs',
+  ]);
+
+  grunt.registerTask('test:unit', [
+    'karma:unit'
+  ]);
+
+  grunt.registerTask('test:e2e', [
+    'protractor-setup',
+    'protractor:default'
   ]);
 
   grunt.registerTask('prepare', [
@@ -269,7 +278,7 @@ module.exports = function(grunt) {
     'bower-install-simple:install',
     'jshint',
     'jscs',
-    'karma:ci',
+    'karma:unit',
     'less:dist',
     'copy'
   ]);
@@ -280,11 +289,6 @@ module.exports = function(grunt) {
     'compress:osx',
     'compress:linux32',
     'compress:linux64'
-  ]);
-
-  grunt.registerTask('e2e', [
-    'protractor-setup',
-    'protractor:default'
   ]);
 
   grunt.registerTask('version', [
