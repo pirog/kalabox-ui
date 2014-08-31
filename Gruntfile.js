@@ -4,14 +4,8 @@ module.exports = function(grunt) {
   // commenting this out for now until used
   //var dist = '' + (process.env.SERVER_BASE || 'dist_dev');
 
-  // Set platform for nw binary selection.
   var path = require('path');
-  var platform = require('os').platform();
-  var nwBinaries = {
-    linux: path.normalize('node_modules/nodewebkit/nodewebkit/nw'),
-    darwin: path.normalize('node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit'),
-    win32: path.normalize('node_modules/nodewebkit/nodewebkit/nw.exe')
-  };
+  var pconfig = require('./src/lib/pconfig');
 
   var config = {
     pkg: grunt.file.readJSON('package.json'),
@@ -106,7 +100,7 @@ module.exports = function(grunt) {
     },
     shell: {
       nw: {
-        command: nwBinaries[platform] + ' .'
+        command: pconfig.devBinary + ' .'
       }
     },
     jshint: {
@@ -132,7 +126,12 @@ module.exports = function(grunt) {
           rootElement: 'body'
         }
       },
-      default: {}
+      default: {
+        specs: [
+          'test/e2e/**/*.spec.js',
+          'src/modules/*/test/e2e/**/*.spec.js'
+        ]
+      }
     },
     /**
      * Simple server for testing and dev.
@@ -193,7 +192,7 @@ module.exports = function(grunt) {
     nodewebkit: {
       options: {
         // Versions listed here: http://dl.node-webkit.org/
-        version: 'v0.10.1',
+        version: 'v0.10.2',
         platforms: ['win', 'osx', 'linux32', 'linux64'],
         buildDir: 'dist'
       },
@@ -208,12 +207,6 @@ module.exports = function(grunt) {
       },
       // Required by grunt, can override later.
       unit: {
-        options: {
-          singleRun: true,
-          browsers: ['NodeWebkit']
-        }
-      },
-      ci: {
         options: {
           singleRun: true,
           browsers: ['NodeWebkit']
@@ -262,7 +255,22 @@ module.exports = function(grunt) {
     'jshint',
     'jscs',
     'bower-install-simple:ci',
-    'karma:ci'
+    'test:unit',
+    'test:e2e'
+  ]);
+
+  grunt.registerTask('test:js', [
+    'jshint',
+    'jscs',
+  ]);
+
+  grunt.registerTask('test:unit', [
+    'karma:unit'
+  ]);
+
+  grunt.registerTask('test:e2e', [
+    'protractor-setup',
+    'protractor:default'
   ]);
 
   grunt.registerTask('prepare', [
@@ -270,21 +278,18 @@ module.exports = function(grunt) {
     'bower-install-simple:install',
     'jshint',
     'jscs',
-    'karma:ci',
+    'karma:unit',
     'less:dist',
     'copy'
   ]);
 
   grunt.registerTask('build', [
+    'copy',
     'nodewebkit',
     'compress:win',
     'compress:osx',
     'compress:linux32',
     'compress:linux64'
-  ]);
-
-  grunt.registerTask('e2e', [
-    'protractor'
   ]);
 
   grunt.registerTask('version', [
