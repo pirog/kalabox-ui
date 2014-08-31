@@ -52,7 +52,6 @@ module.exports = function(grunt) {
         })
         .on('finish', function() {
           // *nix only?
-          // TODO: Fix chmod not working on at least osx
           fs.chmodSync(cdFile, 0755);
           grunt.log.writeln('Protractor setup is complete.');
           grunt.log.writeln('To run tests, you may now run: grunt e2e');
