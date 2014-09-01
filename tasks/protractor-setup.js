@@ -28,11 +28,6 @@ module.exports = function(grunt) {
     var cdRemote = pconfig.chromedriverDownload;
     var cdLocal = path.resolve(dir, pconfig.chromedriverDownload.split('/').pop());
 
-    grunt.log.writeln(cdLocal);
-    done();
-    return;
-
-
     var download = function(url, dest, cb, cbdone) {
       var file = fs.createWriteStream(dest);
       http.get(url, function(response) {
@@ -48,10 +43,13 @@ module.exports = function(grunt) {
 
       if (pconfig.platform === 'linux') {
         var targz = require('tar.gz');
-        var compress = new targz().extract(cdLocal, dir, function(err){
+        var compress = new targz().extract(cdLocal, dir, function(err) {
           if(err)
             console.log(err);
 
+          var cdSrc = path.resolve(cdLocal.replace(/\.tar\.gz$/, ''), 'chromedriver');
+          fs.renameSync(cdSrc, cdFile); 
+          
           grunt.log.writeln('Protractor setup is complete.');
           grunt.log.writeln('To run tests, you may now run: grunt e2e');
           cbdone();
