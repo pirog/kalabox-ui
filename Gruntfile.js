@@ -243,11 +243,6 @@ module.exports = function(grunt) {
     'bower-install-simple:install',
     'jshint',
     'less:dev',
-    'watch'
-  ]);
-
-  grunt.registerTask('run', [
-    'bower-install-simple:install',
     'shell:nw'
   ]);
 
