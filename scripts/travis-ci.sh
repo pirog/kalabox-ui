@@ -95,10 +95,8 @@ after-script() {
 # Clean up after the tests.
 #
 after-success() {
-  DISPLAY=:99.0 grunt prepare
-  cd $TRAVIS_BUILD_DIR/generated
-  npm install --production --ignore-scripts
-  grunt build
+  cd $TRAVIS_BUILD_DIR
+  DISPLAY=:99.0 grunt build
   cd $TRAVIS_BUILD_DIR
 }
 
