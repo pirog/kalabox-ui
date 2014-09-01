@@ -8,12 +8,14 @@ angular.module('kalabox.initialize', [])
     });
   })
   .controller('InitializeCtrl',
-  ['$scope', '$location', '_', 'VirtualBox', 'Boot2Docker',
-    function ($scope, $location, _, VirtualBox, Boot2Docker) {
+  ['$scope', '$location', '_', 'pconfig', 'VirtualBox', 'Boot2Docker',
+    function ($scope, $location, _, pconfig, VirtualBox, Boot2Docker) {
 
       var gui = require('nw.gui');
       var mb = new gui.Menu({type: 'menubar'});
-      mb.createMacBuiltin('Kalabox', {hideEdit: true, hideWindow: true});
+      if (pconfig.platform === 'darwin') {
+        mb.createMacBuiltin('Kalabox', {hideEdit: true, hideWindow: true});
+      }
       gui.Window.get().menu = mb;
 
       // Best practices is to manage our data in a scope object
