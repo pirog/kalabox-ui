@@ -40,21 +40,21 @@ before-install() {
     if [ ! -z $TRAVIS_TAG ]; then
       if [ $COMMIT_MINOR -le $CURRENT_MINOR ]; then
         echo "Illegal minor version number. Please use grunt release to roll an official release."
-        exit 666
+        set_error
       else
         if [ $COMMIT_PATCH -ne 0 ]; then
           echo "Illegal patch version number. Should be 0 on a minor version bump. Please use grunt release to bump the version."
-          exit 666
+          set_error
         fi
       fi
     else
       if [ $COMMIT_MINOR -ne $CURRENT_MINOR ]; then
         echo "Illegal minor version number. Minor versions should only change on a tag and release."
-        exit 666
+        set_error
       fi
       if [ $COMMIT_PATCH -le $CURRENT_PATCH ]; then
         echo "Illegal patch version number. Please use grunt version to bump the version."
-        exit 666
+        set_error
       fi
     fi
   fi
@@ -130,31 +130,17 @@ after-deploy() {
 # UTILITY FUNCTIONS:
 ##
 
-# Prints a message about the section of the script.
-header() {
-  set +xv
-  echo
-  echo "** $@"
-  echo
-  set -xv
-}
-
 # Sets the exit level to error.
 set_error() {
   EXIT_VALUE=1
 }
 
 # Runs a command and sets an error if it fails.
-run_test() {
+run_command() {
+  set -xv
   if ! $@; then
     set_error
   fi
-}
-
-# Runs a command showing all the lines executed
-run_command() {
-  set -xv
-  $@
   set +xv
 }
 
