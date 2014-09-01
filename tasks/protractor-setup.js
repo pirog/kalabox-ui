@@ -28,6 +28,11 @@ module.exports = function(grunt) {
     var cdRemote = pconfig.chromedriverDownload;
     var cdLocal = path.resolve(dir, pconfig.chromedriverDownload.split('/').pop());
 
+    grunt.log.writeln(cdLocal);
+    done();
+    return;
+
+
     var download = function(url, dest, cb, cbdone) {
       var file = fs.createWriteStream(dest);
       http.get(url, function(response) {
@@ -41,22 +46,35 @@ module.exports = function(grunt) {
     var extractChromedriver = function(cbdone) {
       grunt.log.writeln('Extracting node-webkit chromedriver.');
 
-      fs.createReadStream(cdLocal)
-        .pipe(unzip.Parse())
-        .on('entry', function (entry) {
-          if (entry.path.indexOf('/chromedriver') >= 0) {
-            entry.pipe(fs.createWriteStream(cdFile));
-          } else {
-            entry.autodrain();
-          }
-        })
-        .on('finish', function() {
-          // *nix only?
-          fs.chmodSync(cdFile, 0755);
+      if (pconfig.platform === 'linux') {
+        var targz = require('tar.gz');
+        var compress = new targz().extract(cdLocal, dir, function(err){
+          if(err)
+            console.log(err);
+
           grunt.log.writeln('Protractor setup is complete.');
           grunt.log.writeln('To run tests, you may now run: grunt e2e');
           cbdone();
         });
+      }
+      else {
+        fs.createReadStream(cdLocal)
+          .pipe(unzip.Parse())
+          .on('entry', function (entry) {
+            if (entry.path.indexOf('/chromedriver') >= 0) {
+              entry.pipe(fs.createWriteStream(cdFile));
+            } else {
+              entry.autodrain();
+            }
+          })
+          .on('finish', function() {
+            // *nix only?
+            fs.chmodSync(cdFile, 0755);
+            grunt.log.writeln('Protractor setup is complete.');
+            grunt.log.writeln('To run tests, you may now run: grunt e2e');
+            cbdone();
+          });
+      }
     };
 
     if (!supportExists) {
