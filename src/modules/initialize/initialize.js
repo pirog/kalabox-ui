@@ -9,7 +9,7 @@ angular.module('kalabox.initialize', [])
   })
   .controller('InitializeCtrl',
   ['$scope', '$location', '_', 'VirtualBox', 'Boot2Docker',
-    function ($scope, $location, _, GUI, VirtualBox, Boot2Docker) {
+    function ($scope, $location, _, VirtualBox, Boot2Docker) {
 
       var gui = require('nw.gui');
       var mb = new gui.Menu({type: 'menubar'});
