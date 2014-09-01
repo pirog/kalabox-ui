@@ -6,7 +6,7 @@
   ],
   "chromedriverDownload": [
     "http://dl.node-webkit.org/v0.10.2/chromedriver-nw-v0.10.2-osx-x64.zip",
-    "http://dl.node-webkit.org/v0.10.2/chromedriver-nw-v0.10.2-linux-x64.tar.gz",
+    "http://files.kalamuna.com/chromedriver-nw-v0.10.2-linux-x64.zip",
     "http://dl.node-webkit.org/v0.10.2/chromedriver-nw-v0.10.2-win-ia32.zip"
   ],
   "devBinary": [
