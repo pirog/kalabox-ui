@@ -20,12 +20,12 @@
       "file": "node-webkit.app"
     },
     {
-      "path": "node_modules/nodewebkit/nodewebkit",
-      "file": "node-webkit.app"
+      "path": "node_modules/nodewebkit/nodewebkit/nw",
+      "file": "nw"
     },
     {
-      "path": "node_modules/nodewebkit/nodewebkit",
-      "file": "node-webkit.app"
+      "path": "node_modules/nodewebkit/nodewebkit/nw.exe",
+      "file": "nw.exe"
     }
   ]
 }
