@@ -100,7 +100,7 @@ module.exports = function(grunt) {
     },
     shell: {
       nw: {
-        command: pconfig.devBinary + ' .'
+        command: pconfig.devBinary + ' generated/'
       },
       build: {
         command: 'cd ./generated && npm install --production --ignore-scripts'
@@ -185,6 +185,11 @@ module.exports = function(grunt) {
             src: ['src/**'],
             dest: 'generated/'
           },
+          {
+            expand: true,
+            src: ['config/**'],
+            dest: 'generated/'
+          },
           {src: ['package.json'], dest: 'generated/package.json'}
         ]
       }
@@ -243,9 +248,11 @@ module.exports = function(grunt) {
 
   // create workflows
   grunt.registerTask('default', [
+    'clean',
     'bower-install-simple:install',
     'jshint',
     'less:dev',
+    'copy',
     'shell:nw'
   ]);
 
