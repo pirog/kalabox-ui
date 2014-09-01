@@ -46,6 +46,7 @@
     "matchdep": "~0.3.0",
     "nodewebkit": "~0.10.2",
     "protractor": "https://github.com/kalabox/protractor/tarball/master",
+    "request": "~2.40.0",
     "tar.gz": "~0.1.1",
     "unzip": "~0.1.9"
   }
