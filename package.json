@@ -45,7 +45,7 @@
     "karma-nodewebkit-launcher": "git://github.com/kalabox/karma-nodewebkit-launcher#node-webkit-travis",
     "karma-phantomjs-launcher": "^0.1.4",
     "matchdep": "~0.3.0",
-    "nodewebkit": "~0.10.1",
+    "nodewebkit": "~0.10.2",
     "protractor": "https://github.com/kalabox/protractor/tarball/master",
     "unzip": "~0.1.9"
   }
