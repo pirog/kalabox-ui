@@ -13,6 +13,9 @@ angular.module('kalabox.nodewrappers', [])
   .factory('os', [function() {
     return require('os');
   }])
+  .factory('pconfig', [function() {
+    return require('./lib/pconfig');
+  }])
   .factory('_', function() {
     return require('lodash');
   });
