@@ -1,6 +1,6 @@
 {
   "name": "Kalabox",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "src/index.html",
   "private": true,
   "window": {
@@ -13,7 +13,6 @@
     "resizeable": "false"
   },
   "scripts": {
-    "postinstall": "node ./node_modules/grunt-protractor-runner/node_modules/.bin/webdriver-manager update",
     "test": "grunt test"
   },
   "dependencies": {
@@ -25,7 +24,7 @@
     "grunt-bower-install-simple": "^1.0.0",
     "grunt-bump": "0.0.15",
     "grunt-contrib-clean": "~0.6.0",
-    "grunt-contrib-compress": "git://github.com/kalabox/grunt-contrib-compress#master",
+    "grunt-contrib-compress": "https://github.com/kalabox/grunt-contrib-compress/tarball/master",
     "grunt-contrib-connect": "^0.8.0",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-jshint": "~0.10.0",
@@ -42,11 +41,13 @@
     "karma-coverage": "^0.2.6",
     "karma-jasmine": "^0.1.5",
     "karma-ng-html2js-preprocessor": "^0.1.0",
-    "karma-nodewebkit-launcher": "git://github.com/kalabox/karma-nodewebkit-launcher#node-webkit-travis",
+    "karma-nodewebkit-launcher": "https://github.com/kalabox/karma-nodewebkit-launcher/tarball/node-webkit-travis",
     "karma-phantomjs-launcher": "^0.1.4",
     "matchdep": "~0.3.0",
     "nodewebkit": "~0.10.2",
     "protractor": "https://github.com/kalabox/protractor/tarball/master",
+    "request": "~2.40.0",
+    "tar.gz": "~0.1.1",
     "unzip": "~0.1.9"
   }
 }

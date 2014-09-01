@@ -101,6 +101,9 @@ module.exports = function(grunt) {
     shell: {
       nw: {
         command: pconfig.devBinary + ' .'
+      },
+      build: {
+        command: 'cd ./generated && npm install --production --ignore-scripts'
       }
     },
     jshint: {
@@ -268,18 +271,13 @@ module.exports = function(grunt) {
     'protractor:default'
   ]);
 
-  grunt.registerTask('prepare', [
+  grunt.registerTask('build', [
     'clean',
     'bower-install-simple:install',
-    'jshint',
-    'jscs',
-    'karma:unit',
+    'test',
     'less:dist',
-    'copy'
-  ]);
-
-  grunt.registerTask('build', [
     'copy',
+    'shell:build',
     'nodewebkit',
     'compress:win',
     'compress:osx',

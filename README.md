@@ -91,10 +91,7 @@ We assume you've downloaded your kalabox source into `$HOME/kalabox`.
 ```
 cd $HOME/kalabox
 npm install
-grunt prepare
-cd $HOME/kalabox/generated
-npm install --production --ignore-scripts
-grunt build --force
+grunt build
 ```
 
 Kalabox binary should be in `$HOME/kalabox/built/(kalabox-linux32-dev.tar.gz|kalabox-linux64-dev.tar.gz|kalabox-osx-dev.tar.gz|kalabox-win-dev.zip)`

@@ -5,9 +5,9 @@
     "win32"
   ],
   "chromedriverDownload": [
-    "http://dl.node-webkit.org/v0.10.2/chromedriver-nw-v0.10.2-osx-x64.zip",
-    "http://files.kalamuna.com/chromedriver-nw-v0.10.2-linux-x64.zip",
-    "http://dl.node-webkit.org/v0.10.2/chromedriver-nw-v0.10.2-win-ia32.zip"
+    "http://files.kalamuna.com/chromedriver-nw-v0.10.2-osx-x64.zip",
+    "http://files.kalamuna.com/chromedriver-nw-v0.10.2-linux-x64.tar.gz",
+    "http://files.kalamuna.com/chromedriver-nw-v0.10.2-win-ia32.zip"
   ],
   "devBinary": [
     "node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit",
@@ -20,11 +20,11 @@
       "file": "node-webkit.app"
     },
     {
-      "path": "node_modules/nodewebkit/nodewebkit/nw",
+      "path": "node_modules/nodewebkit/nodewebkit",
       "file": "nw"
     },
     {
-      "path": "node_modules/nodewebkit/nodewebkit/nw.exe",
+      "path": "node_modules/nodewebkit/nodewebkit",
       "file": "nw.exe"
     }
   ]
