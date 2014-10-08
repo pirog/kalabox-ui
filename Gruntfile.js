@@ -226,7 +226,11 @@ module.exports = function(grunt) {
      * Bower's API's directly.
      */
     'bower-install-simple' : {
-      install: {},
+      install: {
+        options: {
+          directory: 'src/lib/vendor'
+        },
+      },
       ci: {
         options: {
           interactive: false
