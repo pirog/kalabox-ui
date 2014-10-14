@@ -89,22 +89,7 @@ before-deploy() {
     BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
     TRAVIS_TAG=BUILD_VERSION
 
-    # Set up the SSH key
-    chmod 600 $HOME/.ssh/travis.id_rsa
-    eval "$(ssh-agent)"
-    ssh-add $HOME/.ssh/travis.id_rsa
-    # Set a user for things
-    git config --global user.name "Kala C. Bot"
-    git config --global user.email "kalacommitbot@kalamuna.com"
-    # Set up our repos
-    # We need to re-add this in because our clone was originally read-only
-    git remote rm origin
-    git remote add origin git@github.com:kalabox/kalabox-ui.git
-    git checkout $TRAVIS_BRANCH
-    git add -A
-    git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --amend --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
-    git push origin $TRAVIS_BRANCH -f
-
+    # Move the built stuff over
     mv built/kalabox-win-dev.zip built/kalabox2-win-$BUILD_VERSION-dev.zip
     mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-$BUILD_VERSION-dev.tar.gz
     mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-$BUILD_VERSION-dev.tar.gz
@@ -118,6 +103,21 @@ before-deploy() {
 #
 after-deploy() {
   $HOME/index-gen.sh >/dev/null
+  # Set up the SSH key
+  chmod 600 $HOME/.ssh/travis.id_rsa
+  eval "$(ssh-agent)"
+  ssh-add $HOME/.ssh/travis.id_rsa
+  # Set a user for things
+  git config --global user.name "Kala C. Bot"
+  git config --global user.email "kalacommitbot@kalamuna.com"
+  # Set up our repos
+  # We need to re-add this in because our clone was originally read-only
+  git remote rm origin
+  git remote add origin git@github.com:kalabox/kalabox-ui.git
+  git checkout $TRAVIS_BRANCH
+  git add -A
+  git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --amend --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
+  git push origin $TRAVIS_BRANCH -f
 }
 
 ##

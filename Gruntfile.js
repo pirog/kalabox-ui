@@ -228,6 +228,7 @@ module.exports = function(grunt) {
       },
       ci: {
         options: {
+          directory: 'src/lib/vendor',
           interactive: false
         }
       }
