@@ -3,18 +3,6 @@
 COMMAND=$1
 EXIT_VALUE=0
 
-CURRENT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(curl -s https://raw.githubusercontent.com/kalabox/kalabox/master/package.json)")
-COMMIT_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
-
-CURRENT_MAJOR=$(echo $CURRENT_VERSION | cut -f1 -d.)
-COMMIT_MAJOR=$(echo $COMMIT_VERSION | cut -f1 -d.)
-CURRENT_MINOR=$(echo $CURRENT_VERSION | cut -f2 -d.)
-COMMIT_MINOR=$(echo $COMMIT_VERSION | cut -f2 -d.)
-CURRENT_PATCH=$(echo $CURRENT_VERSION | cut -f3 -d.)
-COMMIT_PATCH=$(echo $COMMIT_VERSION | cut -f3 -d.)
-
-BUILD_VERSION=v$COMMIT_MAJOR.$COMMIT_MINOR.$COMMIT_PATCH
-
 ##
 # SCRIPT COMMANDS
 ##
@@ -26,7 +14,7 @@ BUILD_VERSION=v$COMMIT_MAJOR.$COMMIT_MINOR.$COMMIT_PATCH
 before-install() {
   # This is to locally simulate travis
   if [ -z $TRAVIS ]; then
-    TRAVIS_BUILD_DIR="/Users/pirog/Desktop/kalabox"
+    TRAVIS_BUILD_DIR="$HOME/Desktop/kalabox"
     #TRAVIS_TAG=v0.12.0
   else
     sudo apt-get install curl
@@ -35,28 +23,10 @@ before-install() {
     sleep 5
   fi
 
-  # We only check on a PR
-  if [ $TRAVIS_PULL_REQUEST != "false" ]; then
-    if [ ! -z $TRAVIS_TAG ]; then
-      if [ $COMMIT_MINOR -le $CURRENT_MINOR ]; then
-        echo "Illegal minor version number. Please use grunt release to roll an official release."
-        set_error
-      else
-        if [ $COMMIT_PATCH -ne 0 ]; then
-          echo "Illegal patch version number. Should be 0 on a minor version bump. Please use grunt release to bump the version."
-          set_error
-        fi
-      fi
-    else
-      if [ $COMMIT_MINOR -ne $CURRENT_MINOR ]; then
-        echo "Illegal minor version number. Minor versions should only change on a tag and release."
-        set_error
-      fi
-      if [ $COMMIT_PATCH -le $CURRENT_PATCH ]; then
-        echo "Illegal patch version number. Please use grunt version to bump the version."
-        set_error
-      fi
-    fi
+  if [ $TRAVIS_BRANCH == "master" ] &&
+    [ $TRAVIS_PULL_REQUEST == "false" ] &&
+    [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
+      openssl aes-256-cbc -K $encrypted_1855b2cf27b1_key -iv $encrypted_1855b2cf27b1_iv -in ci/travis.id_rsa.enc -out $HOME/.ssh/travis.id_rsa -d
   fi
 }
 
@@ -105,17 +75,40 @@ after-success() {
 # Clean up after the tests.
 #
 before-deploy() {
-if [ ! -z $TRAVIS_TAG ]; then
-  mv built/kalabox-win-dev.zip built/kalabox2-win-$TRAVIS_TAG.zip
-  mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-$TRAVIS_TAG.tar.gz
-  mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-$TRAVIS_TAG.tar.gz
-  mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-$TRAVIS_TAG.tar.gz
-else
-  mv built/kalabox-win-dev.zip built/kalabox2-win-$BUILD_VERSION-dev.zip
-  mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-$BUILD_VERSION-dev.tar.gz
-  mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-$BUILD_VERSION-dev.tar.gz
-  mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-$BUILD_VERSION-dev.tar.gz
-fi
+  if [ $TRAVIS_BRANCH == "master" ] &&
+     [ $TRAVIS_PULL_REQUEST == "false" ] &&
+     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
+
+    #BUMP BASED ON TAG
+    if [ ! -z $TRAVIS_TAG ]; then
+      grunt bump-minor
+    else
+      grunt bump-patch
+    fi
+
+    BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
+    TRAVIS_TAG=BUILD_VERSION
+
+    # Set up the SSH key
+    chmod 600 $HOME/.ssh/travis.id_rsa
+    eval "$(ssh-agent)"
+    ssh-add $HOME/.ssh/travis.id_rsa
+    # Set a user for things
+    git config --global user.name "Kala C. Bot"
+    git config --global user.email "kalacommitbot@kalamuna.com"
+    # Set up our repos
+    # We need to re-add this in because our clone was originally read-only
+    git remote rm origin
+    git remote add origin git@github.com:kalabox/kalabox-ui.git
+    git checkout $TRAVIS_BRANCH
+    git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --amend --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
+    git push origin $TRAVIS_BRANCH -f
+
+    mv built/kalabox-win-dev.zip built/kalabox2-win-$BUILD_VERSION-dev.zip
+    mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-$BUILD_VERSION-dev.tar.gz
+    mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-$BUILD_VERSION-dev.tar.gz
+    mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-$BUILD_VERSION-dev.tar.gz
+  fi
 }
 
 # after-deploy

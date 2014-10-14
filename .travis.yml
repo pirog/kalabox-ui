@@ -25,7 +25,7 @@ after_deploy:
 deploy:
 - provider: releases
   api_key:
-    secure: PHYaRPogtbjY8y5eoEJLPZzrEuGZ4yDsVlrF0jhiZmWpTdxWIEJOZf0peixvNGE9erBzNfQAn0Ubh2JZXB6lYKaDVua7XsPFfEOJPrlY+f14o6m5kC9O7yRlPY6ezEZbZjCGq86A0/l6uaHLScyCCvodeSZReDP+7xJXQHuEkJw=
+    secure: ay6Y16MbnOFAfyxBgW/C4Z0V1QLj9h9t4pLXPziDw3+KE4Olh3qOxVP5HNEF5VpwNBmXzKeRGlC88LGn93sW8x+A5CfYNZxBoNWGASUSkuRfoAB6oLaqAwJlm9GViq4m/qtuFzJJ5+ZpSWw6JE1GZnS/hzgcYZVdKyhlf4PA4XA=
   file:
   - kalabox2-win-$TRAVIS_TAG.zip
   - kalabox2-osx-$TRAVIS_TAG.tar.gz
@@ -33,8 +33,8 @@ deploy:
   - kalabox2-linux64-$TRAVIS_TAG.tar.gz
   skip_cleanup: true
   on:
-    repo: kalabox/kalabox
-    all_branches: true
+    repo: kalabox/kalabox-ui
+    branch: master
     tags: true
 - provider: cloudfiles
   username: kalamuna
@@ -44,7 +44,7 @@ deploy:
   container: kb2
   skip_cleanup: true
   on:
-    repo: kalabox/kalabox
+    repo: kalabox/kalabox-ui
     branch: master
 cache:
   directories:

@@ -32,12 +32,7 @@ module.exports = function(grunt) {
       options: {
         files: ['package.json', 'bower.json'],
         updateConfigs: [],
-        commit: true,
-        commitMessage: 'Release v%VERSION%',
-        commitFiles: ['package.json', 'bower.json'],
-        createTag: true,
-        tagName: 'v%VERSION%',
-        tagMessage: 'Version %VERSION%',
+        commit: false,
         push: false
       }
     },
@@ -296,13 +291,12 @@ module.exports = function(grunt) {
     'compress:linux64'
   ]);
 
-  grunt.registerTask('version', [
-    'bump-only:patch',
+  grunt.registerTask('bump-patch', [
+    'bump-only:patch'
   ]);
 
-  grunt.registerTask('release', [
-    'bump-only:minor',
-    'bump-commit'
+  grunt.registerTask('bump-minor', [
+    'bump-only:minor'
   ]);
 
 };
