@@ -1,0 +1,17 @@
+{
+  "name": "ngMidwayTester",
+  "devDependencies": {
+    "angularjs": "http://code.angularjs.org/1.2.0-rc.3/angular.js",
+    "angularjs-route": "http://code.angularjs.org/1.2.0-rc.3/angular-route.js"
+  },
+  "homepage": "https://github.com/yearofmoo/ngMidwayTester",
+  "_release": "c3fda6c6b6",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "c3fda6c6b6cb1ef59f793651d3da8e2bc17bd61f"
+  },
+  "_source": "git://github.com/yearofmoo/ngMidwayTester.git",
+  "_target": "*",
+  "_originalSource": "ngMidwayTester"
+}

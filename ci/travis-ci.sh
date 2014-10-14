@@ -101,6 +101,7 @@ before-deploy() {
     git remote rm origin
     git remote add origin git@github.com:kalabox/kalabox-ui.git
     git checkout $TRAVIS_BRANCH
+    git add -A
     git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --amend --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
     git push origin $TRAVIS_BRANCH -f
 
