@@ -79,10 +79,8 @@ before-deploy() {
     [ $TRAVIS_PULL_REQUEST == "false" ] &&
     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
 
-    #BUMP BASED ON TAG
-    if [ ! -z $TRAVIS_TAG ]; then
-      grunt bump-minor
-    else
+    #BUMP patch but only on master and not a tag
+    if [ -z $TRAVIS_TAG ]; then
       grunt bump-patch
     fi
 
