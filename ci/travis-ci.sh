@@ -82,7 +82,7 @@ before-deploy() {
     COMMIT_MESSAGE=$(git log --format=%B -n 1)
     BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
     # BUMP patch but only on master and not a tag
-    if [ -z $TRAVIS_TAG ] && [ $TRAVIS_BRANCH == "master" ] && [ $COMMIT_MESSAGE != " Release v${BUILD_VERSION} " ] ; then
+    if [ -z $TRAVIS_TAG ] && [ $TRAVIS_BRANCH == "master" ] && [ "${COMMIT_MESSAGE}" != " Release v${BUILD_VERSION} " ] ; then
       grunt bump-patch
     fi
 
