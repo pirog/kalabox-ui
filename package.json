@@ -1,6 +1,6 @@
 {
   "name": "Kalabox",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "src/index.html",
   "private": true,
   "window": {
@@ -24,7 +24,7 @@
     "grunt-bower-install-simple": "^1.0.0",
     "grunt-bump": "0.0.15",
     "grunt-contrib-clean": "~0.6.0",
-    "grunt-contrib-compress": "https://github.com/kalabox/grunt-contrib-compress/tarball/master",
+    "grunt-contrib-compress": "~0.12.0",
     "grunt-contrib-connect": "^0.8.0",
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-jshint": "~0.10.0",
@@ -41,7 +41,7 @@
     "karma-coverage": "^0.2.6",
     "karma-jasmine": "^0.1.5",
     "karma-ng-html2js-preprocessor": "^0.1.0",
-    "karma-nodewebkit-launcher": "https://github.com/kalabox/karma-nodewebkit-launcher/tarball/node-webkit-travis",
+    "karma-nodewebkit-launcher": "https://github.com/nDmitry/karma-nodewebkit-launcher/tarball/master",
     "karma-phantomjs-launcher": "^0.1.4",
     "matchdep": "~0.3.0",
     "nodewebkit": "~0.10.2",
