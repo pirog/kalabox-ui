@@ -41,7 +41,7 @@
     "karma-coverage": "^0.2.6",
     "karma-jasmine": "^0.1.5",
     "karma-ng-html2js-preprocessor": "^0.1.0",
-    "karma-nodewebkit-launcher": "https://github.com/kalabox/karma-nodewebkit-launcher/tarball/node-webkit-travis",
+    "karma-nodewebkit-launcher": "https://github.com/nDmitry/karma-nodewebkit-launcher/tarball/master",
     "karma-phantomjs-launcher": "^0.1.4",
     "matchdep": "~0.3.0",
     "nodewebkit": "~0.10.2",
