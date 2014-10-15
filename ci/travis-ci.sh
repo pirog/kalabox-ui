@@ -90,10 +90,10 @@ before-deploy() {
     TRAVIS_TAG=BUILD_VERSION
 
     # Move the built stuff over
-    mv built/kalabox-win-dev.zip built/kalabox2-win-$BUILD_VERSION-dev.zip
-    mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-$BUILD_VERSION-dev.tar.gz
-    mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-$BUILD_VERSION-dev.tar.gz
-    mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-$BUILD_VERSION-dev.tar.gz
+    mv built/kalabox-win-dev.zip built/kalabox2-win-v$BUILD_VERSION-dev.zip
+    mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-v$BUILD_VERSION-dev.tar.gz
+    mv built/kalabox-linux32-dev.tar.gz built/kalabox2-vlinux32-$BUILD_VERSION-dev.tar.gz
+    mv built/kalabox-linux64-dev.tar.gz built/kalabox2-vlinux64-$BUILD_VERSION-dev.tar.gz
   else
     exit $EXIT_VALUE
   fi
