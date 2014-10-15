@@ -88,8 +88,7 @@ before-deploy() {
       grunt bump-minor
     fi
 
-    BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
-    TRAVIS_TAG=BUILD_VERSION
+    export BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
 
     # Move the built stuff over
     mv built/kalabox-win-dev.zip built/kalabox2-win-v$BUILD_VERSION.zip
@@ -123,7 +122,11 @@ after-deploy() {
     git remote add origin git@github.com:kalabox/kalabox-ui.git
     git checkout $TRAVIS_BRANCH
     git add -A
-    git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --amend --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
+    if [ ! -z $TRAVIS_TAG ]; then
+      git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
+    else
+      git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --amend --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
+    fi
     git push origin $TRAVIS_BRANCH -f
   fi
 }
