@@ -22,8 +22,8 @@ before-install() {
     sh -e /etc/init.d/xvfb start +extension RANDR
     sleep 5
   fi
-
-  if [ $TRAVIS_BRANCH == "master" ] &&
+  # Add our key
+  if ([ $TRAVIS_BRANCH == "master" ] || [ ! -z $TRAVIS_TAG ]) &&
     [ $TRAVIS_PULL_REQUEST == "false" ] &&
     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
       openssl aes-256-cbc -K $encrypted_1855b2cf27b1_key -iv $encrypted_1855b2cf27b1_iv -in ci/travis.id_rsa.enc -out $HOME/.ssh/travis.id_rsa -d
@@ -75,9 +75,9 @@ after-success() {
 # Clean up after the tests.
 #
 before-deploy() {
-  if [ $TRAVIS_BRANCH == "master" ] &&
-     [ $TRAVIS_PULL_REQUEST == "false" ] &&
-     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
+  if ([ $TRAVIS_BRANCH == "master" ] || [ ! -z $TRAVIS_TAG ])
+    [ $TRAVIS_PULL_REQUEST == "false" ] &&
+    [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
 
     #BUMP BASED ON TAG
     if [ ! -z $TRAVIS_TAG ]; then
@@ -90,10 +90,12 @@ before-deploy() {
     TRAVIS_TAG=BUILD_VERSION
 
     # Move the built stuff over
-    mv built/kalabox-win-dev.zip built/kalabox2-win-$BUILD_VERSION-dev.zip
-    mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-$BUILD_VERSION-dev.tar.gz
-    mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-$BUILD_VERSION-dev.tar.gz
-    mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-$BUILD_VERSION-dev.tar.gz
+    mv built/kalabox-win-dev.zip built/kalabox2-win-v$BUILD_VERSION-dev.zip
+    mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-v$BUILD_VERSION-dev.tar.gz
+    mv built/kalabox-linux32-dev.tar.gz built/kalabox2-vlinux32-$BUILD_VERSION-dev.tar.gz
+    mv built/kalabox-linux64-dev.tar.gz built/kalabox2-vlinux64-$BUILD_VERSION-dev.tar.gz
+  else
+    exit $EXIT_VALUE
   fi
 }
 
@@ -102,22 +104,26 @@ before-deploy() {
 # Clean up after the tests.
 #
 after-deploy() {
-  $HOME/index-gen.sh >/dev/null
-  # Set up the SSH key
-  chmod 600 $HOME/.ssh/travis.id_rsa
-  eval "$(ssh-agent)"
-  ssh-add $HOME/.ssh/travis.id_rsa
-  # Set a user for things
-  git config --global user.name "Kala C. Bot"
-  git config --global user.email "kalacommitbot@kalamuna.com"
-  # Set up our repos
-  # We need to re-add this in because our clone was originally read-only
-  git remote rm origin
-  git remote add origin git@github.com:kalabox/kalabox-ui.git
-  git checkout $TRAVIS_BRANCH
-  git add -A
-  git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --amend --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
-  git push origin $TRAVIS_BRANCH -f
+  if ([ $TRAVIS_BRANCH == "master" ] || [ ! -z $TRAVIS_TAG ])
+    [ $TRAVIS_PULL_REQUEST == "false" ] &&
+    [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
+    $HOME/index-gen.sh >/dev/null
+    # Set up the SSH key
+    chmod 600 $HOME/.ssh/travis.id_rsa
+    eval "$(ssh-agent)"
+    ssh-add $HOME/.ssh/travis.id_rsa
+    # Set a user for things
+    git config --global user.name "Kala C. Bot"
+    git config --global user.email "kalacommitbot@kalamuna.com"
+    # Set up our repos
+    # We need to re-add this in because our clone was originally read-only
+    git remote rm origin
+    git remote add origin git@github.com:kalabox/kalabox-ui.git
+    git checkout $TRAVIS_BRANCH
+    git add -A
+    git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --amend --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
+    git push origin $TRAVIS_BRANCH -f
+  fi
 }
 
 ##

@@ -34,7 +34,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: kalabox/kalabox-ui
-    branch: master
+    all_branches: true
     tags: true
 - provider: cloudfiles
   username: kalamuna
