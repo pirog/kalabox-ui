@@ -84,8 +84,8 @@ before-deploy() {
       grunt bump-patch
     fi
     # BUMP minor on a tag
-    if [ ! -z $TRAVIS_TAG ] then
-      grunt bump-patch
+    if [ ! -z $TRAVIS_TAG ]; then
+      grunt bump-minor
     fi
 
     BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
