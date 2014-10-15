@@ -88,7 +88,7 @@ before-deploy() {
       grunt bump-minor
     fi
 
-    export BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
+    BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
 
     # Move the built stuff over
     mv built/kalabox-win-dev.zip built/kalabox2-win-v$BUILD_VERSION.zip
@@ -109,6 +109,7 @@ after-deploy() {
     [ $TRAVIS_PULL_REQUEST == "false" ] &&
     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
     $HOME/index-gen.sh > /dev/null
+    BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
     # Set up the SSH key
     chmod 600 $HOME/.ssh/travis.id_rsa
     eval "$(ssh-agent)"
