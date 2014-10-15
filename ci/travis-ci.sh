@@ -79,8 +79,12 @@ before-deploy() {
     [ $TRAVIS_PULL_REQUEST == "false" ] &&
     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
 
-    #BUMP patch but only on master and not a tag
-    if [ -z $TRAVIS_TAG ]; then
+    # BUMP patch but only on master and not a tag
+    if [ -z $TRAVIS_TAG ] && [ $TRAVIS_BRANCH == "master" ]; then
+      grunt bump-patch
+    fi
+    # BUMP minor on a tag
+    if [ ! -z $TRAVIS_TAG ] then
       grunt bump-patch
     fi
 
@@ -88,10 +92,10 @@ before-deploy() {
     TRAVIS_TAG=BUILD_VERSION
 
     # Move the built stuff over
-    mv built/kalabox-win-dev.zip built/kalabox2-win-v$BUILD_VERSION-dev.zip
-    mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-v$BUILD_VERSION-dev.tar.gz
-    mv built/kalabox-linux32-dev.tar.gz built/kalabox2-vlinux32-$BUILD_VERSION-dev.tar.gz
-    mv built/kalabox-linux64-dev.tar.gz built/kalabox2-vlinux64-$BUILD_VERSION-dev.tar.gz
+    mv built/kalabox-win-dev.zip built/kalabox2-win-v$BUILD_VERSION.zip
+    mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-v$BUILD_VERSION.tar.gz
+    mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-v$BUILD_VERSION.tar.gz
+    mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-v$BUILD_VERSION.tar.gz
   else
     exit $EXIT_VALUE
   fi
@@ -105,7 +109,7 @@ after-deploy() {
   if ([ $TRAVIS_BRANCH == "master" ] || [ ! -z $TRAVIS_TAG ])
     [ $TRAVIS_PULL_REQUEST == "false" ] &&
     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
-    $HOME/index-gen.sh >/dev/null
+    $HOME/index-gen.sh > /dev/null
     # Set up the SSH key
     chmod 600 $HOME/.ssh/travis.id_rsa
     eval "$(ssh-agent)"
