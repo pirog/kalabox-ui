@@ -1,3 +1,4 @@
+
 'use strict';
 
 module.exports = function(grunt) {
@@ -32,7 +33,12 @@ module.exports = function(grunt) {
       options: {
         files: ['package.json', 'bower.json'],
         updateConfigs: [],
-        commit: false,
+        commit: true,
+        commitMessage: 'Release v%VERSION%',
+        commitFiles: ['package.json', 'bower.json'],
+        createTag: true,
+        tagName: 'v%VERSION%',
+        tagMessage: 'Version %VERSION%',
         push: false
       }
     },
@@ -297,7 +303,8 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('bump-minor', [
-    'bump-only:minor'
+    'bump-only:minor',
+    'bump-commit'
   ]);
 
 };
