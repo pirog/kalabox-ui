@@ -79,13 +79,10 @@ before-deploy() {
     [ $TRAVIS_PULL_REQUEST == "false" ] &&
     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
 
+    COMMIT_MESSAGE=$(git log --format=%B -n 1)
     # BUMP patch but only on master and not a tag
-    if [ -z $TRAVIS_TAG ] && [ $TRAVIS_BRANCH == "master" ]; then
+    if [ -z $TRAVIS_TAG ] && [ $TRAVIS_BRANCH == "master" ] && [ COMMIT_MESSAGE != "Release ${TRAVIS_TAG}" ] ; then
       grunt bump-patch
-    fi
-    # BUMP minor on a tag
-    if [ ! -z $TRAVIS_TAG ]; then
-      grunt bump-minor
     fi
 
     BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
@@ -105,7 +102,7 @@ before-deploy() {
 # Clean up after the tests.
 #
 after-deploy() {
-  if ([ $TRAVIS_BRANCH == "master" ] || [ ! -z $TRAVIS_TAG ])
+  if [ $TRAVIS_BRANCH == "master" ] &&
     [ $TRAVIS_PULL_REQUEST == "false" ] &&
     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
     $HOME/index-gen.sh > /dev/null
@@ -123,9 +120,7 @@ after-deploy() {
     git remote add origin git@github.com:kalabox/kalabox-ui.git
     git checkout $TRAVIS_BRANCH
     git add -A
-    if [ ! -z $TRAVIS_TAG ]; then
-      git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
-    else
+    if [ -z $TRAVIS_TAG ]; then
       git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --amend --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
     fi
     git push origin $TRAVIS_BRANCH -f
