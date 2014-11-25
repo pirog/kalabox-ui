@@ -122,9 +122,9 @@ after-deploy() {
     git checkout $TRAVIS_BRANCH
     git add -A
     if [ -z $TRAVIS_TAG ]; then
-      git commit -m "KALABOT MERGING COMMIT ${TRAVIS_COMMIT} FROM ${TRAVIS_REPO_SLUG} VERSION ${BUILD_VERSION} [ci skip]" --amend --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
+      git commit -m "KALABOT RUNNING A LEVEL THREE DIAGNOSTIC VERSION ${BUILD_VERSION} [ci skip]" --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
     fi
-    git push origin $TRAVIS_BRANCH -f
+    git push origin $TRAVIS_BRANCH
   fi
 }
 
