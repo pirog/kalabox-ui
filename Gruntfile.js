@@ -43,28 +43,55 @@ module.exports = function(grunt) {
       }
     },
     compress: {
-      win: {
+      win32: {
         options: {
-          archive: 'built/kalabox-win-dev.zip'
+          archive: 'built/kalabox-win32-dev.zip'
         },
         files: [
           {
             expand: true,
-            cwd: 'dist/Kalabox/win/',
+            cwd: 'dist/Kalabox/win32/',
             src: ['**'],
             dest: 'Kalabox/'
           }
         ]
       },
-      osx: {
+      win64: {
         options: {
-          archive: 'built/kalabox-osx-dev.tar.gz',
+          archive: 'built/kalabox-win64-dev.zip'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/Kalabox/win64/',
+            src: ['**'],
+            dest: 'Kalabox/'
+          }
+        ]
+      },
+      osx32: {
+        options: {
+          archive: 'built/kalabox-osx32-dev.tar.gz',
           mode: 'tgz'
         },
         files: [
           {
             expand: true,
-            cwd: 'dist/Kalabox/osx/',
+            cwd: 'dist/Kalabox/osx32/',
+            src: ['**'],
+            dest: 'Kalabox/'
+          }
+        ]
+      },
+      osx64: {
+        options: {
+          archive: 'built/kalabox-osx64-dev.tar.gz',
+          mode: 'tgz'
+        },
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/Kalabox/osx64/',
             src: ['**'],
             dest: 'Kalabox/'
           }
@@ -201,8 +228,15 @@ module.exports = function(grunt) {
     nodewebkit: {
       options: {
         // Versions listed here: http://dl.node-webkit.org/
-        version: 'v0.10.2',
-        platforms: ['win', 'osx', 'linux32', 'linux64'],
+        version: 'v0.11.6',
+        platforms: [
+          'win32',
+          'win64',
+          'osx32',
+          'osx64',
+          'linux32',
+          'linux64'
+        ],
         buildDir: 'dist'
       },
       src: ['generated/**/**']
@@ -292,8 +326,10 @@ module.exports = function(grunt) {
     'copy',
     'shell:build',
     'nodewebkit',
-    'compress:win',
-    'compress:osx',
+    'compress:win32',
+    'compress:win64',
+    'compress:osx32',
+    'compress:osx64',
     'compress:linux32',
     'compress:linux64'
   ]);
