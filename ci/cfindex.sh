@@ -20,7 +20,7 @@ HTML+="\t\t<link href=\"//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.
 HTML+="\t\t<script src=\"//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js\"></script>\n"
 HTML+="\t</head>\n"
 HTML+="\t<body>\n"
-HTML+="\t\t<img src=\"https://camo.githubusercontent.com/a2c89a5279aa7c68a35c5010bf26ef37f4e762a1/687474703a2f2f7777772e6b616c616d756e612e636f6d2f73697465732f64656661756c742f66696c65732f66656174757265645f636f6e74656e742f696d616765732f63656c6562726174652532306b322e706e67\">"
+HTML+="\t\t<img src=\"http://files.kalamuna.com/PirogBlogTestKalabox.jpg\">"
 HTML+="\t\t<table class=\"table table-striped\">\n"
 HTML+="\t\t\t<tr><th>Name</th><th>Content-type</th><th>Bytes</th><th>Last modified</th></tr>\n"
 
