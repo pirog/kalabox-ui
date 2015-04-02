@@ -27,8 +27,10 @@ deploy:
   api_key:
     secure: ay6Y16MbnOFAfyxBgW/C4Z0V1QLj9h9t4pLXPziDw3+KE4Olh3qOxVP5HNEF5VpwNBmXzKeRGlC88LGn93sW8x+A5CfYNZxBoNWGASUSkuRfoAB6oLaqAwJlm9GViq4m/qtuFzJJ5+ZpSWw6JE1GZnS/hzgcYZVdKyhlf4PA4XA=
   file:
-  - kalabox2-win-$TRAVIS_TAG.zip
-  - kalabox2-osx-$TRAVIS_TAG.tar.gz
+  - kalabox2-win32-$TRAVIS_TAG.zip
+  - kalabox2-win64-$TRAVIS_TAG.zip
+  - kalabox2-osx32-$TRAVIS_TAG.tar.gz
+  - kalabox2-osx64-$TRAVIS_TAG.tar.gz
   - kalabox2-linux32-$TRAVIS_TAG.tar.gz
   - kalabox2-linux64-$TRAVIS_TAG.tar.gz
   skip_cleanup: true

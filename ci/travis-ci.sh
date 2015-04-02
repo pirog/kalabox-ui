@@ -89,8 +89,10 @@ before-deploy() {
     BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
 
     # Move the built stuff over
-    mv built/kalabox-win-dev.zip built/kalabox2-win-v$BUILD_VERSION.zip
-    mv built/kalabox-osx-dev.tar.gz built/kalabox2-osx-v$BUILD_VERSION.tar.gz
+    mv built/kalabox-win32-dev.zip built/kalabox2-win32-v$BUILD_VERSION.zip
+    mv built/kalabox-win64-dev.zip built/kalabox2-win64-v$BUILD_VERSION.zip
+    mv built/kalabox-osx32-dev.tar.gz built/kalabox2-osx32-v$BUILD_VERSION.tar.gz
+    mv built/kalabox-osx64-dev.tar.gz built/kalabox2-osx64-v$BUILD_VERSION.tar.gz
     mv built/kalabox-linux32-dev.tar.gz built/kalabox2-linux32-v$BUILD_VERSION.tar.gz
     mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-v$BUILD_VERSION.tar.gz
   else
