@@ -172,7 +172,7 @@ case $COMMAND in
     ;;
 
   after-script)
-    run_command after_script
+    run_command after-script
     ;;
 
   after-success)
