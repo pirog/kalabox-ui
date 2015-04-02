@@ -20,7 +20,7 @@ HTML+="\t\t<link href=\"//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.
 HTML+="\t\t<script src=\"//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js\"></script>\n"
 HTML+="\t</head>\n"
 HTML+="\t<body>\n"
-HTML+="\t\t<img src=\"http://files.kalamuna.com/PirogBlogTestKalabox.jpg\">"
+HTML+="\t\t<img src=\"http://files.kalamuna.com/PirogBlogTestKalabox.jpg\" style=\"width:100%;\">"
 HTML+="\t\t<table class=\"table table-striped\">\n"
 HTML+="\t\t\t<tr><th>Name</th><th>Content-type</th><th>Bytes</th><th>Last modified</th></tr>\n"
 
