@@ -16,7 +16,7 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "kalabox": "^0.5.0",
+    "kalabox": "^0.9.7",
     "lodash": "~2.4.1"
   },
   "devDependencies": {
