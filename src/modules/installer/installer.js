@@ -8,44 +8,30 @@ angular.module('kalabox.installer', [
     templateUrl: 'modules/installer/installer.html',
     controller: 'InstallerCtrl'
   });
-  $routeProvider.when('/installer/download', {
-    templateUrl: 'modules/installer/installer.html',
-    controller: 'InstallerDownloadCtrl'
-  });
-  $routeProvider.when('/installer/vbox', {
-    templateUrl: 'modules/installer/installer.html',
-    controller: 'InstallerVBoxCtrl'
-  });
-  $routeProvider.when('/installer/docker', {
-    templateUrl: 'modules/installer/installer.html',
-    controller: 'InstallerDockerCtrl'
+  $routeProvider.when('/start', {
+    templateUrl: 'modules/installer/start.html',
   });
 })
 .controller('InstallerCtrl', ['$scope', function ($scope) {
+  // @todo: Should listen for events emitted by Kalabox and change stage of
+  // the $scope.ui object to feed variables to installer.html.
   $scope.ui = {
     title: 'Checking Prerequisites',
     detail: 'Testing Firewall',
-    stepProgress: 5
+    stepProgress: '10%'
   };
 }])
-.controller('InstallerDownloadCtrl', ['$scope', function ($scope) {
-  $scope.ui = {
-    title: 'Downloading Files',
-    detail: '',
-    stepProgress: 5
-  };
-}])
-.controller('InstallerVBoxCtrl', ['$scope', function ($scope) {
-  $scope.ui = {
-    title: 'Installing VirtualBox',
-    detail: '',
-    stepProgress: 5
-  };
-}])
-.controller('InstallerDockerCtrl', function ($scope) {
-  $scope.ui = {
-    title: 'Installing Docker',
-    detail: '',
-    stepProgress: 5
+.directive('startInstall', function($location) {
+  return {
+    scope: false,
+    link: function(scope, element) {
+      element.on('click', function(){
+        // @todo: start install and move to installer screen.
+        // kbox.install.start();
+        scope.$apply(function() {
+          $location.path('/installer');
+        });
+      });
+    }
   };
 });
