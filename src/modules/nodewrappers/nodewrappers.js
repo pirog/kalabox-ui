@@ -10,6 +10,9 @@ angular.module('kalabox.nodewrappers', [])
   .factory('http', [function() {
     return require('http');
   }])
+  .factory('kbox', function() {
+    return require('kalabox');
+  })
   .factory('os', [function() {
     return require('os');
   }])
