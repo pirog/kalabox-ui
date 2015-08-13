@@ -1,6 +1,9 @@
 'use strict';
 
-angular.module('kalabox.initialize', [])
+angular.module('kalabox.initialize', [
+    'ngRoute',
+    'kalabox.nodewrappers' 
+  ])
   .config(function ($routeProvider) {
     $routeProvider.when('/initialize', {
       templateUrl: 'modules/initialize/initialize.html',
@@ -9,7 +12,9 @@ angular.module('kalabox.initialize', [])
   })
   .controller('InitializeCtrl',
   ['$scope', '$location', '_', 'pconfig', 'VirtualBox', 'Boot2Docker',
-    function ($scope, $location, _, pconfig, VirtualBox, Boot2Docker) {
+    '$q', 'kbox',
+    function ($scope, $location, _, pconfig, VirtualBox, Boot2Docker,
+    $q, kbox) {
 
       var gui = require('nw.gui');
       var mb = new gui.Menu({type: 'menubar'});
@@ -20,69 +25,29 @@ angular.module('kalabox.initialize', [])
 
       // Best practices is to manage our data in a scope object
       $scope.ui = {
-        messageText: 'Testing dependencies...'
+        messageText: 'initializing...'
       };
 
-      // Setup the dependency array
-      $scope.ui.dependencies = [
-        {
-          key: 'virtualbox',
-          name: 'VirtualBox',
-          service: VirtualBox,
-          checked: false,
-          pass: false,
-          status: '',
-          version: ''
-        },
-        {
-          key: 'boot2docker',
-          name: 'Boot2Docker',
-          service: Boot2Docker,
-          checked: false,
-          pass: false,
-          status: '',
-          version: ''
+      // Create promise.
+      var deferred = $q.defer();
+
+      // Initialize kbox.
+      kbox.init(function(err) {
+        if (err) {
+          deferred.reject(err);
+        } else {
+          deferred.resolve();    
         }
-      ];
+      });
 
-      // reduce callback, returns true if all deps have been checked
-      var depChecked = function(result, dependency) {
-        return !(!result || !dependency.checked);
-      };
-
-      // reduce callback, returns true if all deps passed
-      var depPassed = function(result, dependency) {
-        return !(!result || !dependency.pass);
-      };
-
-      // map callback to test dependency
-      var depInstalled = function(dependency) {
-        dependency.service.getVersion().then(function(version) {
-          dependency.checked = true;
-          if (version !== false) {
-            dependency.pass = true;
-            dependency.status = 'OK';
-            dependency.version = version;
-          }
-          else {
-            dependency.status = 'Failed';
-            dependency.version = 'N/A';
-          }
-
-          // check if all deps have been checked
-          if (_.reduce($scope.ui.dependencies, depChecked, true)) {
-            // if so, redirect based on if they have all passed or not
-            if (_.reduce($scope.ui.dependencies, depPassed, true)) {
-              $location.path('/dashboard');
-            }
-            else {
-              $location.path('/installer');
-            }
-          }
-        });
-      };
-
-      // run the dependency install checks.
-      _.map($scope.ui.dependencies, depInstalled);
+      // Resolve promise.
+      return deferred.promise.then(function() {
+        $scope.ui.messageText = 'initialized';
+        $location.path('/dashboard');
+        //$location.path('/installer');
+      })
+      .catch(function(err) {
+        $scope.ui.messageText = err.message + '\n' + err.stack;
+      });
 
     }]);
