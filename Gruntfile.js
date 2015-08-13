@@ -128,7 +128,12 @@ module.exports = function(grunt) {
     },
     shell: {
       nw: {
-        command: pconfig.devBinary + ' generated/'
+        command: pconfig.devBinary + ' generated/',
+        options: {
+          execOptions: {
+            maxBuffer: Infinity
+          }
+        }
       },
       build: {
         command: 'cd ./generated && npm install --production --ignore-scripts'
