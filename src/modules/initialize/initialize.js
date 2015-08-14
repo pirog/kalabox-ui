@@ -43,8 +43,9 @@ angular.module('kalabox.initialize', [
       // Resolve promise.
       return deferred.promise.then(function() {
         $scope.ui.messageText = 'initialized';
-        $location.path('/dashboard');
+        //$location.path('/dashboard');
         //$location.path('/installer');
+        $location.path('/start');
       })
       .catch(function(err) {
         $scope.ui.messageText = err.message + '\n' + err.stack;
