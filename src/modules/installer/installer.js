@@ -5,10 +5,27 @@ angular.module('kalabox.installer', [
   'kalabox.nodewrappers'
 ])
 .config(function ($routeProvider) {
+  $routeProvider.when('/start', {
+    templateUrl: 'modules/installer/start.html',
+  });
   $routeProvider.when('/installer', {
     templateUrl: 'modules/installer/installer.html',
     controller: 'InstallerCtrl'
   });
+})
+.directive('startInstall', function($location) {
+  return {
+    scope: false,
+    link: function(scope, element) {
+      element.on('click', function(){
+        // @todo: start install and move to installer screen.
+        // kbox.install.start();
+        scope.$apply(function() {
+          $location.path('/installer');
+        });
+      });
+    }
+  };
 })
 .controller('InstallerCtrl',
 ['$scope', '$q', '$location', 'kbox',
@@ -34,21 +51,23 @@ function ($scope, $q, $location, kbox) {
     downloads: [],
     containers: [],
     log: kbox.core.log,
-    stepIndex: 0,
+    stepIndex: 1,
     status: true
   };
 
   // Event called before a step runs.
   kbox.install.events.on('pre-step', function(step) {
     $scope.ui.title = step.description;
-    $scope.ui.detail = step.name;
+    $scope.ui.detail =
+      step.name + ' ' + state.stepIndex + ' of ' + state.stepCount;
+    $scope.ui.stepProgress = (state.stepIndex / state.stepCount) * 100;
+    state.stepIndex += 1;
+    $scope.$apply();
   });
 
   // Event called after a step is finished running.
   kbox.install.events.on('post-step', function() {
-    state.stepIndex += 1;
-    $scope.ui.stepProgress = state.stepIndex * (100 / state.stepCount);
-    $scope.$apply();
+
   });
 
   // OH NO!!!! an error has happened. :(
