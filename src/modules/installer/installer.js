@@ -87,6 +87,10 @@ function ($scope, $q, $location, kbox) {
   });
 
   // Run provisioning.
+  /*
+   * @todo: @bcauldwell: add some code to determine if we've already gone
+   * through the provision step before.
+   */
   kbox.install.run(state);
 
   // Return promise.
