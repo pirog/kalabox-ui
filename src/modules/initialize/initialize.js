@@ -11,7 +11,7 @@ angular.module('kalabox.initialize', [
   });
 })
 .controller('InitializeCtrl',
-['$scope', '$location', '_', $q',
+['$scope', '$location', '_', '$q',
   function ($scope, $location, _, $q) {
 
     var gui = require('nw.gui');
