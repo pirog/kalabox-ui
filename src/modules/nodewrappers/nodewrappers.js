@@ -10,14 +10,21 @@ angular.module('kalabox.nodewrappers', [])
   .factory('http', [function() {
     return require('http');
   }])
-  .factory('kbox', function() {
-    return require('kalabox');
+  .factory('kbox', function($q) {
+    // Lazy load a fully initialized kbox core library.
+    var deferred = $q.defer();
+    var kbox = require('kalabox');
+    kbox.init(function(err) {
+      if (err) {
+        deferred.reject(err);
+      } else {
+        deferred.resolve(kbox);
+      }
+    });
+    return deferred.promise;
   })
   .factory('os', [function() {
     return require('os');
-  }])
-  .factory('pconfig', [function() {
-    return require('./lib/pconfig');
   }])
   .factory('_', function() {
     return require('lodash');

@@ -14,13 +14,15 @@ angular.module('kalabox.dashboard', [])
     link: function($scope, element) {
       element.on('click', function() {
         var deferred = $q.defer();
-        kbox.engine.up(3, function(err) {
-          if (err) {
-            deferred.reject(err);
-          } else {
-            $window.alert('UP!');
-            deferred.resolve();
-          }
+        kbox.then(function(kbox) {
+          kbox.engine.up(3, function(err) {
+            if (err) {
+              deferred.reject(err);
+            } else {
+              $window.alert('UP!');
+              deferred.resolve();
+            }
+          });
         });
         return deferred;
       });
@@ -34,13 +36,15 @@ angular.module('kalabox.dashboard', [])
     link: function($scope, element) {
       element.on('click', function() {
         var deferred = $q.defer();
-        kbox.engine.down(3, function(err) {
-          if (err) {
-            deferred.reject(err);
-          } else {
-            $window.alert('DOWN!');
-            deferred.resolve();
-          }
+        kbox.then(function(kbox) {
+          kbox.engine.down(3, function(err) {
+            if (err) {
+              deferred.reject(err);
+            } else {
+              $window.alert('DOWN!');
+              deferred.resolve();
+            }
+          });
         });
         return deferred;
       });
@@ -60,13 +64,15 @@ function ($scope, $window, $timeout, $interval, $q, kbox) {
   // Poll engine status.
   function pollEngineStatus() {
     var deferred = $q.defer();
-    kbox.engine.isUp(function(err, isUp) {
-      if (err) {
-        deferred.reject(err);
-      } else {
-        $scope.ui.engineStatus = isUp ? 'up' : 'down';
-        deferred.resolve();
-      }
+    kbox.then(function(kbox) {
+      kbox.engine.isUp(function(err, isUp) {
+        if (err) {
+          deferred.reject(err);
+        } else {
+          $scope.ui.engineStatus = isUp ? 'up' : 'down';
+          deferred.resolve();
+        }
+      });
     });
     return deferred;
   }

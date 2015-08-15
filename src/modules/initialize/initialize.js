@@ -11,14 +11,12 @@ angular.module('kalabox.initialize', [
   });
 })
 .controller('InitializeCtrl',
-['$scope', '$location', '_', 'pconfig', 'VirtualBox', 'Boot2Docker',
-  '$q', 'kbox',
-  function ($scope, $location, _, pconfig, VirtualBox, Boot2Docker,
-  $q, kbox) {
+['$scope', '$location', '_', $q',
+  function ($scope, $location, _, $q) {
 
     var gui = require('nw.gui');
     var mb = new gui.Menu({type: 'menubar'});
-    if (pconfig.platform === 'darwin') {
+    if (process.platform === 'darwin') {
       mb.createMacBuiltin('Kalabox', {hideEdit: true, hideWindow: true});
     }
     gui.Window.get().menu = mb;
@@ -28,27 +26,6 @@ angular.module('kalabox.initialize', [
       messageText: 'initializing...'
     };
 
-    // Create promise.
-    var deferred = $q.defer();
-
-    // Initialize kbox.
-    kbox.init(function(err) {
-      if (err) {
-        deferred.reject(err);
-      } else {
-        deferred.resolve();
-      }
-    });
-
-    // Resolve promise.
-    return deferred.promise.then(function() {
-      $scope.ui.messageText = 'initialized';
-      //$location.path('/dashboard');
-      //$location.path('/installer');
-      $location.path('/start');
-    })
-    .catch(function(err) {
-      $scope.ui.messageText = err.message + '\n' + err.stack;
-    });
+    $location.path('/start');
 
   }]);
