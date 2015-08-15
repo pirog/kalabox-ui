@@ -16,7 +16,7 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "kalabox": "^0.9.7",
+    "kalabox": "https://github.com/kalabox/kalabox/tarball/donna-summer-hot-stuff",
     "lodash": "~2.4.1"
   },
   "devDependencies": {
