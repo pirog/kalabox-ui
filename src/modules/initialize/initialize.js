@@ -11,8 +11,8 @@ angular.module('kalabox.initialize', [
   });
 })
 .controller('InitializeCtrl',
-['$scope', '$location', '_', '$q',
-  function ($scope, $location, _, $q) {
+['$scope', '$location',
+  function ($scope, $location) {
 
     var gui = require('nw.gui');
     var mb = new gui.Menu({type: 'menubar'});
