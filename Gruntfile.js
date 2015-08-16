@@ -139,7 +139,7 @@ module.exports = function(grunt) {
         command: 'cd ./generated && npm install --production --ignore-scripts'
       },
       foo: {
-        command: 'ls -l && ls -l ./test'
+        command: 'ls -l && ls -l ./test && ls -l ./test/support'
       }
     },
     jshint: {
