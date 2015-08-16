@@ -322,7 +322,6 @@ module.exports = function(grunt) {
     'jscs',
     'bower-install-simple:ci',
     'test:unit',
-    'shell:foo',
     'test:e2e'
   ]);
 
@@ -337,6 +336,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test:e2e', [
     'protractor-setup',
+    'shell:foo',
     'protractor:default'
   ]);
 
