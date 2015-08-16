@@ -235,17 +235,16 @@ module.exports = function(grunt) {
     },
     nwjs: {
       options: {
-        platforms: []
+        platforms: [
+          'win32',
+          'win64',
+          'osx32',
+          'osx64',
+          'linux32',
+          'linux64'
+        ],
+        buildDir: 'dist'
       },
-      platforms: [
-        'win32',
-        'win64',
-        'osx32',
-        'osx64',
-        'linux32',
-        'linux64'
-      ],
-      buildDir: 'dist'
     },
     nodewebkit: {
       options: {
@@ -323,6 +322,7 @@ module.exports = function(grunt) {
     'jscs',
     'bower-install-simple:ci',
     'test:unit',
+    'protractor-setup'.
     'shell:foo',
     'test:e2e'
   ]);
