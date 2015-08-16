@@ -137,6 +137,9 @@ module.exports = function(grunt) {
       },
       build: {
         command: 'cd ./generated && npm install --production --ignore-scripts'
+      },
+      foo: {
+        command: 'ls -l test/support && ls -l test/support/chromedriver'
       }
     },
     jshint: {
@@ -306,6 +309,7 @@ module.exports = function(grunt) {
     'jscs',
     'bower-install-simple:ci',
     'test:unit',
+    'shell:foo',
     'test:e2e'
   ]);
 
