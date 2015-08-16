@@ -348,8 +348,7 @@ module.exports = function(grunt) {
     'less:dist',
     'copy',
     'shell:build',
-    'nwjs'
-    //'nodewebkit',
+    'nwjs',
     'compress:win32',
     'compress:win64',
     'compress:osx32',
