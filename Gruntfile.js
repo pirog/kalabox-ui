@@ -322,8 +322,6 @@ module.exports = function(grunt) {
     'jscs',
     'bower-install-simple:ci',
     'test:unit',
-    'protractor-setup',
-    'shell:foo',
     'test:e2e'
   ]);
 
