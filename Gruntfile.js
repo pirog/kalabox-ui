@@ -233,6 +233,20 @@ module.exports = function(grunt) {
     clean: {
       workspaces: ['built', 'dist', 'generated', 'src/downloads']
     },
+    nwjs: {
+      options: {
+        platforms: []
+      },
+      platforms: [
+        'win32',
+        'win64',
+        'osx32',
+        'osx64',
+        'linux32',
+        'linux64'
+      ],
+      buildDir: 'dist'
+    },
     nodewebkit: {
       options: {
         // Versions listed here: http://dl.node-webkit.org/
@@ -334,7 +348,8 @@ module.exports = function(grunt) {
     'less:dist',
     'copy',
     'shell:build',
-    'nodewebkit',
+    'nwjs'
+    //'nodewebkit',
     'compress:win32',
     'compress:win64',
     'compress:osx32',
