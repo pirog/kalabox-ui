@@ -128,7 +128,12 @@ module.exports = function(grunt) {
     },
     shell: {
       nw: {
-        command: pconfig.devBinary + ' generated/'
+        command: pconfig.devBinary + ' generated/',
+        options: {
+          execOptions: {
+            maxBuffer: Infinity
+          }
+        }
       },
       build: {
         command: 'cd ./generated && npm install --production --ignore-scripts'
@@ -225,6 +230,19 @@ module.exports = function(grunt) {
     clean: {
       workspaces: ['built', 'dist', 'generated', 'src/downloads']
     },
+    nwjs: {
+      options: {
+        platforms: [
+          'win32',
+          'win64',
+          'osx32',
+          'osx64',
+          'linux32',
+          'linux64'
+        ],
+        buildDir: 'dist'
+      },
+    },
     nodewebkit: {
       options: {
         // Versions listed here: http://dl.node-webkit.org/
@@ -300,8 +318,8 @@ module.exports = function(grunt) {
     'jshint',
     'jscs',
     'bower-install-simple:ci',
-    'test:unit',
-    'test:e2e'
+    'test:unit'/*,
+    'test:e2e'*/
   ]);
 
   grunt.registerTask('test:js', [
@@ -325,7 +343,7 @@ module.exports = function(grunt) {
     'less:dist',
     'copy',
     'shell:build',
-    'nodewebkit',
+    'nwjs',
     'compress:win32',
     'compress:win64',
     'compress:osx32',

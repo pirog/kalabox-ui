@@ -1,5 +1,3 @@
-/* global  describe, it, expect, inject*/
-
 'use strict';
 
 describe('Controller: InstallerCtrl', function () {
@@ -7,8 +5,8 @@ describe('Controller: InstallerCtrl', function () {
   // load the controller's module
   beforeEach(module('kalabox.installer'));
 
-  var InstallerCtrl,
-    scope;
+  var InstallerCtrl;
+  var scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {

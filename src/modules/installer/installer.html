@@ -1,16 +1,15 @@
 <div class="install kalawrap">
   <hr>
   <div class="text-center">
-    <p class="lead">{{ui.title}}</p>
+    <p class="lead" ng-bind="ui.title"></p>
     <div id="icoco" class="kalagreen">
       <!-- i class="fa fa-download icon-massive"></i -->
       <div class="spinner-box"></div>
-      <strong style="color:black;">THIS APPLICATION DOES NOT DO ANYTHING YET! THIS IS A DEMO!</strong>
     </div>
-    <p>{{ui.detail}}</p>
+    <p ng-bind="ui.detail"></p>
   </div>
   <hr>
   <div class="progress progress-striped default active">
-    <div class="progress-bar" style="width: {{ui.stepProgress}}%;"></div>
+    <div class="progress-bar" ng-style="{ 'width': ui.stepProgress}"></div>
   </div>
 </div>

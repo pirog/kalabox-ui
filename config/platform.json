@@ -10,22 +10,22 @@
     "http://files.kalamuna.com/chromedriver-nw-v0.10.2-win-ia32.zip"
   ],
   "devBinary": [
-    "node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit",
-    "node_modules/nodewebkit/nodewebkit/nw",
-    "node_modules/nodewebkit/nodewebkit/nw.exe"
+    "node_modules/nw/nwjs/nwjs.app/Contents/MacOS/nwjs",
+    "node_modules/nw/nwjs/nwjc",
+    "node_modules/nw/nwjs/nwjc.exe"
   ],
   "devSymlink": [
     {
-      "path": "node_modules/nodewebkit/nodewebkit",
-      "file": "node-webkit.app"
+      "path": "node_modules/nw/nwjs",
+      "file": "nwjs.app"
     },
     {
-      "path": "node_modules/nodewebkit/nodewebkit",
-      "file": "nw"
+      "path": "node_modules/nw/nwjs",
+      "file": "nwjc"
     },
     {
-      "path": "node_modules/nodewebkit/nodewebkit",
-      "file": "nw.exe"
+      "path": "node_modules/nw/nwjs",
+      "file": "nwjc.exe"
     }
   ]
 }
