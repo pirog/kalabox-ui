@@ -13,18 +13,12 @@ angular.module('kalabox.dashboard', [])
     scope: false,
     link: function($scope, element) {
       element.on('click', function() {
-        var deferred = $q.defer();
-        kbox.then(function(kbox) {
-          kbox.engine.up(3, function(err) {
-            if (err) {
-              deferred.reject(err);
-            } else {
-              $window.alert('UP!');
-              deferred.resolve();
-            }
-          });
+        return kbox.then(function(kbox) {
+          return kbox.engine.up(3);
+        })
+        .then(function() {
+          $window.alert('Engine is up!');
         });
-        return deferred;
       });
     }
   };
@@ -35,24 +29,23 @@ angular.module('kalabox.dashboard', [])
     scope: false,
     link: function($scope, element) {
       element.on('click', function() {
-        var deferred = $q.defer();
-        kbox.then(function(kbox) {
-          kbox.engine.down(3, function(err) {
-            if (err) {
-              deferred.reject(err);
-            } else {
-              $window.alert('DOWN!');
-              deferred.resolve();
-            }
+        return kbox.then(function(kbox) {
+          return kbox.engine.down(3)
+          .then(function() {
+            $window.alert('Engine is down!');
           });
         });
-        return deferred;
       });
     }
   };
 })
 .controller('DashboardCtrl',
 function ($scope, $window, $timeout, $interval, $q, kbox) {
+
+  /*
+   * Number of milliseconds between pollings.
+   */
+  var LOOP_INTERVAL = 2 * 1000;
 
   //Init ui model.
   $scope.ui = {
@@ -63,28 +56,19 @@ function ($scope, $window, $timeout, $interval, $q, kbox) {
 
   // Poll engine status.
   function pollEngineStatus() {
-    var deferred = $q.defer();
-    kbox.then(function(kbox) {
-      kbox.engine.isUp(function(err, isUp) {
-        if (err) {
-          deferred.reject(err);
-        } else {
-          $scope.ui.engineStatus = isUp ? 'up' : 'down';
-          deferred.resolve();
-        }
+    return kbox.then(function(kbox) {
+      return kbox.engine.isUp()
+      .then(function(isUp) {
+        $scope.ui.engineStatus = isUp ? 'up' : 'down';
       });
     });
-    return deferred;
   }
 
   // Poll all.
   function pollAll() {
     return $q.all([
       pollEngineStatus()
-    ])
-    .catch(function(err) {
-      $window.alert(err.message);
-    });
+    ]);
   }
 
   // Interval loop.
@@ -95,7 +79,7 @@ function ($scope, $window, $timeout, $interval, $q, kbox) {
         $scope.$apply();
       });
     });
-  }, 5 * 1000);
+  }, LOOP_INTERVAL);
 
   // Make sure to stop interval loop.
   var gui = require('nw.gui');
