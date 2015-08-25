@@ -2,25 +2,27 @@
 
 angular.module('kalabox', [
   'ngRoute',
-  'kalabox.boot2docker',
+  'kalabox.nodewrappers',
   'kalabox.dashboard',
   'kalabox.initialize',
   'kalabox.installer',
-  'kalabox.nodewrappers',
-  'kalabox.virtualbox',
   'ui.bootstrap',
   'mwl.bluebird'
 ])
-// Global error handing.
-.run(function($q, $window) {
-  // Global function for handling errors.
-  function handleErrors(err) {
+// Override the default global error handler.
+.factory('$exceptionHandler', function($window) {
+  return function(exception, cause) {
+    console.log('cause -> ' + cause);
+    var err = exception;
     $window.alert(err.message + '\n' + err.stack);
     console.log(err.message);
     console.log(err.stack);
-  }
+  };
+})
+// Global error handing.
+.run(function($q, $window, $exceptionHandler) {
   // Global function for handling errors from bluebird promises.
-  $q.onPossiblyUnhandledRejection(handleErrors);
+  $q.onPossiblyUnhandledRejection($exceptionHandler);
 })
 .config(function ($routeProvider) {
   $routeProvider.otherwise({

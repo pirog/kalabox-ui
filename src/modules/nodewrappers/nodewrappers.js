@@ -20,6 +20,11 @@ angular.module('kalabox.nodewrappers', [])
       return kbox;
     });
   })
+  .factory('globalConfig', function(kbox) {
+    return kbox.then(function(kbox) {
+      return kbox.core.deps.get('globalConfig');
+    });
+  })
   .factory('os', [function() {
     return require('os');
   }])
