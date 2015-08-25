@@ -11,8 +11,8 @@ angular.module('kalabox.initialize', [
   });
 })
 .controller('InitializeCtrl',
-['$scope', '$location',
-  function ($scope, $location) {
+['$scope', '$location', 'globalConfig',
+  function ($scope, $location, globalConfig) {
 
     var gui = require('nw.gui');
     var mb = new gui.Menu({type: 'menubar'});
@@ -26,6 +26,13 @@ angular.module('kalabox.initialize', [
       messageText: 'initializing...'
     };
 
-    $location.path('/start');
+    // Decide on next location.
+    globalConfig.then(function(globalConfig) {
+      if (globalConfig.provisioned) {
+        $location.path('/dashboard');
+      } else {
+        $location.path('/start');
+      }
+    });
 
   }]);
