@@ -10,15 +10,12 @@ angular.module('kalabox', [
   'mwl.bluebird'
 ])
 // Override the default global error handler.
-.factory('$exceptionHandler', function($window, kbox) {
+.factory('$exceptionHandler', function($window) {
   return function(exception) {
-    return kbox.then(function(kbox) {
-      var err = exception;
-      var stack = kbox.getStackTrace(err);
-      $window.alert(err.message + '\n' + stack);
-      console.log(err.message);
-      console.log(stack);
-    });
+    var err = exception;
+    $window.alert(err.message + '\n' + err.stack);
+    console.log(err.message);
+    console.log(err.stack);
   };
 })
 // Global error handing.
