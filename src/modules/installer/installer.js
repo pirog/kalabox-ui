@@ -44,27 +44,16 @@ angular.module('kalabox.installer', [
       // Start a new promise.
       return new Promise(function(resolve, reject) {
 
-        // Build initial state.
-        var state = {
-          disksize: 5 * 1000,
-          password: true,
-          nonInteractive: true,
-          adminCommands: [],
-          config: kbox.core.deps.get('config'),
-          downloads: [],
-          containers: [],
-          log: kbox.core.log,
-          stepIndex: 1,
-          status: true
-        };
-
         // Event called before a step runs.
-        kbox.install.events.on('pre-step', function(step) {
-          $scope.ui.title = step.description;
+        kbox.install.events.on('pre-step', function(ctx) {
+          $scope.ui.title = ctx.step.description;
           $scope.ui.detail =
-            step.name + ' ' + state.stepIndex + ' of ' + state.stepCount;
-          $scope.ui.stepProgress = (state.stepIndex / state.stepCount) * 100;
-          state.stepIndex += 1;
+            ctx.step.name + ' ' +
+            ctx.state.stepIndex + ' of ' +
+            ctx.state.stepCount;
+          $scope.ui.stepProgress =
+            (ctx.state.stepIndex / ctx.state.stepCount) * 100;
+          ctx.state.stepIndex += 1;
           $scope.$apply();
         });
 
@@ -77,15 +66,14 @@ angular.module('kalabox.installer', [
         kbox.install.events.on('error', function(err) {
           console.log(err.message + '\n' + err.stack);
           $scope.ui.title = 'ERROR: ' + err.message;
-          reject(err);
           $scope.$apply();
+          reject(err);
         });
 
         // Event called after provisioning has finished.
-        kbox.install.events.on('end', function() {
+        kbox.install.events.on('end', function(ctx) {
           $scope.ui.title = 'Done installing!';
           $location.path('/dashboard');
-          resolve();
           $scope.$apply();
         });
 
@@ -95,7 +83,7 @@ angular.module('kalabox.installer', [
          * through the provision step before.
          */
         Promise.try(function() {
-          return kbox.install.run(state);
+          return kbox.install.run();
         })
         .catch(function(err) {
           reject(err);
