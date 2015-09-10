@@ -11,7 +11,7 @@ angular.module('kalabox', [
 ])
 // Override the default global error handler.
 .factory('$exceptionHandler', function($window, kbox) {
-  return function(exception, cause) {
+  return function(exception) {
     return kbox.then(function(kbox) {
       var err = exception;
       var stack = kbox.getStackTrace(err);

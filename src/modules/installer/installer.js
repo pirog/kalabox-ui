@@ -71,7 +71,7 @@ angular.module('kalabox.installer', [
         });
 
         // Event called after provisioning has finished.
-        kbox.install.events.on('end', function(ctx) {
+        kbox.install.events.on('end', function() {
           $scope.ui.title = 'Done installing!';
           $location.path('/dashboard');
           $scope.$apply();
