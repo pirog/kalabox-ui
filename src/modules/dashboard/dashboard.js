@@ -40,57 +40,40 @@ angular.module('kalabox.dashboard', [])
   };
 })
 .controller('DashboardCtrl',
-function ($scope, $window, $timeout, $interval, $q, kbox) {
-
-  /*
-   * Number of milliseconds between pollings.
-   */
-  var LOOP_INTERVAL = 2 * 1000;
+function ($scope, $window, $timeout, $interval, $q, kbox,
+  installedSitesService, pollingService) {
 
   //Init ui model.
   $scope.ui = {
     messageText: 'Kalabox dashboard module.',
     engineStatus: '',
+    apps: '',
     detail: ''
   };
 
   // Poll engine status.
-  function pollEngineStatus() {
+  pollingService.add(function() {
     return kbox.then(function(kbox) {
       return kbox.engine.isUp()
       .then(function(isUp) {
         $scope.ui.engineStatus = isUp ? 'up' : 'down';
       });
     });
-  }
-
-  // Poll all.
-  function pollAll() {
-    return $q.all([
-      pollEngineStatus()
-    ]);
-  }
-
-  // Interval loop.
-  var loop = $interval(function() {
-    return pollAll()
-    .then(function() {
-      return $timeout(function() {
-        $scope.$apply();
-      });
-    });
-  }, LOOP_INTERVAL);
-
-  // Make sure to stop interval loop.
-  var gui = require('nw.gui');
-  var win = gui.Window.get();
-  win.on('close', function() {
-    // Cancel interval loop.
-    $interval.cancel(loop);
-    // Close window.
-    this.close(true);
   });
 
-  return loop;
+  // Poll installed sites.
+  pollingService.add(function() {
+    return installedSitesService.getAll()
+    .then(function(sites) {
+      $scope.ui.apps = JSON.stringify(sites, null, '  ');
+    });
+  });
+
+  // Start polling.
+  return pollingService.start()
+  // Wait for polling to be shutdown.
+  .then(function() {
+    return pollingService.wait();
+  });
 
 });
