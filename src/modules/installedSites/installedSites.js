@@ -25,7 +25,7 @@ angular.module('kalabox.installedSites', [])
     .then(function() {
       return function(app) {
         if (map[app] === undefined) {
-          throw new Error('test');
+          return false;
         }
         return map[app];
       };
