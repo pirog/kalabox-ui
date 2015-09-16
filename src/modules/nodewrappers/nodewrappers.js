@@ -25,6 +25,9 @@ angular.module('kalabox.nodewrappers', [])
       return kbox.core.deps.get('globalConfig');
     });
   })
+  .factory('moment', function() {
+    return require('moment');
+  })
   .factory('os', [function() {
     return require('os');
   }])

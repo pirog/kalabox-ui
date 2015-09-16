@@ -17,7 +17,8 @@
   },
   "dependencies": {
     "kalabox": "https://github.com/kalabox/kalabox/tarball/master",
-    "lodash": "~2.4.1"
+    "lodash": "~2.4.1",
+    "moment": "^2.10.6"
   },
   "devDependencies": {
     "compression": "~1.0.9",
