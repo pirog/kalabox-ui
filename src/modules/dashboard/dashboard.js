@@ -63,7 +63,7 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
 
   // Poll installed sites.
   pollingService.add(function() {
-    return installedSitesService.getAll()
+    return installedSitesService.sites()
     .then(function(sites) {
       $scope.ui.apps = JSON.stringify(sites, null, '  ');
     });
