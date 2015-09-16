@@ -1,8 +1,31 @@
-<h1>Dashboard</h1>
-<p>{{ui.messageText}}</p>
-<p>engine: {{ui.engineStatus}}</p>
 
-<div class="kalatron">
-  <a class="btn btn-large btn-success btn-massive" kbox-up>UP</a>
-  <a class="btn btn-large btn-success btn-massive" kbox-down>DOWN</a>
+<div class="container">
+  <div class="row header">
+    <div class="col-xs-3">
+      <img src="" />
+    </div>
+    <div class="col-xs-4">
+
+    </div>
+    <div class="col-xs-3">
+    </div>
+  </div>
+  <div class="sites row">
+    <div ng-repeat="site in sites">
+      <div class="site col-xs-6">
+        <div class="row">
+          <img class="pull-left col-xs-4 img-responsive" ng-src="{{site.image}}"/>
+          <div class="site-info col-xs-8 caption">
+            <h3 ng-bind="site.name"></h3>
+            <div class="site-actions">
+              <a href="" ng-class="{'site-up': site.up}"><i class="fa fa-power-off"></i></a>
+              <a href=""><i class="fa fa-trash-o"></i></a>
+              <a href=""><i class="fa fa-cloud-download"></i></a>
+              <a ng-href="site.link"><i class="fa fa-desktop"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

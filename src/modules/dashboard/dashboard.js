@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('kalabox.dashboard', [])
+angular.module('kalabox.dashboard', [
+  'kalabox.nodewrappers'])
 .config(function ($routeProvider) {
   $routeProvider.when('/dashboard', {
     templateUrl: 'modules/dashboard/dashboard.html',
@@ -38,6 +39,36 @@ angular.module('kalabox.dashboard', [])
       });
     }
   };
+})
+// @todo: only for demoing and dev, remove.
+.controller('DashboardCtrl1',
+function ($scope) {
+  $scope.sites = [
+    {
+      'name': 'Greenbiz',
+      'image': 'http://placehold.it/250x200',
+      'link': 'https://www.youtube.com/watch?v=hhJg1finpyU',
+      'up': true,
+      'provider': 'pantheon',
+      'framework': 'drupal'
+    },
+    {
+      'name': 'Computerized Structures Inc.',
+      'image': 'http://placehold.it/250x200',
+      'link': 'https://www.youtube.com/watch?v=hhJg1finpyU',
+      'up': false,
+      'provider': 'pantheon',
+      'framework': 'drupal'
+    },
+    {
+      'name': 'CITC',
+      'image': 'http://placehold.it/250x200',
+      'link':'https://www.youtube.com/watch?v=hhJg1finpyU',
+      'up': false,
+      'provider': 'pantheon',
+      'framework': 'drupal'
+    }
+  ];
 })
 .controller('DashboardCtrl',
 function ($scope, $window, $timeout, $interval, $q, kbox) {

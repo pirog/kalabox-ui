@@ -25,7 +25,8 @@ module.exports = function(grunt) {
       },
       less: {
         src: [
-          'src/css/style.less'
+          'src/css/style.less',
+          'src/css/dashboard.less'
         ]
       }
     },
@@ -312,6 +313,14 @@ module.exports = function(grunt) {
     'less:dev',
     'copy',
     'shell:nw'
+  ]);
+
+  grunt.registerTask('rebuild', [
+    'clean',
+    'bower-install-simple:install',
+    'jshint',
+    'less:dev',
+    'copy',
   ]);
 
   grunt.registerTask('test', [
