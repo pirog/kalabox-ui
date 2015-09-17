@@ -41,13 +41,34 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-// @todo: this is just for testing.
 .directive('siteToggle', function() {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
         return $scope.site.toggle();
+      });
+    }
+  };
+})
+.directive('siteBrowser', function() {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        var gui = require('nw.gui');
+        gui.Shell.openExternal($scope.site.url);
+      });
+    }
+  };
+})
+.directive('siteCode', function() {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        var gui = require('nw.gui');
+        gui.Shell.openItem($scope.site.folder);
       });
     }
   };
@@ -59,7 +80,8 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
   //Init ui model.
   $scope.ui = {
     engineStatus: null,
-    sites: []
+    sites: [],
+    states: {}
   };
 
   // Poll engine status.
@@ -77,11 +99,17 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
     return installedSitesService.sites()
     .then(function(sites) {
       $scope.ui.sites = sites;
+    })
+    .then(function() {
+      return installedSitesService.states();
+    })
+    .then(function(states) {
+      $scope.ui.states = states;
     });
   });
 
   // Start polling.
-  return pollingService.start()
+  return pollingService.start(3)
   // Wait for polling to be shutdown.
   .then(function() {
     return pollingService.wait();

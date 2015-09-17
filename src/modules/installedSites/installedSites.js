@@ -70,6 +70,9 @@ angular.module('kalabox.installedSites', [])
     var self = this;
     return kbox.then(function(kbox) {
       return kbox.app.get(self.name)
+      .tap(function(app) {
+        return kbox.setAppContext(app);
+      })
       .then(function(app) {
         return kbox.app.start(app);
       });
@@ -83,6 +86,9 @@ angular.module('kalabox.installedSites', [])
     var self = this;
     return kbox.then(function(kbox) {
       return kbox.app.get(self.name)
+      .tap(function(app) {
+        return kbox.setAppContext(app);
+      })
       .then(function(app) {
         return kbox.app.stop(app);
       });
@@ -116,7 +122,7 @@ angular.module('kalabox.installedSites', [])
  * Object for getting a cached list of site instances.
  */
 .factory('siteList', function(Cache, kbox, Site) {
-  var cache = new Cache(10);
+  var cache = new Cache(15);
   return {
     get: function(name) {
       return cache.update(function() {
@@ -135,7 +141,7 @@ angular.module('kalabox.installedSites', [])
  * Object for getting a cached list of site instance states.
  */
 .factory('siteStateMap', function($q, kbox, Cache) {
-  var cache = new Cache(2);
+  var cache = new Cache(15);
   return {
     get: function(name) {
       return cache.update(function() {
@@ -144,8 +150,11 @@ angular.module('kalabox.installedSites', [])
           return kbox.app.list()
           .map(function(app) {
             return kbox.engine.list(app.name)
-            .each(function(container) {
-              map[app.name] = map[app.name] || kbox.engine.isRunning(container.name);
+            .reduce(function(result, container) {
+              return result || kbox.engine.isRunning(container.name);
+            }, false)
+            .then(function(result) {
+              map[app.name] = result;
             });
           });
         })

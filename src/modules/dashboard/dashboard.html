@@ -19,14 +19,14 @@
     <div ng-repeat="site in ui.sites | filter:siteSearch">
       <div class="site col-xs-6">
         <div class="row">
-          <img class="pull-left col-xs-5 img-responsive" ng-src="{{site.image}}"/>
+          <a ng-href="" site-browser><img class="pull-left col-xs-5 img-responsive" ng-src="{{site.image}}"/></a>
           <div class="site-info col-xs-7">
             <h3 ng-bind="site.name"></h3>
             <div class="site-actions">
-              <a href="" site-toggle ng-class="{'site-up': site.up}"><i class="fa fa-power-off fa-2"></i></a>
-              <a href=""><i class="fa fa-trash-o fa-2"></i></a>
-              <a href=""><i class="fa fa-cloud-download fa-2"></i></a>
-              <a ng-href="site.link"><i class="fa fa-desktop fa-2"></i></a>
+              <a ng-href="" site-toggle ng-class="{'site-up': ui.states[site.name]}"><i class="fa fa-power-off fa-2"></i></a>
+              <a ng-href=""><i class="fa fa-trash-o fa-2"></i></a>
+              <a ng-href=""><i class="fa fa-cloud-download fa-2"></i></a>
+              <a ng-href="" site-code><i class="fa fa-desktop fa-2"></i></a>
             </div>
           </div>
         </div>
