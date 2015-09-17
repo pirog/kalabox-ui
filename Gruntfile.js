@@ -25,8 +25,7 @@ module.exports = function(grunt) {
       },
       less: {
         src: [
-          'src/css/style.less',
-          'src/css/dashboard.less'
+          'src/css/style.less'
         ]
       }
     },
