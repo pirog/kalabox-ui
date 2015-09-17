@@ -50,7 +50,7 @@ angular.module('kalabox.installedSites', [])
     this.name = opts.name;
     this.url = opts.url;
     this.folder = opts.folder;
-    this.image = 'http://placehold.it/250x200';
+    this.image = 'http://placehold.it/300x250';
     this.provider = 'pantheon';
     this.framework = 'drupal';
   }
