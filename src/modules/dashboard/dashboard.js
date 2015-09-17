@@ -42,17 +42,12 @@ angular.module('kalabox.dashboard', [
   };
 })
 // @todo: this is just for testing.
-.directive('siteToggle', function(kbox) {
+.directive('siteToggle', function() {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        return kbox.then(function(kbox) {
-          return kbox.app.get($scope.site.name)
-          .then(function(site) {
-            return kbox.app.start(site);
-          });
-        });
+        return $scope.site.toggle();
       });
     }
   };

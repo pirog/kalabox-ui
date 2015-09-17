@@ -43,7 +43,7 @@ angular.module('kalabox.installedSites', [])
 /*
  * Class for encapsulating a site instance.
  */
-.factory('Site', function() {
+.factory('Site', function(kbox, siteStateMap) {
 
   // Constructor.
   function Site(opts) {
@@ -55,7 +55,52 @@ angular.module('kalabox.installedSites', [])
     this.framework = 'drupal';
   }
 
-  // Helper function to create from a kalabox app object.
+  /*
+   * Returns boolean set to true if site is running.
+   */
+  Site.prototype.isRunning = function() {
+    var self = this;
+    return siteStateMap.get(self.name);
+  };
+
+  /*
+   * Start site.
+   */
+  Site.prototype.start = function() {
+    var self = this;
+    return kbox.then(function(kbox) {
+      return kbox.app.get(self.name)
+      .then(function(app) {
+        return kbox.app.start(app);
+      });
+    });
+  };
+
+  /*
+   * Stop site.
+   */
+  Site.prototype.stop = function() {
+    var self = this;
+    return kbox.then(function(kbox) {
+      return kbox.app.get(self.name)
+      .then(function(app) {
+        return kbox.app.stop(app);
+      });
+    });
+  };
+
+  /*
+   * Toggle side, start if stopped etc...
+   */
+  Site.prototype.toggle = function() {
+    var self = this;
+    return self.isRunning()
+    .then(function(isRunning) {
+      return isRunning ? self.stop() : self.start();
+    });
+  };
+
+  // Static helper function to create from a kalabox app object.
   Site.fromApp = function(app) {
     return new Site({
       name: app.name,
@@ -89,19 +134,23 @@ angular.module('kalabox.installedSites', [])
 /*
  * Object for getting a cached list of site instance states.
  */
-.factory('siteStateMap', function($q, kbox, Cache, siteList) {
+.factory('siteStateMap', function($q, kbox, Cache) {
   var cache = new Cache(2);
   return {
     get: function(name) {
       return cache.update(function() {
+        var map = {};
         return kbox.then(function(kbox) {
-          return siteList.get()
-          .map(function(site) {
-            return kbox.engine.list(site.name)
-            .reduce(function(result, container) {
-              return result || kbox.engine.isRunning(container.name);
-            }, false);
+          return kbox.app.list()
+          .map(function(app) {
+            return kbox.engine.list(app.name)
+            .each(function(container) {
+              map[app.name] = map[app.name] || kbox.engine.isRunning(container.name);
+            });
           });
+        })
+        .then(function() {
+          return map;
         });
       })
       .then(function(map) {
