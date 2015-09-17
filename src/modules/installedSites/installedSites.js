@@ -50,6 +50,9 @@ angular.module('kalabox.installedSites', [])
     this.name = opts.name;
     this.url = opts.url;
     this.folder = opts.folder;
+    this.image = 'http://placehold.it/250x200';
+    this.provider = 'pantheon';
+    this.framework = 'drupal';
   }
 
   // Helper function to create from a kalabox app object.
