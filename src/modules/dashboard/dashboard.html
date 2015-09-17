@@ -1,4 +1,5 @@
 <div class="container">
+  <p>{{ui.engineStatus}}</p>
   <div class="row header">
     <div class="col-xs-3">
       <img src="" />
@@ -10,14 +11,14 @@
     </div>
   </div>
   <div class="sites row">
-    <div ng-repeat="site in sites">
+    <div ng-repeat="site in ui.sites">
       <div class="site col-xs-6">
         <div class="row">
           <img class="pull-left col-xs-4 img-responsive" ng-src="{{site.image}}"/>
           <div class="site-info col-xs-8 caption">
             <h3 ng-bind="site.name"></h3>
             <div class="site-actions">
-              <a href="" ng-class="{'site-up': site.up}"><i class="fa fa-power-off"></i></a>
+              <a href="" site-toggle ng-class="{'site-up': site.up}"><i class="fa fa-power-off"></i></a>
               <a href=""><i class="fa fa-trash-o"></i></a>
               <a href=""><i class="fa fa-cloud-download"></i></a>
               <a ng-href="site.link"><i class="fa fa-desktop"></i></a>
