@@ -1,16 +1,22 @@
 <div class="container">
   <div class="row header">
     <div class="col-xs-3">
-      <img src="" />
+      <img src="images/kalabox2.png" />
     </div>
-    <div class="col-xs-4">
-
+    <div class="col-xs-6">
+      <form class="form-inline">
+        <div class="form-group">
+          <label class="sr-only" for="siteSearch">Site search</label>
+          <input type="search" ng-model="siteSearch" class="form-control" id="siteSearch" placeholder="Type site name">
+        </div>
+      </form>
     </div>
     <div class="col-xs-3">
+      <a href="" class="btn btn-primary">Add Site</a>
     </div>
   </div>
   <div class="sites row">
-    <div ng-repeat="site in sites">
+    <div ng-repeat="site in sites | filter:siteSearch">
       <div class="site col-xs-6">
         <div class="row">
           <img class="pull-left col-xs-4 img-responsive" ng-src="{{site.image}}"/>
