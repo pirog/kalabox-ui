@@ -9,44 +9,23 @@ angular.module('kalabox.dashboard', [
     controller: 'DashboardCtrl'
   });
 })
-// Handle kbox up directive.
-.directive('kboxUp', function($window, $q, kbox) {
-  return {
-    scope: false,
-    link: function($scope, element) {
-      element.on('click', function() {
-        return kbox.then(function(kbox) {
-          return kbox.engine.up(3);
-        })
-        .then(function() {
-          $window.alert('Engine is up!');
-        });
-      });
-    }
-  };
-})
-// Handle kbox down directive.
-.directive('kboxDown', function($window, $q, kbox) {
-  return {
-    scope: false,
-    link: function($scope, element) {
-      element.on('click', function() {
-        return kbox.then(function(kbox) {
-          return kbox.engine.down(3)
-          .then(function() {
-            $window.alert('Engine is down!');
-          });
-        });
-      });
-    }
-  };
-})
-.directive('siteToggle', function() {
+.directive('siteToggle', function(jobQueueService, $q, _) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        return $scope.site.toggle();
+        var desc = 'Toggle Site: ' + $scope.site.name;
+        jobQueueService.add(desc, function() {
+          return $q.try(function() {
+            // Inject random errors for testing.
+            if (_.random(1, 5) === 1) {
+              throw new Error('Oh no a failure happened!');
+            }
+          })
+          .then(function() {
+            return $scope.site.toggle();
+          });
+        });
       });
     }
   };
@@ -73,26 +52,38 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
+.directive('jobClear', function(jobQueueService) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        jobQueueService.clear($scope.job);
+      });
+    }
+  };
+})
+.directive('jobRetry', function(jobQueueService) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        if ($scope.job.status === 'failed') {
+          jobQueueService.retry($scope.job);
+        }
+      });
+    }
+  };
+})
 .controller('DashboardCtrl',
 function ($scope, $window, $timeout, $interval, $q, kbox,
-  installedSitesService, pollingService) {
+  installedSitesService, pollingService, jobQueueService) {
 
   //Init ui model.
   $scope.ui = {
-    engineStatus: null,
     sites: [],
-    states: {}
+    states: {},
+    jobs: []
   };
-
-  // Poll engine status.
-  pollingService.add(function() {
-    return kbox.then(function(kbox) {
-      return kbox.engine.isUp()
-      .then(function(isUp) {
-        $scope.ui.engineStatus = isUp ? 'up' : 'down';
-      });
-    });
-  });
 
   // Poll installed sites.
   pollingService.add(function() {
@@ -106,6 +97,10 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
     .then(function(states) {
       $scope.ui.states = states;
     });
+  });
+
+  pollingService.add(function() {
+    $scope.ui.jobs = jobQueueService.jobs();
   });
 
   // Start polling.

@@ -15,6 +15,13 @@
       <a href="" class="btn btn-primary">Add Site</a>
     </div>
   </div>
+  <div ng-repeat="job in ui.jobs">
+    <div>
+      {{job.desc}} - ({{job.status}})
+      - <button ng-disabled="job.status === 'running'" job-clear>clear</button>
+      - <button ng-disabled="job.status !== 'failed'" job-retry>retry</button>
+    </div>
+  </div>
   <div class="sites row">
     <div ng-repeat="site in ui.sites | filter:siteSearch">
       <div class="site col-xs-6">
