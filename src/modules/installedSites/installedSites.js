@@ -57,6 +57,7 @@ angular.module('kalabox.installedSites', [])
     this.name = opts.name;
     this.url = opts.url;
     this.folder = opts.folder;
+    this.codeFolder = opts.codeFolder;
     this.image = 'http://placehold.it/300x250';
     this.provider = 'pantheon';
     this.framework = 'drupal';
@@ -132,7 +133,8 @@ angular.module('kalabox.installedSites', [])
     return new Site({
       name: app.name,
       url: app.url,
-      folder: app.root
+      folder: app.root,
+      codeFolder: app.config.codeRoot
     });
   };
 
