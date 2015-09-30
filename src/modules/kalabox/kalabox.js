@@ -88,8 +88,9 @@ angular.module('kalabox', [
       removeJob(job);
     })
     // Handle failures.
-    .catch(function() {
+    .catch(function(err) {
       job.status = 'failed';
+      job.err = err;
     })
     .then(function() {
       check();
@@ -134,6 +135,7 @@ angular.module('kalabox', [
   function retry(job) {
     removeJob(job);
     job.status = 'pending';
+    job.err = null;
     job.next = null;
     job.prev = null;
     addJob(job);

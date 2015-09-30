@@ -37,6 +37,13 @@ angular.module('kalabox.installedSites', [])
     }
   };
 
+  /*
+   * Reset cache.
+   */
+  Cache.prototype.reset = function() {
+    this.lastUpdated = null;
+  };
+
   return Cache;
 
 })
@@ -75,6 +82,9 @@ angular.module('kalabox.installedSites', [])
       })
       .then(function(app) {
         return kbox.app.start(app);
+      })
+      .then(function() {
+        return siteStateMap.cache.reset();
       });
     });
   };
@@ -91,18 +101,29 @@ angular.module('kalabox.installedSites', [])
       })
       .then(function(app) {
         return kbox.app.stop(app);
+      })
+      .then(function() {
+        return siteStateMap.cache.reset();
       });
     });
   };
 
   /*
-   * Toggle side, start if stopped etc...
+   * Remove site.
    */
-  Site.prototype.toggle = function() {
+  Site.prototype.trash = function() {
     var self = this;
-    return self.isRunning()
-    .then(function(isRunning) {
-      return isRunning ? self.stop() : self.start();
+    return kbox.then(function(kbox) {
+      return kbox.app.get(self.name)
+      .tap(function(app) {
+        return kbox.setAppContext(app);
+      })
+      .then(function(app) {
+        return kbox.app.destroy(app);
+      })
+      .then(function() {
+        return siteStateMap.cache.reset();
+      });
     });
   };
 
@@ -119,15 +140,33 @@ angular.module('kalabox.installedSites', [])
 
 })
 /*
+ * Object for controlling caches.
+ */
+.factory('siteCache', function(siteList, siteStateMap) {
+  return {
+    reset: function() {
+      siteList.cache.reset();
+      siteStateMap.cache.reset();
+    }
+  };  
+})
+/*
  * Object for getting a cached list of site instances.
  */
 .factory('siteList', function(Cache, kbox, Site) {
   var cache = new Cache(15);
   return {
+    cache: cache,
     get: function(name) {
       return cache.update(function() {
         return kbox.then(function(kbox) {
+          // Get list of apps.
           return kbox.app.list()
+          // Only include apps with installed containers.
+          .filter(function(app) {
+            return kbox.app.isInstalled(app);
+          })
+          // Map to sites.
           .map(Site.fromApp);
         });
       })
@@ -143,6 +182,7 @@ angular.module('kalabox.installedSites', [])
 .factory('siteStateMap', function($q, kbox, Cache) {
   var cache = new Cache(15);
   return {
+    cache: cache,
     get: function(name) {
       return cache.update(function() {
         var map = {};

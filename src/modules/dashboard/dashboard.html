@@ -17,7 +17,7 @@
   </div>
   <div ng-repeat="job in ui.jobs">
     <div>
-      {{job.desc}} - ({{job.status}})
+      {{job.desc}} - ({{job.status}}) - {{job.err.message}} {{job.err.stack}}
       - <button ng-disabled="job.status === 'running'" job-clear>clear</button>
       - <button ng-disabled="job.status !== 'failed'" job-retry>retry</button>
     </div>
@@ -31,7 +31,7 @@
             <h3 ng-bind="site.name"></h3>
             <div class="site-actions">
               <a ng-href="" site-toggle ng-class="{'site-up': ui.states[site.name]}"><i class="fa fa-power-off fa-2"></i></a>
-              <a ng-href=""><i class="fa fa-trash-o fa-2"></i></a>
+              <a ng-href="" site-trash><i class="fa fa-trash-o fa-2"></i></a>
               <a ng-href=""><i class="fa fa-cloud-download fa-2"></i></a>
               <a ng-href="" site-code><i class="fa fa-desktop fa-2"></i></a>
             </div>

@@ -16,7 +16,7 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "kalabox": "https://github.com/kalabox/kalabox/tarball/master",
+    "kalabox": "https://github.com/kalabox/kalabox/tarball/v0.10",
     "lodash": "~2.4.1",
     "moment": "^2.10.6"
   },

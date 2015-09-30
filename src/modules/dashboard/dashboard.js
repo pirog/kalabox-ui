@@ -9,23 +9,48 @@ angular.module('kalabox.dashboard', [
     controller: 'DashboardCtrl'
   });
 })
-.directive('siteToggle', function(jobQueueService, $q, _) {
+/*
+ * Start site if site is stopped, stop site if site is started.
+ */
+.directive('siteToggle', function(jobQueueService) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        var desc = 'Toggle Site: ' + $scope.site.name;
-        jobQueueService.add(desc, function() {
-          return $q.try(function() {
-            // Inject random errors for testing.
-            if (_.random(1, 5) === 1) {
-              throw new Error('Oh no a failure happened!');
-            }
-          })
-          .then(function() {
-            return $scope.site.toggle();
-          });
+        // Query running state of site.
+        return $scope.site.isRunning()
+        .then(function(isRunning) {
+          var name = $scope.site.name;
+          if (isRunning) {
+            // Stop site.
+            jobQueueService.add('Stop Site: ' + name, function() {
+              return $scope.site.stop();
+            });
+          } else {
+            // Start site.
+            jobQueueService.add('Start Site: ' + name, function() {
+              return $scope.site.start();
+            });
+          }
         });
+      });
+    }
+  };
+})
+.directive('siteTrash', function(jobQueueService, $q) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        var areYouSure = true;
+        if (areYouSure) {
+          var desc = 'Remove Site: ' + $scope.site.name;
+          jobQueueService.add(desc, function() {
+            return $q.try(function() {
+              return $scope.site.trash();
+            });
+          });
+        }
       });
     }
   };
