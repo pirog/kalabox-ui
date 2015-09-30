@@ -66,13 +66,14 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('siteCode', function() {
+.directive('siteCode', function(terminal, $q) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        var gui = require('nw.gui');
-        gui.Shell.openItem($scope.site.folder);
+        return $q.try(function() {
+          terminal.open($scope.site.codeFolder);
+        });
       });
     }
   };
