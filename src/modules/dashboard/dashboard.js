@@ -100,6 +100,21 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
+.directive('providerClick', function() {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        var provider = $scope.$parent.provider;
+        if (provider.auth) {
+
+        } else {
+
+        }
+      });
+    }
+  };
+})
 .controller('DashboardCtrl',
 function ($scope, $window, $timeout, $interval, $q, kbox,
   installedSitesService, pollingService, jobQueueService) {
@@ -108,7 +123,53 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
   $scope.ui = {
     sites: [],
     states: {},
-    jobs: []
+    jobs: [],
+    providers: [
+      {
+        name: 'Pantheon',
+        auth: true,
+        username: 'alec@kalamuna.com',
+        displayName: function(providers) {
+          if (providers.length > 1) {
+            return this.name + ' (' + this.username + ')';
+          } else {
+            return this.name;
+          }
+        },
+        availableSites: function() {
+          return [
+            {
+              name: 'Site 1',
+              platform: 'Drupal'
+            },
+            {
+              name: 'Site 2',
+              platform: 'Wordpress'
+            },
+            {
+              name: 'Site 3',
+              platform: 'Drupal'
+            },
+            {
+              name: 'Site 4',
+              platform: 'Drupal'
+            }
+          ];
+        }
+      },
+      {
+        name: 'Pantheon',
+        auth: false,
+        username: 'reynolds.alec@gmail.com',
+        displayName: function(providers) {
+          if (providers.length > 1) {
+            return this.name + ' (' + this.username + ')';
+          } else {
+            return this.name;
+          }
+        }
+      }
+    ]
   };
 
   // Poll installed sites.

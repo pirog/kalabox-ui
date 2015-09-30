@@ -1,3 +1,12 @@
+<nav id="addSite" class="navmenu navmenu-default navmenu-fixed-right offcanvas" role="navigation">
+  <button type="button" class="close" data-toggle="offcanvas" data-target="#addSite" aria-label="Close">
+    <span aria-hidden="true">×</span>
+  </button>
+  <ul class="nav navmenu-nav" ng-repeat="provider in ui.providers">
+    <li class="provider" ng-class="{'provider-reauth': !provider.auth}"><a ng-href="" ng-bind="provider.displayName(ui.providers)"></a></li>
+  </ul>
+</nav>
+
 <div class="container">
   <div class="row header">
     <div class="col-xs-1">
@@ -12,7 +21,7 @@
       </form>
     </div>
     <div class="col-xs-3">
-      <a href="" class="btn btn-primary">Add Site</a>
+      <a href="" class="btn btn-primary" data-toggle="offcanvas" data-target="#addSite">Add Site</a>
     </div>
   </div>
   <div ng-repeat="job in ui.jobs">
