@@ -1,17 +1,20 @@
 'use strict';
 
 angular.module('kalabox.installer', [
-  'ngRoute',
+  'ui.router',
   'kalabox.nodewrappers'
 ])
-.config(function ($routeProvider) {
-  $routeProvider.when('/start', {
-    templateUrl: 'modules/installer/start.html',
-  });
-  $routeProvider.when('/installer', {
-    templateUrl: 'modules/installer/installer.html',
-    controller: 'InstallerCtrl'
-  });
+.config(function($stateProvider) {
+  $stateProvider
+    .state('start', {
+      url: '/start',
+      templateUrl: 'modules/installer/start.html',
+    })
+    .state('installer', {
+      url: '/installer',
+      templateUrl: 'modules/installer/installer.html',
+      controller: 'InstallerCtrl'
+    });
 })
 .directive('startInstall', function($location) {
   return {

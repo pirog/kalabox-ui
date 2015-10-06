@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('kalabox', [
-  'ngRoute',
   'kalabox.nodewrappers',
   'kalabox.dashboard',
   'kalabox.initialize',
@@ -11,16 +10,15 @@ angular.module('kalabox', [
   'mwl.bluebird'
 ])
 // Override the default global error handler.
-.factory('$exceptionHandler', function($window) {
+.factory('$exceptionHandler', function() {
   return function(exception) {
     var err = exception;
-    $window.alert(err.message + '\n' + err.stack);
     console.log(err.message);
     console.log(err.stack);
   };
 })
 // Global error handing.
-.run(function($q, $window, $exceptionHandler) {
+.run(function($q, $exceptionHandler) {
   // Global function for handling errors from bluebird promises.
   $q.onPossiblyUnhandledRejection($exceptionHandler);
 })
@@ -228,11 +226,6 @@ angular.module('kalabox', [
     .finally(function() {
       self.close(true);
     });
-  });
-})
-.config(function ($routeProvider) {
-  $routeProvider.otherwise({
-    redirectTo: '/initialize'
   });
 })
 .value('version', '2.0');
