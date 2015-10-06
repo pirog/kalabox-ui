@@ -12,6 +12,9 @@ angular.module('kalabox', [
 // Override the default global error handler.
 .factory('$exceptionHandler', function() {
   return function(exception) {
+    if(exception.message.match(/transition (superseded|prevented|aborted|failed)/)) {
+      return;
+    }
     var err = exception;
     console.log(err.message);
     console.log(err.stack);
