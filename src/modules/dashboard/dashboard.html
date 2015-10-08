@@ -2,15 +2,12 @@
   <button type="button" class="close" data-toggle="offcanvas" data-target="#addSite" aria-label="Close">
     <span aria-hidden="true">×</span>
   </button>
-  <div ng-repeat="provider in ui.providers">
-    <div><a href="" ng-bind="provider.displayName()" provider-click></a></div>
-    <div ng-repeat="site in provider.sites">
-      {{site.name}}
-    </div>
-  </div>
-  <!--<ul class="nav navmenu-nav" ng-repeat="provider in ui.providers">
+  <ul class="nav navmenu-nav" ng-repeat="provider in ui.providers">
     <li class="provider" ng-class="{'provider-reauth': !provider.auth}" provider-click><a ng-href="" ng-bind="provider.displayName(ui.providers)" provider-click></a></li>
-  </ul>-->
+    <ul ng-repeat="site in provider.sites">
+      <li class="">{{site.name}}</li>
+    </ul>
+  </ul>
 </nav>
 
 <div class="container">
