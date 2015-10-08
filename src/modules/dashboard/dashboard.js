@@ -202,6 +202,8 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
           var self = this;
           // Run inside of a promise.
           Promise.try(function() {
+            // Clear sites.
+            self.sites = [];
             // Get sites action of integration.
             var sites = integration.sites();
             // Handle question events.
