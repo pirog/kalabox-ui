@@ -50,7 +50,7 @@ angular.module('kalabox.installedSites', [])
 /*
  * Class for encapsulating a site instance.
  */
-.factory('Site', function(kbox, siteStateMap) {
+.factory('Site', function(kbox, siteStateMap, jobQueueService) {
 
   // Constructor.
   function Site(opts) {
@@ -105,6 +105,22 @@ angular.module('kalabox.installedSites', [])
       })
       .then(function() {
         return siteStateMap.cache.reset();
+      });
+    });
+  };
+
+  /*
+   * Pull site.
+   */
+  Site.prototype.pull = function() {
+    var self = this;
+    return kbox.then(function(kbox) {
+      return kbox.app.get(self.name)
+      .then(function(app) {
+        return kbox.setAppContext(app);
+      })
+      .then(function() {
+        return kbox.integrations.get('pantheon').pull();
       });
     });
   };

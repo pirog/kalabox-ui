@@ -9,6 +9,13 @@ angular.module('kalabox.dashboard', [
     controller: 'DashboardCtrl'
   });
 })
+.factory('loginService', function($q) {
+  return {
+    username: function() {
+      return $q.resolve('ben@kalamuna.com');
+    }
+  };
+})
 /*
  * Start site if site is stopped, stop site if site is started.
  */
@@ -51,6 +58,36 @@ angular.module('kalabox.dashboard', [
             });
           });
         }
+      });
+    }
+  };
+})
+.directive('sitePull', function(jobQueueService) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        var siteName = $scope.site.name;
+        var desc = 'Pull Site: ' + siteName;
+        jobQueueService.add(desc, function() {
+          var job = this;
+          return $scope.site.pull()
+          .then(function(pull) {
+            pull.on('ask', function(question) {
+              if (question.id === 'shouldPullFiles') {
+                question.answer(true);
+              } else if (question.id === 'shouldPullDatabase') {
+                question.answer(true);
+              } else {
+                question.fail(new Error(question));
+              }
+            });
+            pull.on('update', function() {
+              job.update(pull.status);
+            });
+            return pull.run(siteName);
+          });
+        });
       });
     }
   };
@@ -105,72 +142,104 @@ angular.module('kalabox.dashboard', [
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        var provider = $scope.$parent.provider;
-        if (provider.auth) {
-
-        } else {
-
-        }
+        $scope.provider.refreshSites();
       });
     }
   };
 })
 .controller('DashboardCtrl',
 function ($scope, $window, $timeout, $interval, $q, kbox,
-  installedSitesService, pollingService, jobQueueService) {
+  installedSitesService, pollingService, jobQueueService, _, loginService) {
 
   //Init ui model.
   $scope.ui = {
     sites: [],
     states: {},
     jobs: [],
-    providers: [
-      {
-        name: 'Pantheon',
-        auth: true,
-        username: 'alec@kalamuna.com',
-        displayName: function(providers) {
-          if (providers.length > 1) {
-            return this.name + ' (' + this.username + ')';
+    providers: []
+  };
+
+  // Initialize providers.
+  kbox.then(function(kbox) {
+    // Get list of installed integrations.
+    var integrations = _.values(kbox.integrations.get());
+    // Map each integration into a GUI provider.
+    var providers = _.map(integrations, function(integration) {
+      return {
+        name: integration.name,
+        auth: false,
+        username: null,
+        displayName: function() {
+          var self = this;
+          if (self.auth) {
+            return self.name + ' (' + self.username + ')';
           } else {
-            return this.name;
+            return self.name;
           }
         },
-        availableSites: function() {
-          return [
-            {
-              name: 'Site 1',
-              platform: 'Drupal'
-            },
-            {
-              name: 'Site 2',
-              platform: 'Wordpress'
-            },
-            {
-              name: 'Site 3',
-              platform: 'Drupal'
-            },
-            {
-              name: 'Site 4',
-              platform: 'Drupal'
+        getUsername: function() {
+          var self = this;
+          // Run inside of a promise.
+          return Promise.try(function() {
+            if (self.auth) {
+              // Already authorized.
+              return self.username;
+            } else {
+              // Get user name from login service.
+              return loginService.username()
+              // Set username, auth, and return username.
+              .tap(function(username) {
+                self.username = username;
+                self.auth = true;
+              });
             }
-          ];
+          });
+        },
+        sites : [],
+        refreshSites: function() {
+          var self = this;
+          // Run inside of a promise.
+          Promise.try(function() {
+            // Get sites action of integration.
+            var sites = integration.sites();
+            // Handle question events.
+            sites.on('ask', function(question) {
+              if (question.id === 'email') {
+                self.getUsername()
+                .then(function(username) {
+                  question.answer(username);
+                });
+              } else {
+                question.fail(new Error(
+                  'Unanswered question: ' + question.id
+                ));
+              }
+            });
+            // Handle update events.
+            sites.on('update', function() {
+              /*
+               * @todo: Add some communication between integration and gui.
+               */
+            });
+            // Run sites action.
+            return sites.run()
+            // Map integration sites to GUI sites.
+            .map(function(site) {
+              return {
+                name: site.name,
+                platform: 'Drupal'
+              };
+            })
+            // Set sites.
+            .then(function(sites) {
+              self.sites = sites;
+            });
+          });
         }
-      },
-      {
-        name: 'Pantheon',
-        auth: false,
-        username: 'reynolds.alec@gmail.com',
-        displayName: function(providers) {
-          if (providers.length > 1) {
-            return this.name + ' (' + this.username + ')';
-          } else {
-            return this.name;
-          }
-        }
-      }
-    ]
-  };
+      };
+    });
+    $scope.ui.providers = providers;
+  });
 
   // Poll installed sites.
   pollingService.add(function() {
@@ -191,7 +260,7 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
   });
 
   // Start polling.
-  return pollingService.start(3)
+  return pollingService.start(2 * 1000)
   // Wait for polling to be shutdown.
   .then(function() {
     return pollingService.wait();

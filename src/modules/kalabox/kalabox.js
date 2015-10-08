@@ -11,14 +11,23 @@ angular.module('kalabox', [
   'mwl.bluebird'
 ])
 // Override the default global error handler.
+/* jshint ignore:start */
 .factory('$exceptionHandler', function($window) {
   return function(exception) {
     var err = exception;
-    $window.alert(err.message + '\n' + err.stack);
+    var stack = (function() {
+      if (err.jse_cause && err.jse_cause.stack) {
+        return err.jse_cause.stack;
+      } else {
+        return err.stack;
+      }
+    }());
+    $window.alert(err.message + '\n' + stack);
     console.log(err.message);
-    console.log(err.stack);
+    console.log(stack);
   };
 })
+/* jshint ignore:end */
 // Global error handing.
 .run(function($q, $window, $exceptionHandler) {
   // Global function for handling errors from bluebird promises.
@@ -81,7 +90,9 @@ angular.module('kalabox', [
     // Set job status.
     job.status = 'running';
     // Run job's function.
-    return $q.try(job.fn)
+    return $q.try(function() {
+      return job.fn.call(job);
+    })
     // Set next job as the head and run next job.
     .then(function() {
       job.status = 'completed';
@@ -121,7 +132,11 @@ angular.module('kalabox', [
       fn: fn,
       prev: null,
       next: null,
-      status: 'pending'
+      status: 'pending',
+      statusMsg: '',
+      update: function(s) {
+        this.statusMsg = s;
+      }
     };
 
     addJob(job);
