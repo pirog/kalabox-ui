@@ -50,7 +50,7 @@ angular.module('kalabox.installedSites', [])
 /*
  * Class for encapsulating a site instance.
  */
-.factory('Site', function(kbox, siteStateMap, jobQueueService) {
+.factory('Site', function(kbox, siteStateMap) {
 
   // Constructor.
   function Site(opts) {
