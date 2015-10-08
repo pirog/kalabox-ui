@@ -16,9 +16,9 @@
     <script src="lib/vendor/jquery/dist/jquery.js"></script>
     <script src="lib/vendor/d3/d3.js"></script>
     <script src="lib/vendor/angular/angular.js"></script>
-    <script src="lib/vendor/angular-route/angular-route.js"></script>
+    <script src="lib/vendor/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="lib/vendor/angular-bootstrap/ui-bootstrap.js"></script>
-    <script src="lib/vendor/angular-bluebird-promises/dist/angular-bluebird-promises.min.js"></script>
+    <script src="lib/vendor/angular-bluebird-promises/dist/angular-bluebird-promises.js"></script>
     <script src="lib/vendor/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
 
     <!-- App files -->
@@ -34,7 +34,7 @@
   </head>
   <body ng-app="kalabox">
     <div id="main" role="main">
-      <div id="content" class="container" ng-view=""></div>
+      <div id="content" class="container" ui-view></div>
     </div>
   </body>
 </html>

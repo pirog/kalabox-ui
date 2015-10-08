@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('kalabox.dashboard', [
+  'ui.router',
   'kalabox.nodewrappers'
 ])
-.config(function ($routeProvider) {
-  $routeProvider.when('/dashboard', {
+.config(function($stateProvider) {
+  $stateProvider.state('dashboard', {
+    url: '/dashboard',
     templateUrl: 'modules/dashboard/dashboard.html',
     controller: 'DashboardCtrl'
   });

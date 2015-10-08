@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('kalabox', [
-  'ngRoute',
   'kalabox.nodewrappers',
   'kalabox.dashboard',
   'kalabox.initialize',
@@ -14,6 +13,9 @@ angular.module('kalabox', [
 /* jshint ignore:start */
 .factory('$exceptionHandler', function($window) {
   return function(exception) {
+    if(exception.message.match(/transition (superseded|prevented|aborted|failed)/)) {
+      return;
+    }
     var err = exception;
     var stack = (function() {
       if (err.jse_cause && err.jse_cause.stack) {
@@ -29,7 +31,7 @@ angular.module('kalabox', [
 })
 /* jshint ignore:end */
 // Global error handing.
-.run(function($q, $window, $exceptionHandler) {
+.run(function($q, $exceptionHandler) {
   // Global function for handling errors from bluebird promises.
   $q.onPossiblyUnhandledRejection($exceptionHandler);
 })
@@ -243,11 +245,6 @@ angular.module('kalabox', [
     .finally(function() {
       self.close(true);
     });
-  });
-})
-.config(function ($routeProvider) {
-  $routeProvider.otherwise({
-    redirectTo: '/initialize'
   });
 })
 .value('version', '2.0');
