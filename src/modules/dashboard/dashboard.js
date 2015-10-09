@@ -7,8 +7,20 @@ angular.module('kalabox.dashboard', [
 .config(function($stateProvider) {
   $stateProvider.state('dashboard', {
     url: '/dashboard',
-    templateUrl: 'modules/dashboard/dashboard.html',
-    controller: 'DashboardCtrl'
+    views: {
+      '': {
+        controller: 'DashboardCtrl',
+        templateUrl: 'modules/dashboard/dashboard.html'
+      },
+      'platforms@dashboard': {
+        controller: 'DashboardCtrl',
+        templateUrl: 'modules/dashboard/platforms.html'
+      },
+      'platform-sites@dashboard': {
+        controller: 'DashboardCtrl',
+        templateUrl: 'modules/dashboard/platform-sites.html'
+      }
+    }
   });
 })
 .factory('loginService', function($q) {
