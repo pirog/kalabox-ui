@@ -178,8 +178,17 @@ angular.module('kalabox', [
   // Singleton array of polling functions.
   var funcs = [];
 
+  var EventEmitter = require('events').EventEmitter;
+  var events = new EventEmitter();
+
+  var stopped = $q.fromNode(function(cb) {
+    events.on('stopped', cb);
+  });
+
   // Promise to wait for completion of polling.
-  var wait = $q.defer();
+  var wait = function() {
+    return stopped;
+  };
 
   // Add a polling function.
   function add(func) {
@@ -202,7 +211,7 @@ angular.module('kalabox', [
       });
     } else {
       // Stop flag has been set, signal polling is done.
-      wait.resolve();
+      events.emit('stopped');
     }
   }
 
@@ -215,7 +224,7 @@ angular.module('kalabox', [
   // Set stop flag and wait for current polling to finish.
   function stop() {
     stopFlag = true;
-    return wait;
+    return wait();
   }
 
   return {
@@ -227,23 +236,42 @@ angular.module('kalabox', [
   };
 
 })
-.run(function(kbox, pollingService) {
-  // Hook into the gui window closing event.
-  var gui = require('nw.gui');
-  var win = gui.Window.get();
-  win.on('close', function() {
-    var self = this;
-    // Stop the polling service.
-    return pollingService.stop()
-    // Shutdown the engine.
-    .then(function() {
-      return kbox.then(function(kbox) {
-        return kbox.engine.down();
+.run(function(kbox, pollingService, $q, $window) {
+  Promise.try(function() {
+    // Get nw window object.
+    var win = require('nw.gui').Window.get();
+    // Hook into the gui window closing event.
+    win.on('close', function() {
+
+      var self = this;
+
+      // Stop the polling service.
+      pollingService.stop()
+      // Stop the engine.
+      .then(function() {
+        return kbox.then(function(kbox) {
+          return kbox.engine.down();
+        });
+      })
+      // Close.
+      .then(function() {
+        self.close(true);
       });
-    })
-    // Force close the window.
-    .finally(function() {
-      self.close(true);
+
+      // Start a seperate promise to ensure app get's shutdown.
+      $q.delay(30 * 1000)
+      // Inform user it's taking too long and ask if they want to force quit.
+      .then(function() {
+        /*
+         * @todo: We should add a popup at this point to ask the user if they
+         * want to force quit, or wait for the regular shutdown.
+         */
+      })
+      // Force quit.
+      .then(function() {
+        self.close(true);
+      });
+
     });
   });
 })
