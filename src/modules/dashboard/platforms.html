@@ -3,7 +3,13 @@
 </button>
 <ul class="nav navmenu-nav" ng-repeat="provider in ui.providers">
   <li class="provider" ng-class="{'provider-reauth': !provider.auth}" provider-click><a ng-href="" ng-bind="provider.displayName(ui.providers)" provider-click></a></li>
-  <ul ng-repeat="site in provider.sites">
+  <form ng-hide="!ui.showProviderSites" class="form-inline">
+    <div class="form-group">
+      <label class="sr-only" for="siteAvailableSearch">Site search</label>
+      <input type="search" ng-model="siteAvailableSearch" class="form-control" id="siteAvailableSearch" placeholder="Type site name">
+    </div>
+  </form>
+  <ul ng-repeat="site in provider.sites | filter:siteAvailableSearch">
     <li class="">{{site.name}}</li>
   </ul>
 </ul>

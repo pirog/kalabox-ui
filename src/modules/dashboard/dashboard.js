@@ -26,7 +26,7 @@ angular.module('kalabox.dashboard', [
 .factory('loginService', function($q) {
   return {
     username: function() {
-      return $q.resolve('ben@kalamuna.com');
+      return $q.resolve('alec@kalamuna.com');
     }
   };
 })
@@ -156,6 +156,7 @@ angular.module('kalabox.dashboard', [
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
+        $scope.ui.showProviderSites = true;
         $scope.provider.refreshSites();
       });
     }
@@ -167,6 +168,7 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
 
   //Init ui model.
   $scope.ui = {
+    showProviderSites: false,
     sites: [],
     states: {},
     jobs: [],
@@ -183,6 +185,7 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
         name: integration.name,
         auth: false,
         username: null,
+        showSites: false,
         displayName: function() {
           var self = this;
           if (self.auth) {
