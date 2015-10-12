@@ -15,10 +15,6 @@ angular.module('kalabox.dashboard', [
       'platforms@dashboard': {
         controller: 'DashboardCtrl',
         templateUrl: 'modules/dashboard/platforms.html'
-      },
-      'platform-sites@dashboard': {
-        controller: 'DashboardCtrl',
-        templateUrl: 'modules/dashboard/platform-sites.html'
       }
     }
   });
@@ -156,7 +152,6 @@ angular.module('kalabox.dashboard', [
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        $scope.ui.showProviderSites = true;
         $scope.provider.refreshSites();
       });
     }
@@ -168,7 +163,6 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
 
   //Init ui model.
   $scope.ui = {
-    showProviderSites: false,
     sites: [],
     states: {},
     jobs: [],
@@ -219,10 +213,15 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
           Promise.try(function() {
             // Clear sites.
             self.sites = [];
+            self.showSites = false;
+            self.loadingSites = true;
             // Get sites action of integration.
             var sites = integration.sites();
             // Handle question events.
             sites.on('ask', function(question) {
+              /*
+               * @todo: Ask via the modal.
+               */
               if (question.id === 'email') {
                 self.getUsername()
                 .then(function(username) {
@@ -252,6 +251,8 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
             // Set sites.
             .then(function(sites) {
               self.sites = sites;
+              self.showSites = true;
+              self.loadingSites = false;
             });
           });
         }
