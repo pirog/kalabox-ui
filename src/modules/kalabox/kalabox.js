@@ -236,7 +236,7 @@ angular.module('kalabox', [
   };
 
 })
-.run(function(kbox, pollingService, $q, $window) {
+.run(function(kbox, pollingService, $q) {
   Promise.try(function() {
     // Get nw window object.
     var win = require('nw.gui').Window.get();
