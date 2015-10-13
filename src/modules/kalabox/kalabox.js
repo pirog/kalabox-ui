@@ -24,7 +24,6 @@ angular.module('kalabox', [
         return err.stack;
       }
     }());
-    $window.alert(err.message + '\n' + stack);
     console.log(err.message);
     console.log(stack);
   };
@@ -236,7 +235,7 @@ angular.module('kalabox', [
   };
 
 })
-.run(function(kbox, pollingService, $q, $window) {
+.run(function(kbox, pollingService, $q) {
   Promise.try(function() {
     // Get nw window object.
     var win = require('nw.gui').Window.get();
