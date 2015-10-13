@@ -2,6 +2,7 @@
 
 angular.module('kalabox.dashboard', [
   'ui.router',
+  'ui.bootstrap',
   'kalabox.nodewrappers'
 ])
 .config(function($stateProvider) {
@@ -154,13 +155,21 @@ angular.module('kalabox.dashboard', [
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        $scope.provider.refreshSites();
+        if ($scope.provider.auth) {
+          $scope.provider.refreshSites();
+        } else {
+          // @todo: Auth via the modal.
+          var authModal = $scope.open('modules/dashboard/auth-modal.html', 'AuthModal', {provider: $scope.provider});
+          authModal.result.then(function() {
+            $scope.provider.refreshSites();
+          });
+        }
       });
     }
   };
 })
 .controller('DashboardCtrl',
-function ($scope, $window, $timeout, $interval, $q, kbox,
+function ($scope, $uibModal, $timeout, $interval, $q, kbox,
   installedSitesService, pollingService, jobQueueService, _, loginService) {
 
   //Init ui model.
@@ -171,8 +180,25 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
     providers: []
   };
 
+  // Modal creator.
+  $scope.open = function(templateUrl, controllerName, data) {
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: templateUrl,
+      controller: controllerName,
+      size: 'lg',
+      resolve: {
+        modalData: function() {
+          return data;
+        }
+      }
+    });
+    return modalInstance;
+  };
+
   // Initialize providers.
   kbox.then(function(kbox) {
+    $scope.kbox = kbox;
     // Get list of installed integrations.
     var integrations = _.values(kbox.integrations.get());
     // Map each integration into a GUI provider.
@@ -289,5 +315,45 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
   .then(function() {
     return pollingService.wait();
   });
+})
+.controller('AuthModal', function($scope, $modalInstance, kbox, _, modalData) {
+  $scope.errorMessage = false;
+  // @todo: for some reason the kbox promise isn't resolving?
+  console.log(kbox);
+  // Auth on submission.
+  $scope.ok = function (email, password) {
+    var provider = modalData.provider.name;
+    var integration = kbox.integrations.get(provider);
+    var auth = integration.auth();
+    auth.on('ask', function(questions) {
+      _.each(questions, function(question) {
+        if (question.id === 'username') {
+          question.answer(email);
+        } else if (question.id === 'password') {
+          question.answer(password);
+        } else {
+          throw new Error(JSON.stringify(question, null, '  '));
+        }
+      });
+    });
+    auth.run()
+    .then(function(result) {
+      if (result !== false) {
+        // Close modal on success.
+        console.log(result);
+        $modalInstance.close();
+      } else {
+        throw new Error('Auth failed.');
+      }
+    })
+    .catch(function(e) {
+      console.log(e);
+      $scope.errorMessage = 'Failed to validate.';
+    });
+  };
 
-});
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+})
+;

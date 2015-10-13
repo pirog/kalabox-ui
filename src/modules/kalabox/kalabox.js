@@ -24,7 +24,6 @@ angular.module('kalabox', [
         return err.stack;
       }
     }());
-    $window.alert(err.message + '\n' + stack);
     console.log(err.message);
     console.log(stack);
   };
