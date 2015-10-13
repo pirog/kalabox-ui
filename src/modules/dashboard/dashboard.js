@@ -318,37 +318,37 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
 })
 .controller('AuthModal', function($scope, $modalInstance, kbox, _, modalData) {
   $scope.errorMessage = false;
-  // @todo: for some reason the kbox promise isn't resolving?
-  console.log(kbox);
   // Auth on submission.
   $scope.ok = function (email, password) {
-    var provider = modalData.provider.name;
-    var integration = kbox.integrations.get(provider);
-    var auth = integration.auth();
-    auth.on('ask', function(questions) {
-      _.each(questions, function(question) {
-        if (question.id === 'username') {
-          question.answer(email);
-        } else if (question.id === 'password') {
-          question.answer(password);
-        } else {
-          throw new Error(JSON.stringify(question, null, '  '));
-        }
+    return kbox.then(function(kbox) {
+      var provider = modalData.provider.name;
+      var integration = kbox.integrations.get(provider);
+      var auth = integration.auth();
+      auth.on('ask', function(questions) {
+        _.each(questions, function(question) {
+          if (question.id === 'username') {
+            question.answer(email);
+          } else if (question.id === 'password') {
+            question.answer(password);
+          } else {
+            throw new Error(JSON.stringify(question, null, '  '));
+          }
+        });
       });
-    });
-    auth.run()
-    .then(function(result) {
-      if (result !== false) {
-        // Close modal on success.
-        console.log(result);
-        $modalInstance.close();
-      } else {
-        throw new Error('Auth failed.');
-      }
-    })
-    .catch(function(e) {
-      console.log(e);
-      $scope.errorMessage = 'Failed to validate.';
+      return auth.run()
+      .then(function(result) {
+        if (result !== false) {
+          // Close modal on success.
+          console.log(result);
+          $modalInstance.close();
+        } else {
+          throw new Error('Auth failed.');
+        }
+      })
+      .catch(function(e) {
+        console.log(e);
+        $scope.errorMessage = 'Failed to validate: ' + e.message;
+      });
     });
   };
 
