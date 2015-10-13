@@ -72,7 +72,7 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('sitePull', function(jobQueueService) {
+.directive('sitePull', function(jobQueueService, _) {
   return {
     scope: true,
     link: function($scope, element) {
@@ -83,14 +83,16 @@ angular.module('kalabox.dashboard', [
           var job = this;
           return $scope.site.pull()
           .then(function(pull) {
-            pull.on('ask', function(question) {
-              if (question.id === 'shouldPullFiles') {
-                question.answer(true);
-              } else if (question.id === 'shouldPullDatabase') {
-                question.answer(true);
-              } else {
-                question.fail(new Error(question));
-              }
+            pull.on('ask', function(questions) {
+              _.each(questions, function(question) {
+                if (question.id === 'shouldPullFiles') {
+                  question.answer(true);
+                } else if (question.id === 'shouldPullDatabase') {
+                  question.answer(true);
+                } else {
+                  question.fail(new Error(question));
+                }
+              });
             });
             pull.on('update', function() {
               job.update(pull.status);
@@ -218,20 +220,22 @@ function ($scope, $window, $timeout, $interval, $q, kbox,
             // Get sites action of integration.
             var sites = integration.sites();
             // Handle question events.
-            sites.on('ask', function(question) {
-              /*
-               * @todo: Ask via the modal.
-               */
-              if (question.id === 'email') {
-                self.getUsername()
-                .then(function(username) {
-                  question.answer(username);
-                });
-              } else {
-                question.fail(new Error(
-                  'Unanswered question: ' + question.id
-                ));
-              }
+            sites.on('ask', function(questions) {
+              _.each(questions, function(question) {
+                /*
+                 * @todo: Ask via the modal.
+                 */
+                if (question.id === 'email') {
+                  self.getUsername()
+                  .then(function(username) {
+                    question.answer(username);
+                  });
+                } else {
+                  question.fail(new Error(
+                    'Unanswered question: ' + question.id
+                  ));
+                }
+              });
             });
             // Handle update events.
             sites.on('update', function() {
