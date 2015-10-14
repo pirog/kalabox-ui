@@ -160,7 +160,9 @@ angular.module('kalabox.dashboard', [
         } else {
           // @todo: Auth via the modal.
           var authModal = $scope.open('modules/dashboard/auth-modal.html', 'AuthModal', {provider: $scope.provider});
-          authModal.result.then(function() {
+          authModal.result.then(function(result) {
+            $scope.provider.auth = true;
+            $scope.provider.username = result.username;
             $scope.provider.refreshSites();
           });
         }
@@ -251,7 +253,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
                 /*
                  * @todo: Ask via the modal.
                  */
-                if (question.id === 'email') {
+                if (question.id === 'username') {
                   self.getUsername()
                   .then(function(username) {
                     question.answer(username);
@@ -339,8 +341,9 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
       .then(function(result) {
         if (result !== false) {
           // Close modal on success.
-          console.log(result);
-          $modalInstance.close();
+          $modalInstance.close({
+            username: email
+          });
         } else {
           throw new Error('Auth failed.');
         }
