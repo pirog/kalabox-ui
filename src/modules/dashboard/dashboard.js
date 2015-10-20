@@ -128,6 +128,37 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
+.directive('siteAdd', function($q, $window, kbox, jobQueueService) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        kbox.then(function(kbox) {
+          var siteName = $scope.site.name;
+          var provider = $scope.$parent.provider;
+          var email = provider.username;
+          var config = kbox.core.deps.get('globalConfig');
+          var dir = config.appsRoot;
+          var opts = {
+            dir: dir,
+            name: siteName,
+            site: siteName,
+            email: email,
+            needsFramework: false
+          };
+          var desc = 'Add Site: ' + siteName;
+          return jobQueueService.add(desc, function() {
+            //var job = this;
+            return $q.try(function() {
+              var app = kbox.create.get(provider.name);
+              return kbox.create.createApp(app, opts);
+            });
+          });
+        });
+      });
+    }
+  };
+})
 .directive('jobClear', function(jobQueueService) {
   return {
     scope: true,

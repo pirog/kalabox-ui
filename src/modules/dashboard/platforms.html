@@ -18,7 +18,7 @@
         </form>
         <div class="bootcards-list">
           <ul class="list-group">
-            <li ng-repeat="site in provider.sites | filter:siteAvailableSearch" class="site list-group-item">{{site.name}}</li>
+            <li ng-repeat="site in provider.sites | filter:siteAvailableSearch" class="site list-group-item" site-add>{{site.name}}</li>
           </ul>
         </div>
       </li>
