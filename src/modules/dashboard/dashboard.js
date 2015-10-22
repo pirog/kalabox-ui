@@ -140,6 +140,9 @@ angular.module('kalabox.dashboard', [
           var config = kbox.core.deps.get('globalConfig');
           var dir = config.appsRoot;
           var opts = {
+            verbose: false,
+            buildLocal: false,
+            env: 'dev',
             dir: dir,
             name: siteName,
             site: siteName,
@@ -148,7 +151,6 @@ angular.module('kalabox.dashboard', [
           };
           var desc = 'Add Site: ' + siteName;
           return jobQueueService.add(desc, function() {
-            //var job = this;
             return $q.try(function() {
               var app = kbox.create.get(provider.name);
               return kbox.create.createApp(app, opts);
