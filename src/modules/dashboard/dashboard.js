@@ -105,6 +105,40 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
+.directive('sitePush', function(jobQueueService, _) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        var siteName = $scope.site.name;
+        var desc = 'Push Site: ' + siteName;
+        jobQueueService.add(desc, function() {
+          var job = this;
+          return $scope.site.push()
+          .then(function(push) {
+            push.on('ask', function(questions) {
+              _.each(questions, function(question) {
+                if (question.id === 'message') {
+                  question.answer('foo');
+                } else if (question.id === 'database') {
+                  question.answer('none');
+                } else if (question.id === 'files') {
+                  question.answer('none');
+                } else {
+                  question.fail(new Error(question));
+                }
+              });
+            });
+            push.on('update', function() {
+              job.update(push.status);
+            });
+            return push.run(siteName);
+          });
+        });
+      });
+    }
+  };
+})
 .directive('siteBrowser', function() {
   return {
     scope: true,

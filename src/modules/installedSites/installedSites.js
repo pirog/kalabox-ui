@@ -125,6 +125,19 @@ angular.module('kalabox.installedSites', [])
     });
   };
 
+  Site.prototype.push = function() {
+    var self = this;
+    return kbox.then(function(kbox) {
+      return kbox.app.get(self.name)
+      .then(function(app) {
+        return kbox.setAppContext(app);
+      })
+      .then(function() {
+        return kbox.integrations.get('pantheon').push();
+      });
+    });
+  };
+
   /*
    * Remove site.
    */
