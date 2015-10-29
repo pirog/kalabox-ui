@@ -105,36 +105,17 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('sitePush', function(jobQueueService, _) {
+.directive('sitePush', function() {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        var siteName = $scope.site.name;
-        var desc = 'Push Site: ' + siteName;
-        jobQueueService.add(desc, function() {
-          var job = this;
-          return $scope.site.push()
-          .then(function(push) {
-            push.on('ask', function(questions) {
-              _.each(questions, function(question) {
-                if (question.id === 'message') {
-                  question.answer('foo');
-                } else if (question.id === 'database') {
-                  question.answer('none');
-                } else if (question.id === 'files') {
-                  question.answer('none');
-                } else {
-                  question.fail(new Error(question));
-                }
-              });
-            });
-            push.on('update', function() {
-              job.update(push.status);
-            });
-            return push.run(siteName);
-          });
-        });
+        var pushModal = $scope.open(
+          'modules/dashboard/site-push-modal.html',
+          'SitePullModal',
+          {site: $scope.site}
+        );
+        return pushModal.result;
       });
     }
   };
@@ -405,10 +386,46 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
     return pollingService.wait();
   });
 })
+.controller('SitePullModal', function($scope, $modalInstance, _, modalData, jobQueueService) {
+  $scope.errorMessage = false;
+  $scope.ok = function(message, database, files) {
+    $modalInstance.close();
+    var site = modalData.site;
+    var desc = 'Push Site: ' + site.name;
+    jobQueueService.add(desc, function() {
+      var job = this;
+      return site.push().then(function(push) {
+        push.on('ask', function(questions) {
+          _.each(questions, function(question) {
+            if (question.id === 'message') {
+              question.answer(message);
+            } else if (question.id === 'database') {
+              question.answer(database);
+            } else if (question.id === 'files') {
+              question.answer(files);
+            } else {
+              question.fail(new Error(question.id));
+            }
+          });
+        });
+        push.on('update', function() {
+          job.update(push.status);
+        });
+        return push.run()
+        .then(function() {
+          console.log('done');
+        });
+      });
+    });
+  };
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+})
 .controller('AuthModal', function($scope, $modalInstance, kbox, _, modalData) {
   $scope.errorMessage = false;
   // Auth on submission.
-  $scope.ok = function (email, password) {
+  $scope.ok = function(email, password) {
     return kbox.then(function(kbox) {
       var provider = modalData.provider.name;
       var integration = kbox.integrations.get(provider);
