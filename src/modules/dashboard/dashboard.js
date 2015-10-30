@@ -148,7 +148,7 @@ angular.module('kalabox.dashboard', [
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        var addSiteModal = $scope.open('modules/dashboard/add-site-modal.html', 'AddSiteModal', {provider: $scope.provider, siteName: $scope.site.name});
+        var addSiteModal = $scope.open('modules/dashboard/add-site-modal.html', 'AddSiteModal', {provider: $scope.provider, site: $scope.site});
           addSiteModal.result.then(function(result) {
             console.log('Site pull ran', result);
             //@todo: refresh dashboard list of sites?
@@ -445,23 +445,26 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
   };
 })
 .controller('AddSiteModal', function($scope, $q, $modalInstance, kbox, _, modalData, jobQueueService) {
-  $scope.ok = function(app) {
-    console.log(app, $scope, $q, $modalInstance, kbox, _, modalData, jobQueueService);
-    var siteName = modalData.siteName;
-    var provider = modalData.provider;
-    var email = provider.username;
-    var config = kbox.core.deps.get('globalConfig');
-    var dir = config.appsRoot;
-    var opts = {
-      verbose: false,
-      buildLocal: false,
-      env: app.env,
-      dir: dir,
-      name: app.name,
-      site: siteName,
-      email: email,
-      needsFramework: false
-    };
+  $scope.provider = modalData.provider;
+  $scope.site = modalData.site;
+
+  $scope.ok = function(appConfig) {
+    console.log(appConfig, $scope, $q, $modalInstance, kbox, _, modalData, jobQueueService);
+    var siteName = modalData.siteName,
+      provider = modalData.provider,
+      site = modalData.site,
+      config = kbox.core.deps.get('globalConfig'),
+      dir = config.appsRoot,
+      opts = {
+        verbose: false,
+        buildLocal: false,
+        env: appConfig.env,
+        dir: dir,
+        name: appConfig.name,
+        site: site.name,
+        email: provider.email,
+        needsFramework: false
+      };
     var desc = 'Add Site: ' + siteName;
     return jobQueueService.add(desc, function() {
       return $q.try(function() {

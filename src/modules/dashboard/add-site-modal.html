@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h3 class="modal-title" ng-bind="'Pull ' + site.name + ' from ' + provider.name"></h3>
+  <h3 class="modal-title" ng-bind="'Pull ' + siteName + ' from ' + provider.name"></h3>
 </div>
 <div class="modal-body">
   <div class="alert alert-error" ng-bind="errorMessage" ng-if="errorMessage"></div>
@@ -10,7 +10,7 @@
     </div>
     <div class="form-group">
       <label for="appEnv">Which environment?</label>
-      <select class="form-control" id="appEnv" ng-options="site.environments" ng-model="app.env" required>
+      <select class="form-control" id="appEnv" ng-model="app.env" required>
     </div>
   </form>
 <div class="modal-footer">
