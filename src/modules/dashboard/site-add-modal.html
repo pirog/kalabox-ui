@@ -1,0 +1,19 @@
+<div class="modal-header">
+  <h3 class="modal-title" ng-bind="'Pull ' + siteName + ' from ' + provider.name"></h3>
+</div>
+<div class="modal-body">
+  <div class="alert alert-error" ng-bind="errorMessage" ng-if="errorMessage"></div>
+  <form>
+    <div class="form-group">
+      <label for="appName">Name Your App:</label>
+      <input type="text" class="form-control" id="appName" placeholder="Your New App Name" ng-model="app.name" required>
+    </div>
+    <div class="form-group">
+      <label for="appEnv">Which environment?</label>
+      <select class="form-control" id="appEnv" ng-model="app.env" required>
+    </div>
+  </form>
+<div class="modal-footer">
+  <button class="btn btn-primary" type="button" ng-click="ok(app)">Start</button>
+  <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

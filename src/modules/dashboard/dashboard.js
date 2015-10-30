@@ -143,35 +143,16 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('siteAdd', function($q, $window, kbox, jobQueueService) {
+.directive('siteAdd', function() {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        kbox.then(function(kbox) {
-          var siteName = $scope.site.name;
-          var provider = $scope.$parent.provider;
-          var email = provider.username;
-          var config = kbox.core.deps.get('globalConfig');
-          var dir = config.appsRoot;
-          var opts = {
-            verbose: false,
-            buildLocal: false,
-            env: 'dev',
-            dir: dir,
-            name: siteName,
-            site: siteName,
-            email: email,
-            needsFramework: false
-          };
-          var desc = 'Add Site: ' + siteName;
-          return jobQueueService.add(desc, function() {
-            return $q.try(function() {
-              var app = kbox.create.get(provider.name);
-              return kbox.create.createApp(app, opts);
-            });
+        var addSiteModal = $scope.open('modules/dashboard/add-site-modal.html', 'AddSiteModal', {provider: $scope.provider, siteName: $scope.site.name});
+          addSiteModal.result.then(function(result) {
+            console.log('Site pull ran', result);
+            //@todo: refresh dashboard list of sites?
           });
-        });
       });
     }
   };
@@ -461,6 +442,33 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
 
   $scope.cancel = function () {
     $modalInstance.dismiss('cancel');
+  };
+})
+.controller('AddSiteModal', function($scope, $q, $modalInstance, kbox, _, modalData, jobQueueService) {
+  $scope.ok = function(app) {
+    console.log(app, $scope, $q, $modalInstance, kbox, _, modalData, jobQueueService);
+    var siteName = modalData.siteName;
+    var provider = modalData.provider;
+    var email = provider.username;
+    var config = kbox.core.deps.get('globalConfig');
+    var dir = config.appsRoot;
+    var opts = {
+      verbose: false,
+      buildLocal: false,
+      env: app.env,
+      dir: dir,
+      name: app.name,
+      site: siteName,
+      email: email,
+      needsFramework: false
+    };
+    var desc = 'Add Site: ' + siteName;
+    return jobQueueService.add(desc, function() {
+      return $q.try(function() {
+        var app = kbox.create.get(provider.name);
+        return kbox.create.createApp(app, opts);
+      });
+    });
   };
 })
 ;
