@@ -11,6 +11,8 @@
     <div class="form-group">
       <label for="appEnv">Which environment?</label>
       <select class="form-control" id="appEnv" ng-model="app.env" required>
+        <option ng-repeat="env in site.environments" value="{{env}}">{{env}}</option>
+      </select>
     </div>
   </form>
 <div class="modal-footer">
