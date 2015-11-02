@@ -148,12 +148,12 @@ angular.module('kalabox.dashboard', [
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        var addSiteModal = $scope.open(
-          'modules/dashboard/add-site-modal.html',
-          'AddSiteModal',
+        var siteAddModal = $scope.open(
+          'modules/dashboard/site-add-modal.html',
+          'SiteAddModal',
           {provider: $scope.provider, site: $scope.site}
         );
-        addSiteModal.result.then(function(result) {
+        siteAddModal.result.then(function(result) {
           console.log('Site pull ran', result);
         });
       });
@@ -448,7 +448,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
     $modalInstance.dismiss('cancel');
   };
 })
-.controller('AddSiteModal', function($scope, $q, $modalInstance, kbox, _, modalData, jobQueueService) {
+.controller('SiteAddModal', function($scope, $q, $modalInstance, kbox, _, modalData, jobQueueService) {
   $scope.provider = modalData.provider;
   $scope.site = modalData.site;
 
