@@ -235,43 +235,4 @@ angular.module('kalabox', [
   };
 
 })
-.run(function(kbox, pollingService, $q) {
-  Promise.try(function() {
-    // Get nw window object.
-    var win = require('nw.gui').Window.get();
-    // Hook into the gui window closing event.
-    win.on('close', function() {
-
-      var self = this;
-
-      // Stop the polling service.
-      pollingService.stop()
-      // Stop the engine.
-      .then(function() {
-        return kbox.then(function(kbox) {
-          return kbox.engine.down();
-        });
-      })
-      // Close.
-      .then(function() {
-        self.close(true);
-      });
-
-      // Start a seperate promise to ensure app get's shutdown.
-      $q.delay(30 * 1000)
-      // Inform user it's taking too long and ask if they want to force quit.
-      .then(function() {
-        /*
-         * @todo: We should add a popup at this point to ask the user if they
-         * want to force quit, or wait for the regular shutdown.
-         */
-      })
-      // Force quit.
-      .then(function() {
-        self.close(true);
-      });
-
-    });
-  });
-})
 .value('version', '2.0');

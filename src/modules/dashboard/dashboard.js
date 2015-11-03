@@ -341,8 +341,44 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
         return acc;
       });
     }, []);
+
     providers.then(function(providers) {
       $scope.ui.providers = providers;
+    });
+
+    // Handle shutting down of kalabox.
+    Promise.try(function() {
+      // Get nw window object.
+      var win = require('nw.gui').Window.get();
+      // Hook into the gui window closing event.
+      win.on('close', function() {
+
+        var self = this;
+
+        // Open a modal window to inform the user that app is shutting down.
+        Promise.try(function() {
+          var shutdownModal = $scope.open(
+            'modules/dashboard/shutdown.html',
+            'ShutdownModal',
+            {win: self}
+          );
+          shutdownModal.result.then(function(result) {
+            console.log('Shutdown ran', result);
+          });
+        });
+
+        // Stop the polling service.
+        pollingService.stop()
+        // Stop the engine.
+        .then(function() {
+          return kbox.engine.down();
+        })
+        // Close.
+        .then(function() {
+          self.close(true);
+        });
+
+      });
     });
   });
 
@@ -478,6 +514,11 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
         });
       });
     });
+  };
+})
+.controller('ShutdownModal', function($scope, $q, $modalInstance, kbox, _, modalData) {
+  $scope.ok = function() {
+    modalData.win.close(true);
   };
 })
 ;
