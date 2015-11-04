@@ -20,13 +20,6 @@ angular.module('kalabox.dashboard', [
     }
   });
 })
-.factory('loginService', function($q) {
-  return {
-    username: function() {
-      return $q.resolve('alec@kalamuna.com');
-    }
-  };
-})
 /*
  * Start site if site is stopped, stop site if site is started.
  */
@@ -204,7 +197,7 @@ angular.module('kalabox.dashboard', [
 })
 .controller('DashboardCtrl',
 function ($scope, $uibModal, $timeout, $interval, $q, kbox,
-  installedSitesService, pollingService, jobQueueService, _, loginService) {
+  installedSitesService, pollingService, jobQueueService, _) {
 
   //Init ui model.
   $scope.ui = {
@@ -271,14 +264,6 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
                 if (self.auth) {
                   // Already authorized.
                   return self.username;
-                } else {
-                  // Get user name from login service.
-                  return loginService.username()
-                  // Set username, auth, and return username.
-                  .tap(function(username) {
-                    self.username = username;
-                    self.auth = true;
-                  });
                 }
               });
             },
