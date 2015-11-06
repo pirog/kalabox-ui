@@ -34,7 +34,57 @@ angular.module('kalabox', [
   // Global function for handling errors from bluebird promises.
   $q.onPossiblyUnhandledRejection($exceptionHandler);
 })
-.factory('jobQueueService', function($q) {
+/*
+ * Service for handling of gui errors.
+ */
+.factory('errorService', function() {
+
+  // Singleton state ordered list of errors.
+  var errors = [];
+
+  // Report an error.
+  function report(err) {
+    console.log('ERROR: ' + err.message);
+    errors.push(err);
+  }
+
+  // Get list of errors.
+  function list() {
+    return errors;
+  }
+
+  // Return API.
+  return {
+    list: list,
+    report: report
+  };
+
+})
+/*
+ * Service for making sure gui tasks are run with error collection and
+ * reporting, and an easy way to throw jobs onto the job queue.
+ */
+.factory('guiTask', function($q, errorService, jobQueueService) {
+
+  function tryFn(fn) {
+    return $q.try(fn)
+    .catch(function(err) {
+      errorService.report(err);
+    });
+  }
+
+  function queue(desc, fn) {
+    return jobQueueService.add(desc, fn);
+  }
+
+  return {
+    errors: errorService,
+    try: tryFn,
+    queue: queue
+  };
+
+})
+.factory('jobQueueService', function($q, errorService) {
 
   var nextId = 1;
 
@@ -92,7 +142,8 @@ angular.module('kalabox', [
     job.status = 'running';
     // Run job's function.
     return $q.try(function() {
-      return job.fn.call(job);
+      return job.fn.call(job)
+      .catch(errorService.report);
     })
     // Set next job as the head and run next job.
     .then(function() {

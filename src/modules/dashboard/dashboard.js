@@ -23,24 +23,44 @@ angular.module('kalabox.dashboard', [
 /*
  * Start site if site is stopped, stop site if site is started.
  */
-.directive('siteToggle', function(jobQueueService) {
+.directive('siteToggle', function(guiTask) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        // Query running state of site.
-        return $scope.site.isRunning()
-        .then(function(isRunning) {
-          var name = $scope.site.name;
-          if (isRunning) {
-            // Stop site.
-            jobQueueService.add('Stop Site: ' + name, function() {
-              return $scope.site.stop();
-            });
-          } else {
-            // Start site.
-            jobQueueService.add('Start Site: ' + name, function() {
-              return $scope.site.start();
+        return guiTask.try(function() {
+          // Query running state of site.
+          return $scope.site.isRunning()
+          .then(function(isRunning) {
+            var name = $scope.site.name;
+            if (isRunning) {
+              // Stop site.
+              guiTask.queue('Stop Site: ' + name, function() {
+                return $scope.site.stop();
+              });
+            } else {
+              // Start site.
+              guiTask.queue('Start Site: ' + name, function() {
+                return $scope.site.start();
+              });
+            }
+          });
+        });
+      });
+    }
+  };
+})
+.directive('siteTrash', function(guiTask) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        guiTask.try(function() {
+          var areYouSure = true;
+          if (areYouSure) {
+            var desc = 'Remove Site: ' + $scope.site.name;
+            guiTask.queue(desc, function() {
+              return $scope.site.trash();
             });
           }
         });
@@ -48,156 +68,162 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('siteTrash', function(jobQueueService, $q) {
+.directive('sitePull', function(guiTask, _) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        var areYouSure = true;
-        if (areYouSure) {
-          var desc = 'Remove Site: ' + $scope.site.name;
-          jobQueueService.add(desc, function() {
-            return $q.try(function() {
-              return $scope.site.trash();
-            });
-          });
-        }
-      });
-    }
-  };
-})
-.directive('sitePull', function(jobQueueService, _) {
-  return {
-    scope: true,
-    link: function($scope, element) {
-      element.on('click', function() {
-        var siteName = $scope.site.name;
-        var desc = 'Pull Site: ' + siteName;
-        jobQueueService.add(desc, function() {
-          var job = this;
-          return $scope.site.pull()
-          .then(function(pull) {
-            pull.on('ask', function(questions) {
-              _.each(questions, function(question) {
-                if (question.id === 'shouldPullFiles') {
-                  question.answer(true);
-                } else if (question.id === 'shouldPullDatabase') {
-                  question.answer(true);
-                } else {
-                  question.fail(new Error(question));
-                }
+        // Run inside of a gui task.
+        guiTask.try(function() {
+          var siteName = $scope.site.name;
+          var desc = 'Pull Site: ' + siteName;
+          guiTask.queue(desc, function() {
+            /*
+             * @todo: we need a modal to ask user if they want to pull files
+             * and or pull database.
+             */
+            var job = this;
+            return $scope.site.pull()
+            .then(function(pull) {
+              pull.on('ask', function(questions) {
+                _.each(questions, function(question) {
+                  if (question.id === 'shouldPullFiles') {
+                    question.answer(true);
+                  } else if (question.id === 'shouldPullDatabase') {
+                    question.answer(true);
+                  } else {
+                    question.fail(new Error(question));
+                  }
+                });
               });
+              pull.on('update', function() {
+                job.update(pull.status);
+              });
+              return pull.run(siteName);
             });
-            pull.on('update', function() {
-              job.update(pull.status);
-            });
-            return pull.run(siteName);
           });
         });
       });
     }
   };
 })
-.directive('sitePush', function() {
+.directive('sitePush', function(guiTask) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        var pushModal = $scope.open(
-          'modules/dashboard/site-push-modal.html',
-          'SitePullModal',
-          {site: $scope.site}
-        );
-        return pushModal.result;
+        // Run inside of a gui task.
+        guiTask.try(function() {
+          var sitePushModal = $scope.open(
+            'modules/dashboard/site-push-modal.html',
+            'SitePullModal',
+            {site: $scope.site}
+          );
+          return sitePushModal.result;
+        });
       });
     }
   };
 })
-.directive('siteBrowser', function() {
+.directive('siteBrowser', function(guiTask) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        var gui = require('nw.gui');
-        gui.Shell.openExternal($scope.site.url);
+        guiTask.try(function() {
+          var gui = require('nw.gui');
+          gui.Shell.openExternal($scope.site.url);
+        });
       });
     }
   };
 })
-.directive('siteCode', function(terminal, $q) {
+.directive('siteCode', function(terminal, guiTask) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        return $q.try(function() {
+        guiTask.try(function() {
           terminal.open($scope.site.codeFolder);
         });
       });
     }
   };
 })
-.directive('siteAdd', function() {
+.directive('siteAdd', function(guiTask) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        var siteAddModal = $scope.open(
-          'modules/dashboard/site-add-modal.html',
-          'SiteAddModal',
-          {provider: $scope.provider, site: $scope.site}
-        );
-        siteAddModal.result.then(function(result) {
-          console.log('Site pull ran', result);
+        guiTask.try(function() {
+          var siteAddModal = $scope.open(
+            'modules/dashboard/site-add-modal.html',
+            'SiteAddModal',
+            {provider: $scope.provider, site: $scope.site}
+          );
+          return siteAddModal.result;
         });
       });
     }
   };
 })
-.directive('jobClear', function(jobQueueService) {
+.directive('jobClear', function(guiTask, jobQueueService) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        jobQueueService.clear($scope.job);
+        guiTask.try(function() {
+          return jobQueueService.clear($scope.job);
+        });
       });
     }
   };
 })
-.directive('jobRetry', function(jobQueueService) {
+.directive('jobRetry', function(guiTask, jobQueueService) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        if ($scope.job.status === 'failed') {
-          jobQueueService.retry($scope.job);
-        }
+        guiTask.try(function() {
+          if ($scope.job.status === 'failed') {
+            return jobQueueService.retry($scope.job);
+          }
+        });
       });
     }
   };
 })
-.directive('providerClick', function() {
+.directive('providerClick', function(guiTask) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        if ($scope.provider.auth) {
-          $scope.provider.refreshSites();
-        } else {
-          // @todo: Auth via the modal.
-          var authModal = $scope.open('modules/dashboard/auth-modal.html', 'AuthModal', {provider: $scope.provider});
-          authModal.result.then(function(result) {
-            $scope.provider.auth = true;
-            $scope.provider.username = result.username;
+        guiTask.try(function() {
+          if ($scope.provider.auth) {
             $scope.provider.refreshSites();
-          });
-        }
+          } else {
+            var authModal = $scope.open(
+              'modules/dashboard/auth-modal.html',
+              'AuthModal',
+              {
+                provider: $scope.provider
+              }
+            );
+            return authModal.result.then(function(result) {
+              $scope.provider.auth = true;
+              $scope.provider.username = result.username;
+              $scope.provider.refreshSites();
+            });
+          }
+        });
       });
     }
   };
 })
 .controller('DashboardCtrl',
 function ($scope, $uibModal, $timeout, $interval, $q, kbox,
-  installedSitesService, pollingService, jobQueueService, _) {
+  installedSitesService, pollingService, jobQueueService, _,
+  guiTask) {
 
   //Init ui model.
   $scope.ui = {
@@ -222,6 +248,43 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
     });
     return modalInstance;
   };
+
+  // Handle shutting down of kalabox.
+  guiTask.try(function() {
+    // Get nw window object.
+    var win = require('nw.gui').Window.get();
+    // Hook into the gui window closing event.
+    win.on('close', function() {
+
+      var self = this;
+
+      // Open a modal window to inform the user that app is shutting down.
+      Promise.try(function() {
+        var shutdownModal = $scope.open(
+          'modules/dashboard/shutdown.html',
+          'ShutdownModal',
+          {win: self}
+        );
+        shutdownModal.result.then(function(result) {
+          console.log('Shutdown ran', result);
+        });
+      });
+
+      // Stop the polling service.
+      pollingService.stop()
+      // Stop the engine.
+      .then(function() {
+        return kbox.then(function(kbox) {
+          return kbox.engine.down();
+        });
+      })
+      // Close.
+      .then(function() {
+        self.close(true);
+      });
+
+    });
+  });
 
   // Initialize providers.
   kbox.then(function(kbox) {
@@ -331,58 +394,36 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
       $scope.ui.providers = providers;
     });
 
-    // Handle shutting down of kalabox.
-    Promise.try(function() {
-      // Get nw window object.
-      var win = require('nw.gui').Window.get();
-      // Hook into the gui window closing event.
-      win.on('close', function() {
-
-        var self = this;
-
-        // Open a modal window to inform the user that app is shutting down.
-        Promise.try(function() {
-          var shutdownModal = $scope.open(
-            'modules/dashboard/shutdown.html',
-            'ShutdownModal',
-            {win: self}
-          );
-          shutdownModal.result.then(function(result) {
-            console.log('Shutdown ran', result);
-          });
-        });
-
-        // Stop the polling service.
-        pollingService.stop()
-        // Stop the engine.
-        .then(function() {
-          return kbox.engine.down();
-        })
-        // Close.
-        .then(function() {
-          self.close(true);
-        });
-
-      });
-    });
   });
 
   // Poll installed sites.
   pollingService.add(function() {
-    return installedSitesService.sites()
-    .then(function(sites) {
-      $scope.ui.sites = sites;
-    })
-    .then(function() {
-      return installedSitesService.states();
-    })
-    .then(function(states) {
-      $scope.ui.states = states;
+    return guiTask.try(function() {
+      return installedSitesService.sites()
+      .then(function(sites) {
+        $scope.ui.sites = sites;
+      })
+      .then(function() {
+        return installedSitesService.states();
+      })
+      .then(function(states) {
+        $scope.ui.states = states;
+      });
     });
   });
 
+  // Poll list of jobs.
   pollingService.add(function() {
-    $scope.ui.jobs = jobQueueService.jobs();
+    return guiTask.try(function() {
+      $scope.ui.jobs = jobQueueService.jobs();
+    });
+  });
+
+  // Poll list of errors.
+  pollingService.add(function() {
+    return guiTask.try(function() {
+      $scope.ui.errors = guiTask.errors.list();
+    });
   });
 
   // Start polling.
@@ -392,118 +433,126 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
     return pollingService.wait();
   });
 })
-.controller('SitePullModal', function($scope, $modalInstance, _, modalData, jobQueueService) {
-  $scope.errorMessage = false;
-  $scope.ok = function(message, database, files) {
-    $modalInstance.close();
-    var site = modalData.site;
-    var desc = 'Push Site: ' + site.name;
-    jobQueueService.add(desc, function() {
-      var job = this;
-      return site.push().then(function(push) {
-        push.on('ask', function(questions) {
+.controller('SitePullModal', function($scope, $modalInstance, _, modalData, guiTask) {
+  guiTask.try(function() {
+    $scope.errorMessage = false;
+    $scope.ok = function(message, database, files) {
+      guiTask.try(function() {
+        $modalInstance.close();
+        var site = modalData.site;
+        var desc = 'Push Site: ' + site.name;
+        guiTask.queue(desc, function() {
+          var job = this;
+          return site.push().then(function(push) {
+            push.on('ask', function(questions) {
+              _.each(questions, function(question) {
+                if (question.id === 'message') {
+                  question.answer(message);
+                } else if (question.id === 'database') {
+                  question.answer(database);
+                } else if (question.id === 'files') {
+                  question.answer(files);
+                } else {
+                  question.fail(new Error(question.id));
+                }
+              });
+            });
+            push.on('update', function() {
+              job.update(push.status);
+            });
+            return push.run();
+          });
+        });
+      });
+    };
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+  });
+})
+.controller('AuthModal', function($scope, $modalInstance, kbox, _, modalData, guiTask) {
+  guiTask.try(function() {
+    $scope.errorMessage = false;
+    // Auth on submission.
+    $scope.ok = function(email, password) {
+      return kbox.then(function(kbox) {
+        var provider = modalData.provider.name;
+        var integration = kbox.integrations.get(provider);
+        var auth = integration.auth();
+        auth.on('ask', function(questions) {
           _.each(questions, function(question) {
-            if (question.id === 'message') {
-              question.answer(message);
-            } else if (question.id === 'database') {
-              question.answer(database);
-            } else if (question.id === 'files') {
-              question.answer(files);
+            if (question.id === 'username') {
+              question.answer(email);
+            } else if (question.id === 'password') {
+              question.answer(password);
             } else {
-              question.fail(new Error(question.id));
+              throw new Error(JSON.stringify(question, null, '  '));
             }
           });
         });
-        push.on('update', function() {
-          job.update(push.status);
-        });
-        return push.run()
-        .then(function() {
-          console.log('done');
-        });
-      });
-    });
-  };
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-})
-.controller('AuthModal', function($scope, $modalInstance, kbox, _, modalData) {
-  $scope.errorMessage = false;
-  // Auth on submission.
-  $scope.ok = function(email, password) {
-    return kbox.then(function(kbox) {
-      var provider = modalData.provider.name;
-      var integration = kbox.integrations.get(provider);
-      var auth = integration.auth();
-      auth.on('ask', function(questions) {
-        _.each(questions, function(question) {
-          if (question.id === 'username') {
-            question.answer(email);
-          } else if (question.id === 'password') {
-            question.answer(password);
+        return auth.run()
+        .then(function(result) {
+          if (result !== false) {
+            // Close modal on success.
+            $modalInstance.close({
+              username: email
+            });
           } else {
-            throw new Error(JSON.stringify(question, null, '  '));
+            throw new Error('Auth failed.');
           }
+        })
+        .catch(function(err) {
+          $scope.errorMessage = 'Failed to validate: ' + err.message;
+          throw err;
         });
       });
-      return auth.run()
-      .then(function(result) {
-        if (result !== false) {
-          // Close modal on success.
-          $modalInstance.close({
-            username: email
+    };
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+  });
+})
+.controller('SiteAddModal', function($scope, $q, $modalInstance, kbox, _, modalData, guiTask) {
+  guiTask.try(function() {
+    $scope.provider = modalData.provider;
+    $scope.site = modalData.site;
+    $scope.ok = function(appConfig) {
+      guiTask.try(function() {
+        kbox.then(function(kbox) {
+          var siteName = appConfig.name;
+          var provider = modalData.provider;
+          var site = modalData.site;
+          var config = kbox.core.deps.get('globalConfig');
+          var dir = config.appsRoot;
+          var opts = {
+            verbose: false,
+            buildLocal: false,
+            env: appConfig.env,
+            dir: dir,
+            name: appConfig.name,
+            site: site.name,
+            email: provider.username,
+            needsFramework: false
+          };
+          var desc = 'Add Site: ' + siteName;
+          $modalInstance.close();
+          return guiTask.queue(desc, function() {
+            return $q.try(function() {
+              var app = kbox.create.get(provider.name);
+              return kbox.create.createApp(app, opts);
+            });
           });
-        } else {
-          throw new Error('Auth failed.');
-        }
-      })
-      .catch(function(e) {
-        console.log(e);
-        $scope.errorMessage = 'Failed to validate: ' + e.message;
-      });
-    });
-  };
-
-  $scope.cancel = function () {
-    $modalInstance.dismiss('cancel');
-  };
-})
-.controller('SiteAddModal', function($scope, $q, $modalInstance, kbox, _, modalData, jobQueueService) {
-  $scope.provider = modalData.provider;
-  $scope.site = modalData.site;
-
-  $scope.ok = function(appConfig) {
-    kbox.then(function(kbox) {
-      var siteName = appConfig.name;
-      var provider = modalData.provider;
-      var site = modalData.site;
-      var config = kbox.core.deps.get('globalConfig');
-      var dir = config.appsRoot;
-      var opts = {
-        verbose: false,
-        buildLocal: false,
-        env: appConfig.env,
-        dir: dir,
-        name: appConfig.name,
-        site: site.name,
-        email: provider.username,
-        needsFramework: false
-      };
-      var desc = 'Add Site: ' + siteName;
-      $modalInstance.close();
-      return jobQueueService.add(desc, function() {
-        return $q.try(function() {
-          var app = kbox.create.get(provider.name);
-          return kbox.create.createApp(app, opts);
         });
       });
-    });
-  };
+    };
+  });
+
 })
-.controller('ShutdownModal', function($scope, $q, $modalInstance, kbox, _, modalData) {
-  $scope.ok = function() {
-    modalData.win.close(true);
-  };
+.controller('ShutdownModal', function($scope, $q, $modalInstance, kbox, _, modalData, guiTask) {
+  guiTask.try(function() {
+    $scope.ok = function() {
+      modalData.win.close(true);
+    };
+  });
 })
 ;
