@@ -142,8 +142,7 @@ angular.module('kalabox', [
     job.status = 'running';
     // Run job's function.
     return $q.try(function() {
-      return job.fn.call(job)
-      .catch(errorService.report);
+      return job.fn.call(job);
     })
     // Set next job as the head and run next job.
     .then(function() {
