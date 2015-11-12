@@ -50,7 +50,15 @@ angular.module('kalabox.installedSites', [])
 /*
  * Class for encapsulating a site instance.
  */
-.factory('Site', function(kbox, siteStateMap) {
+.factory('Site', function(kbox, siteStateMap, _) {
+
+  var images = [
+    'http://www.cgdev.org/sites/default/files/cat8.jpg',
+    'http://www.medhatspca.ca/sites/default/files/news_photos/2014-Apr-15/node-147/cute-little-cat.jpg',
+    'https://baaobaab.files.wordpress.com/2014/11/cat-dj.jpg',
+    'http://www.gordonrigg.com/the-hub/wp-content/uploads/2015/06/cat-matlock-derbyshire.jpg',
+    'http://d2118lkw40i39g.cloudfront.net/wp-content/uploads/2015/06/cats.jpg'
+  ];
 
   // Constructor.
   function Site(opts) {
@@ -58,7 +66,8 @@ angular.module('kalabox.installedSites', [])
     this.url = opts.url;
     this.folder = opts.folder;
     this.codeFolder = opts.codeFolder;
-    this.image = 'http://placehold.it/300x250';
+    this.image = images[_.random(0, images.length - 1)];
+    //this.image = 'http://placehold.it/300x250';
     this.provider = 'pantheon';
     this.framework = 'drupal';
   }
