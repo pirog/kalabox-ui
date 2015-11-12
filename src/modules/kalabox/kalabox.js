@@ -84,7 +84,7 @@ angular.module('kalabox', [
   };
 
 })
-.factory('jobQueueService', function($q, errorService) {
+.factory('jobQueueService', function($q) {
 
   var nextId = 1;
 
