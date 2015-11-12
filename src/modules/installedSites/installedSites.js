@@ -60,13 +60,17 @@ angular.module('kalabox.installedSites', [])
     'http://d2118lkw40i39g.cloudfront.net/wp-content/uploads/2015/06/cats.jpg'
   ];
 
+  var getImage = _.memoize(function() {
+    return images[_.random(0, images.length - 1)];
+  });
+
   // Constructor.
   function Site(opts) {
     this.name = opts.name;
     this.url = opts.url;
     this.folder = opts.folder;
     this.codeFolder = opts.codeFolder;
-    this.image = images[_.random(0, images.length - 1)];
+    this.image = getImage(opts.name);
     //this.image = 'http://placehold.it/300x250';
     this.provider = 'pantheon';
     this.framework = 'drupal';
