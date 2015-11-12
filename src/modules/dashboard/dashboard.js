@@ -427,7 +427,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
   });
 
   // Start polling.
-  return pollingService.start(2 * 1000)
+  return pollingService.start(1 * 1000)
   // Wait for polling to be shutdown.
   .then(function() {
     return pollingService.wait();
@@ -514,35 +514,50 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
 })
 .controller('SiteAddModal', function($scope, $q, $modalInstance, kbox, _, modalData, guiTask) {
   guiTask.try(function() {
+    // Set provider.
     $scope.provider = modalData.provider;
+    // Set site.
     $scope.site = modalData.site;
+    // Modal function.
     $scope.ok = function(appConfig) {
+      // Run inside a gui task.
       guiTask.try(function() {
-        kbox.then(function(kbox) {
-          var siteName = appConfig.name;
-          var provider = modalData.provider;
-          var site = modalData.site;
-          var config = kbox.core.deps.get('globalConfig');
-          var dir = config.appsRoot;
-          var opts = {
-            verbose: false,
-            buildLocal: false,
-            env: appConfig.env,
-            dir: dir,
-            name: appConfig.name,
-            site: site.name,
-            email: provider.username,
-            needsFramework: false
-          };
-          var desc = 'Add Site: ' + siteName;
-          $modalInstance.close();
-          return guiTask.queue(desc, function() {
-            return $q.try(function() {
-              var app = kbox.create.get(provider.name);
-              return kbox.create.createApp(app, opts);
-            });
+        // Get 
+        var siteName = appConfig.name;
+        var desc = 'Add Site: ' + siteName;
+
+        // Create a queued task.
+        guiTask.queue(desc, function() {
+          // Get kbox core.
+          return kbox.then(function(kbox) {
+            // Make sure to delete app based dependencies.
+            kbox.core.deps.remove('app');
+            kbox.core.deps.remove('appConfig');
+            // Build vars for creation.
+            var provider = modalData.provider;
+            var site = modalData.site;
+            var config = kbox.core.deps.get('globalConfig');
+            var dir = config.appsRoot;
+            var opts = {
+              verbose: false,
+              buildLocal: false,
+              env: appConfig.env,
+              dir: dir,
+              name: appConfig.name,
+              site: site.name,
+              email: provider.username,
+              needsFramework: false
+            };
+            // Get app.
+            var app = kbox.create.get(provider.name);
+            // Create app.
+            return kbox.create.createApp(app, opts);
           });
         });
+
+        // Close the modal.
+        $modalInstance.close();
+
       });
     };
   });
