@@ -68,38 +68,41 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('sitePull', function(guiTask, _) {
+.directive('sitePull', function(guiTask, kbox, _) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
         // Run inside of a gui task.
         guiTask.try(function() {
-          var siteName = $scope.site.name;
-          var desc = 'Pull Site: ' + siteName;
-          guiTask.queue(desc, function() {
-            /*
-             * @todo: we need a modal to ask user if they want to pull files
-             * and or pull database.
-             */
-            var job = this;
-            return $scope.site.pull()
-            .then(function(pull) {
-              pull.on('ask', function(questions) {
-                _.each(questions, function(question) {
-                  if (question.id === 'shouldPullFiles') {
-                    question.answer(true);
-                  } else if (question.id === 'shouldPullDatabase') {
-                    question.answer(true);
-                  } else {
-                    question.fail(new Error(question));
-                  }
-                });
+          return kbox.then(function(kbox) {
+            var provider = kbox.integrations.get($scope.site.provider);
+            var sites = provider.sites();
+            sites.on('ask', function(questions) {
+              _.each(questions, function(question) {
+                if (question.id === 'username') {
+                  return question.answer('ben@kalamuna.com');
+                } else {
+                  question.fail(question.id);
+                }
               });
-              pull.on('update', function() {
-                job.update(pull.status);
+            });
+            return sites.run().then(function(sites) {
+              var siteInfo = _.find(sites, function(siteInfo) {
+                return siteInfo.name === $scope.site.name;
               });
-              return pull.run(siteName);
+              if (!siteInfo) {
+                throw new Error('Site not found: ' + $scope.site.name);
+              }
+              var sitePullModal = $scope.open(
+                'modules/dashboard/site-pull-modal.html',
+                'SitePullModal',
+                {
+                  site: $scope.site,
+                  environments: siteInfo.environments
+                }
+              );
+              return sitePullModal.result;
             });
           });
         });
@@ -116,7 +119,7 @@ angular.module('kalabox.dashboard', [
         guiTask.try(function() {
           var sitePushModal = $scope.open(
             'modules/dashboard/site-push-modal.html',
-            'SitePullModal',
+            'SitePushModal',
             {site: $scope.site}
           );
           return sitePushModal.result;
@@ -434,6 +437,43 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
   });
 })
 .controller('SitePullModal', function($scope, $modalInstance, _, modalData, guiTask) {
+  guiTask.try(function() {
+    $scope.site = modalData.site;
+    $scope.environments = modalData.environments;
+    $scope.errorMessage = false;
+    $scope.ok = function(database, createBackup, files) {
+      guiTask.try(function() {
+        $modalInstance.close();
+        var site = modalData.site;
+        var desc = 'Pull Site: ' + site.name;
+        guiTask.queue(desc, function() {
+          var job = this;
+          return site.pull().then(function(pull) {
+            pull.on('ask', function(questions) {
+              _.each(questions, function(question) {
+                if (question.id === 'shouldPullFiles') {
+                  question.answer(files);
+                } else if (question.id === 'shouldPullDatabase') {
+                  question.answer(database);
+                } else {
+                  question.fail(new Error(question));
+                }
+              });
+            });
+            pull.on('update', function() {
+              job.update(pull.status);
+            });
+            return pull.run(site.name);
+          });
+        });
+      });
+    };
+    $scope.cancel = function() {
+      $modalInstance.dismiss('cancel');
+    };
+  });
+})
+.controller('SitePushModal', function($scope, $modalInstance, _, modalData, guiTask) {
   guiTask.try(function() {
     $scope.errorMessage = false;
     $scope.ok = function(message, database, files) {
