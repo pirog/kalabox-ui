@@ -242,7 +242,7 @@ module.exports = function ( grunt ) {
         files: [
           {
             src: [ '**' ],
-            dest: '<%= compile_dir %>/assets',
+            dest: '<%= compile_dir %>',
             cwd: '<%= build_dir %>/assets',
             expand: true
           },
@@ -281,13 +281,12 @@ module.exports = function ( grunt ) {
         },
         src: [
           '<%= vendor_files.js %>',
-          'module.prefix',
-          '<%= build_dir %>/src/**/*.js',
+          //'module.prefix',
+          '<%= build_dir %>/src/modules/**/*.js',
           '<%= html2js.app.dest %>',
-          '<%= html2js.common.dest %>',
           'module.suffix'
         ],
-        dest: '<%= compile_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.js'
+        dest: '<%= compile_dir %>/<%= pkg.name %>-<%= pkg.version %>.js'
       }
     },
 
@@ -406,11 +405,11 @@ module.exports = function ( grunt ) {
      */
     html2js: {
       /**
-       * These are the templates from `src/app`.
+       * These are the templates from `src/modules`.
        */
       app: {
         options: {
-          base: 'src/app'
+          base: 'src/modules'
         },
         src: [ '<%= app_files.atpl %>' ],
         dest: '<%= build_dir %>/templates-app.js'
@@ -418,6 +417,7 @@ module.exports = function ( grunt ) {
 
       /**
        * These are the templates from `src/common`.
+       * @todo: do we need this? Doesn't seem so, disabled in compile.
        */
       common: {
         options: {
@@ -464,7 +464,6 @@ module.exports = function ( grunt ) {
         src: [
           '<%= vendor_files.js %>',
           '<%= build_dir %>/src/modules/**/*.js',
-          '<%= html2js.common.dest %>',
           '<%= html2js.app.dest %>',
           '<%= vendor_files.css %>',
           '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
@@ -584,7 +583,7 @@ module.exports = function ( grunt ) {
     },
     shell: {
       nw: {
-        command: pconfig.devBinary + ' <%= build_dir %>/',
+        command: pconfig.devBinary + ' <%= build_dir %>',
         options: {
           execOptions: {
             maxBuffer: Infinity
@@ -592,7 +591,7 @@ module.exports = function ( grunt ) {
         }
       },
       build: {
-        command: 'cd ./generated && npm install --production --ignore-scripts'
+        command: 'cd ./<%= compile_dir %> && npm install --production --ignore-scripts'
       }
     },
   };
@@ -621,7 +620,7 @@ module.exports = function ( grunt ) {
     'clean', 'bower-install-simple:install', 'html2js', 'jshint', 'less:build',
     'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
     'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build',
-    'karma:unit'
+    'shell:nw'
   ]);
 
   /**
@@ -630,7 +629,9 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'compile', [
     'less:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js',
-    'uglify', 'index:compile', 'shell:nw'
+    'uglify', 'index:compile', 'shell:build', 'nwjs', 'compress:win32',
+    'compress:win64', 'compress:osx32', 'compress:osx64', 'compress:linux32',
+    'compress:linux64'
   ]);
 
   /**
