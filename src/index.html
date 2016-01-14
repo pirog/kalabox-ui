@@ -5,32 +5,14 @@
     <title>Kalabox</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
+    <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
+
+    <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
+    <script type="text/javascript" src="<%= file %>"></script><% }); %>
+
     <!-- CSS files -->
-    <link rel="stylesheet" type="text/css" media="screen" href="lib/vendor/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="lib/vendor/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="css/style.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="lib/vendor/jasny-bootstrap/dist/css/jasny-bootstrap.min.css">
-
-    <!-- Vendor files -->
-    <script src="lib/vendor/bluebird/js/browser/bluebird.js"></script>
-    <script src="lib/vendor/jquery/dist/jquery.js"></script>
-    <script src="lib/vendor/d3/d3.js"></script>
-    <script src="lib/vendor/angular/angular.js"></script>
-    <script src="lib/vendor/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="lib/vendor/angular-bootstrap/ui-bootstrap.min.js"></script>
-    <script src="lib/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script src="lib/vendor/angular-bluebird-promises/dist/angular-bluebird-promises.js"></script>
-    <script src="lib/vendor/jasny-bootstrap/dist/js/jasny-bootstrap.min.js"></script>
-
-    <!-- App files -->
-    <script src="modules/boot2docker/boot2docker.js"></script>
-    <script src="modules/dashboard/dashboard.js"></script>
-    <script src="modules/initialize/initialize.js"></script>
-    <script src="modules/installer/installer.js"></script>
-    <script src="modules/nodewrappers/nodewrappers.js"></script>
-    <script src="modules/virtualbox/virtualbox.js"></script>
-    <script src="modules/kalabox/kalabox.js"></script>
-    <script src="modules/installedSites/installedSites.js"></script>
 
   </head>
   <body ng-app="kalabox">
