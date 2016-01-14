@@ -194,7 +194,8 @@ module.exports = function ( grunt ) {
             dest: '<%= build_dir %>/assets/',
             cwd: 'src/assets',
             expand: true
-          }
+          },
+          {src: ['package.json'], dest: '<%= build_dir %>/package.json'}
        ]
       },
       build_vendor_assets: {
@@ -606,12 +607,12 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'build', 'karma:unit', 'delta' ] );
+  grunt.registerTask( 'watch', [ 'build', 'delta' ] );
 
   /**
    * The default task is to build and compile.
    */
-  grunt.registerTask( 'default', [ 'build', 'compile' ] );
+  grunt.registerTask( 'default', [ 'build' ] );
 
   /**
    * The `build` task gets your app ready to run for development and testing.

@@ -1,7 +1,7 @@
 {
   "name": "Kalabox",
   "version": "0.2.6",
-  "main": "src/index.html",
+  "main": "index.html",
   "private": true,
   "licenses": {
     "type": "UNLICENSED"
