@@ -3,7 +3,8 @@
 angular.module('kalabox.dashboard', [
   'ui.router',
   'ui.bootstrap',
-  'kalabox.nodewrappers'
+  'kalabox.nodewrappers',
+  'kalabox.guiEngine'
 ])
 .config(function($stateProvider) {
   $stateProvider.state('dashboard', {
@@ -23,24 +24,24 @@ angular.module('kalabox.dashboard', [
 /*
  * Start site if site is stopped, stop site if site is started.
  */
-.directive('siteToggle', function(guiTask) {
+.directive('siteToggle', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        return guiTask.try(function() {
+        return guiEngine.try(function() {
           // Query running state of site.
           return $scope.site.isRunning()
           .then(function(isRunning) {
             var name = $scope.site.name;
             if (isRunning) {
               // Stop site.
-              guiTask.queue('Stop Site: ' + name, function() {
+              guiEngine.queue.add('Stop Site: ' + name, function() {
                 return $scope.site.stop();
               });
             } else {
               // Start site.
-              guiTask.queue('Start Site: ' + name, function() {
+              guiEngine.queue.add('Start Site: ' + name, function() {
                 return $scope.site.start();
               });
             }
@@ -50,16 +51,16 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('siteTrash', function(guiTask) {
+.directive('siteTrash', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        guiTask.try(function() {
+        guiEngine.try(function() {
           var areYouSure = true;
           if (areYouSure) {
             var desc = 'Remove Site: ' + $scope.site.name;
-            guiTask.queue(desc, function() {
+            guiEngine.queue.add(desc, function() {
               return $scope.site.trash();
             });
           }
@@ -68,13 +69,13 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('sitePull', function(guiTask, kbox, _) {
+.directive('sitePull', function(guiEngine, kbox, _) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
         // Run inside of a gui task.
-        guiTask.try(function() {
+        guiEngine.try(function() {
           return kbox.then(function(kbox) {
             var provider = kbox.integrations.get($scope.site.provider);
             var sites = provider.sites();
@@ -110,13 +111,13 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('sitePush', function(guiTask) {
+.directive('sitePush', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
         // Run inside of a gui task.
-        guiTask.try(function() {
+        guiEngine.try(function() {
           var sitePushModal = $scope.open(
             'modules/dashboard/site-push-modal.html',
             'SitePushModal',
@@ -128,12 +129,12 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('siteBrowser', function(guiTask) {
+.directive('siteBrowser', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        guiTask.try(function() {
+        guiEngine.try(function() {
           var gui = require('nw.gui');
           gui.Shell.openExternal($scope.site.url);
         });
@@ -141,24 +142,24 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('siteCode', function(terminal, guiTask) {
+.directive('siteCode', function(terminal, guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        guiTask.try(function() {
+        guiEngine.try(function() {
           terminal.open($scope.site.codeFolder);
         });
       });
     }
   };
 })
-.directive('siteAdd', function(guiTask) {
+.directive('siteAdd', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        guiTask.try(function() {
+        guiEngine.try(function() {
           var siteAddModal = $scope.open(
             'modules/dashboard/site-add-modal.html',
             'SiteAddModal',
@@ -170,38 +171,38 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('jobClear', function(guiTask, jobQueueService) {
+.directive('jobClear', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        guiTask.try(function() {
-          return jobQueueService.clear($scope.job);
+        guiEngine.try(function() {
+          return guiEngine.queue.clear($scope.job);
         });
       });
     }
   };
 })
-.directive('jobRetry', function(guiTask, jobQueueService) {
+.directive('jobRetry', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        guiTask.try(function() {
+        guiEngine.try(function() {
           if ($scope.job.status === 'failed') {
-            return jobQueueService.retry($scope.job);
+            return guiEngine.queue.retry($scope.job);
           }
         });
       });
     }
   };
 })
-.directive('providerClick', function(guiTask) {
+.directive('providerClick', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        guiTask.try(function() {
+        guiEngine.try(function() {
           if ($scope.provider.auth) {
             $scope.provider.refreshSites();
           } else {
@@ -225,8 +226,7 @@ angular.module('kalabox.dashboard', [
 })
 .controller('DashboardCtrl',
 function ($scope, $uibModal, $timeout, $interval, $q, kbox,
-  installedSitesService, pollingService, jobQueueService, _,
-  guiTask) {
+  installedSitesService, _, guiEngine) {
 
   //Init ui model.
   $scope.ui = {
@@ -253,7 +253,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
   };
 
   // Handle shutting down of kalabox.
-  guiTask.try(function() {
+  guiEngine.try(function() {
     // Get nw window object.
     var win = require('nw.gui').Window.get();
     // Hook into the gui window closing event.
@@ -262,7 +262,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
       var self = this;
 
       // Open a modal window to inform the user that app is shutting down.
-      Promise.try(function() {
+      $q.try(function() {
         var shutdownModal = $scope.open(
           'modules/dashboard/shutdown.html',
           'ShutdownModal',
@@ -274,7 +274,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
       });
 
       // Stop the polling service.
-      pollingService.stop()
+      guiEngine.loop.stop()
       // Stop the engine.
       .then(function() {
         return kbox.then(function(kbox) {
@@ -400,53 +400,41 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
   });
 
   // Poll installed sites.
-  pollingService.add(function() {
-    return guiTask.try(function() {
-      return installedSitesService.sites()
-      .then(function(sites) {
-        $scope.ui.sites = sites;
-      })
-      .then(function() {
-        return installedSitesService.states();
-      })
-      .then(function(states) {
-        $scope.ui.states = states;
-      });
+  guiEngine.loop.add({interval: 15 * 1000}, function() {
+    return installedSitesService.sites()
+    .then(function(sites) {
+      $scope.ui.sites = sites;
+    })
+    .then(function() {
+      return installedSitesService.states();
+    })
+    .then(function(states) {
+      $scope.ui.states = states;
     });
   });
 
   // Poll list of jobs.
-  pollingService.add(function() {
-    return guiTask.try(function() {
-      $scope.ui.jobs = jobQueueService.jobs();
-    });
+  guiEngine.loop.add({interval: 0.25 * 100}, function() {
+    $scope.ui.jobs = guiEngine.queue.jobs();
   });
 
   // Poll list of errors.
-  pollingService.add(function() {
-    return guiTask.try(function() {
-      $scope.ui.errors = guiTask.errors.list();
-    });
+  guiEngine.loop.add({interval: 0.25 * 100}, function() {
+    $scope.ui.errors = guiEngine.errors.list();
   });
 
-  // Start polling.
-  return pollingService.start(1 * 1000)
-  // Wait for polling to be shutdown.
-  .then(function() {
-    return pollingService.wait();
-  });
 })
-.controller('SitePullModal', function($scope, $modalInstance, _, modalData, guiTask) {
-  guiTask.try(function() {
+.controller('SitePullModal', function($scope, $modalInstance, _, modalData, guiEngine) {
+  guiEngine.try(function() {
     $scope.site = modalData.site;
     $scope.environments = modalData.environments;
     $scope.errorMessage = false;
     $scope.ok = function(database, createBackup, files) {
-      guiTask.try(function() {
+      guiEngine.try(function() {
         $modalInstance.close();
         var site = modalData.site;
         var desc = 'Pull Site: ' + site.name;
-        guiTask.queue(desc, function() {
+        guiEngine.queue.add(desc, function() {
           var job = this;
           return site.pull().then(function(pull) {
             pull.on('ask', function(questions) {
@@ -473,15 +461,15 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
     };
   });
 })
-.controller('SitePushModal', function($scope, $modalInstance, _, modalData, guiTask) {
-  guiTask.try(function() {
+.controller('SitePushModal', function($scope, $modalInstance, _, modalData, guiEngine) {
+  guiEngine.try(function() {
     $scope.errorMessage = false;
     $scope.ok = function(message, database, files) {
-      guiTask.try(function() {
+      guiEngine.try(function() {
         $modalInstance.close();
         var site = modalData.site;
         var desc = 'Push Site: ' + site.name;
-        guiTask.queue(desc, function() {
+        guiEngine.queue.add(desc, function() {
           var job = this;
           return site.push().then(function(push) {
             push.on('ask', function(questions) {
@@ -510,8 +498,8 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
     };
   });
 })
-.controller('AuthModal', function($scope, $modalInstance, kbox, _, modalData, guiTask) {
-  guiTask.try(function() {
+.controller('AuthModal', function($scope, $modalInstance, kbox, _, modalData, guiEngine) {
+  guiEngine.try(function() {
     $scope.errorMessage = false;
     // Auth on submission.
     $scope.ok = function(email, password) {
@@ -552,8 +540,8 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
     };
   });
 })
-.controller('SiteAddModal', function($scope, $q, $modalInstance, kbox, _, modalData, guiTask) {
-  guiTask.try(function() {
+.controller('SiteAddModal', function($scope, $q, $modalInstance, kbox, _, modalData, guiEngine) {
+  guiEngine.try(function() {
     // Set provider.
     $scope.provider = modalData.provider;
     // Set site.
@@ -561,13 +549,13 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
     // Modal function.
     $scope.ok = function(appConfig) {
       // Run inside a gui task.
-      guiTask.try(function() {
+      guiEngine.try(function() {
         // Get 
         var siteName = appConfig.name;
         var desc = 'Add Site: ' + siteName;
 
         // Create a queued task.
-        guiTask.queue(desc, function() {
+        guiEngine.queue.add(desc, function() {
           // Get kbox core.
           return kbox.then(function(kbox) {
             // Make sure to delete app based dependencies.
@@ -603,8 +591,8 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
   });
 
 })
-.controller('ShutdownModal', function($scope, $q, $modalInstance, kbox, _, modalData, guiTask) {
-  guiTask.try(function() {
+.controller('ShutdownModal', function($scope, $q, $modalInstance, kbox, _, modalData, guiEngine) {
+  guiEngine.try(function() {
     $scope.ok = function() {
       modalData.win.close(true);
     };
