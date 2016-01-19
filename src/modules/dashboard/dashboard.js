@@ -518,7 +518,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
             }
           });
         });
-        return auth.run()
+        return auth.run(email)
         .then(function(result) {
           if (result !== false) {
             // Close modal on success.
