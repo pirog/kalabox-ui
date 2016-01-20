@@ -2,6 +2,7 @@
 S_Store
 .idea/
 *.log
+.sass-cache
 cache
 dist
 build

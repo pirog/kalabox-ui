@@ -1,6 +1,7 @@
 /* Copyright 2013 Kalamuna LLC */
-@import "../lib/vendor/bootstrap/less/bootstrap.less";
-@import "dashboard.less";
+@import "../lib/vendor/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+@import "../lib/vendor/jasny-bootstrap/scss/jasny-bootstrap.scss";
+@import "dashboard.scss";
 
 a.btn-help {
   text-decoration: none;
