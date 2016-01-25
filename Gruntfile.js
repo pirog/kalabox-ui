@@ -191,8 +191,8 @@ module.exports = function ( grunt ) {
         files: [
           {
             src: [ '**' ],
-            dest: '<%= build_dir %>/assets/',
-            cwd: 'src/assets',
+            dest: '<%= build_dir %>/images/',
+            cwd: 'src/images',
             expand: true
           },
           {src: ['package.json'], dest: '<%= build_dir %>/package.json'}
