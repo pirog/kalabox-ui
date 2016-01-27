@@ -20,7 +20,7 @@ module.exports = {
    * app's unit tests.
    */
   app_files: {
-    js: [ 'src/modules/**/*.js', '!src/modules/**/*.spec.js' ],
+    js: [ 'src/modules/**/*.js', '!src/modules/**/*.spec.js'],
     jsunit: [ 'src/**/*.spec.js' ],
 
     atpl: [ 'src/**/*.html' ],
@@ -64,6 +64,7 @@ module.exports = {
       'src/lib/vendor/d3/d3.js',
       'src/lib/vendor/angular-ui-utils/modules/route/route.js',
       'src/lib/vendor/angular/angular.js',
+      'src/lib/vendor/angular-decorate/angular-decorate.js',
       'src/lib/vendor/angular-ui-router/release/angular-ui-router.min.js',
       'src/lib/vendor/angular-bootstrap/ui-bootstrap.min.js',
       'src/lib/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',

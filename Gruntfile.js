@@ -187,6 +187,13 @@ module.exports = function ( grunt ) {
      * `build_dir`, and then to copy the assets to `compile_dir`.
      */
     copy: {
+      build_nobackend: {
+        files: [
+          {
+            src: ['src/httpBackendStub.js'],
+            dest: '<%= build_dir %>/httpBackendStub.js'}
+       ]
+      },
       build_app_assets: {
         files: [
           {
@@ -466,7 +473,8 @@ module.exports = function ( grunt ) {
           '<%= build_dir %>/src/modules/**/*.js',
           '<%= html2js.app.dest %>',
           '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css',
+          '<%= build_dir %>/httpBackendStub.js'
         ]
       },
 
@@ -607,6 +615,7 @@ module.exports = function ( grunt ) {
    */
   grunt.renameTask( 'watch', 'delta' );
   grunt.registerTask( 'watch', [ 'build', 'delta' ] );
+  grunt.registerTask( 'noBackendWatch', [ 'buildNoBackend', 'delta' ] );
 
   /**
    * The default task is to build and compile.
@@ -616,12 +625,29 @@ module.exports = function ( grunt ) {
   /**
    * The `build` task gets your app ready to run for development and testing.
    */
-  grunt.registerTask( 'build', [
+  grunt.registerTask( 'prepareApp', [
     'clean', 'bower-install-simple:install', 'html2js', 'jshint', 'sass:build',
-    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build',
-    'shell:nw'
+    'concat:build_css'
   ]);
+
+  grunt.registerTask( 'copyFiles', [
+    'copy:build_app_assets', 'copy:build_vendor_assets',
+    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss'
+  ]);
+
+  grunt.registerTask( 'prepareNoBackend', [
+    'prepareApp', 'copyFiles', 'copy:build_nobackend', 'index:build'
+  ]);
+
+  grunt.registerTask( 'build', [
+    'prepareApp', 'copyFiles', 'index:build', 'shell:nw'
+  ]);
+
+  grunt.registerTask( 'buildNoBackend', [
+    'prepareNoBackend', 'shell:nw'
+  ]);
+
+
 
   /**
    * The `compile` task gets your app ready for deployment by concatenating and
