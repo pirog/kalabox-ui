@@ -18,6 +18,7 @@
       <a href="" class="btn btn-primary" data-toggle="offcanvas" data-target="#addSite">Add Site</a>
     </div>
   </div>
+  engine: {{ui.engineStatus}}
   <div ng-repeat="job in ui.jobs">
     <div>
       {{job.desc}} - ({{job.status}}) - {{job.err.message}} {{job.err.stack}} {{job.statusMsg}}

@@ -324,7 +324,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', [
     'jshint',
-    'jscs',
+    //'jscs',
     'bower-install-simple:ci',
     'test:unit'/*,
     'test:e2e'*/

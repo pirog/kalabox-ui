@@ -302,7 +302,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
       return integration.logins().run().then(function(logins) {
         // Get list of emails for this integration.
         var emails = _.map(logins, function(login) {
-          return login.email;
+          return login;
         });
         // Add a null email for an unathorized integration.
         emails.push(null);
@@ -400,7 +400,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
   });
 
   // Poll installed sites.
-  guiEngine.loop.add({interval: 15 * 1000}, function() {
+  guiEngine.loop.add({interval: 1 * 60 * 1000}, function() {
     return installedSitesService.sites()
     .then(function(sites) {
       $scope.ui.sites = sites;
@@ -410,6 +410,15 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
     })
     .then(function(states) {
       $scope.ui.states = states;
+    });
+  });
+
+  guiEngine.loop.add({interval: 0.25 * 60 * 1000}, function() {
+    return kbox.then(function(kbox) {
+      return kbox.engine.isUp();
+    })
+    .then(function(isUp) {
+      $scope.ui.engineStatus = isUp;
     });
   });
 
@@ -567,14 +576,16 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
             var config = kbox.core.deps.get('globalConfig');
             var dir = config.appsRoot;
             var opts = {
+              _: [],
+              h: false,
+              v: false,
               verbose: false,
-              buildLocal: false,
-              env: appConfig.env,
-              dir: dir,
-              name: appConfig.name,
-              site: site.name,
               email: provider.username,
-              needsFramework: false
+              site: site.name,
+              needsFramework: false,
+              env: appConfig.env,
+              name: appConfig.name,
+              dir: dir
             };
             // Get app.
             var app = kbox.create.get(provider.name);

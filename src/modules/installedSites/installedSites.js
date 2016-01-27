@@ -207,8 +207,9 @@ angular.module('kalabox.installedSites', [])
           // Get list of apps.
           return kbox.app.list()
           // Only include apps with installed containers.
-          .filter(function(app) {
-            return kbox.app.isInstalled(app);
+          .filter(function(/*app*/) {
+            return true;
+            //return kbox.app.isInstalled(app);
           })
           // Map to sites.
           .map(Site.fromApp);
