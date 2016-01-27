@@ -28,7 +28,15 @@ angular.module('kalabox.guiEngine', [
   var errors = [];
 
   function report(err) {
+    var stack = (function() {
+      if (err.jse_cause && err.jse_cause.stack) {
+        return err.jse_cause.stack;
+      } else {
+        return err.stack;
+      }
+    }());
     console.log('ERROR: ' + err.message);
+    console.log(stack);
     errors.push(err);
   }
 
@@ -47,6 +55,6 @@ angular.module('kalabox.guiEngine', [
     return $q.try(fn)
     .catch(function(err) {
       errorService.report(err);
-    });    
+    });
   };
 });

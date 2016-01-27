@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('kalabox', [
+  'templates-app',
   'kalabox.nodewrappers',
   'kalabox.dashboard',
   'kalabox.initialize',

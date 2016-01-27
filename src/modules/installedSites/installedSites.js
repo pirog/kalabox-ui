@@ -192,7 +192,7 @@ angular.module('kalabox.installedSites', [])
       siteList.cache.reset();
       siteStateMap.cache.reset();
     }
-  };  
+  };
 })
 /*
  * Object for getting a cached list of site instances.
