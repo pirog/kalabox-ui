@@ -12,18 +12,27 @@
     $delegate.sites = function() {
       return Promise.resolve([
           {
-            "name": "Some App",
-            "image": "blank"
+            name: "Some App",
+            image: "blank",
+            provider: 'pantheon',
+            trash: function() {
+              return true;
+            }
           },
           {
-            "name": "Other App",
-            "image": "blank"
+            name: "Other App",
+            image: "blank",
+            provider: 'pantheon',
+            trash: function() {
+              return true;
+            }
           }
         ]
       );
     };
 
-    $delegate.states = [
+    $delegate.states = function() {
+      return [
           {
             "name": "Some App",
             "image": "blank"
@@ -33,6 +42,7 @@
             "image": "blank"
           }
         ];
+    };
     return $delegate;
   });
 })(angular);
