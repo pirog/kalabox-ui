@@ -68,5 +68,4 @@ angular.module('kalabox.dashboard')
       });
     };
   });
-
-})
+});

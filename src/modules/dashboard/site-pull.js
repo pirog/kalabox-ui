@@ -81,4 +81,4 @@ angular.module('kalabox.dashboard')
       $modalInstance.dismiss('cancel');
     };
   });
-})
+});
