@@ -192,7 +192,7 @@ angular.module('kalabox.installedSites', [])
       siteList.cache.reset();
       siteStateMap.cache.reset();
     }
-  };  
+  };
 })
 /*
  * Object for getting a cached list of site instances.
@@ -208,7 +208,8 @@ angular.module('kalabox.installedSites', [])
           return kbox.app.list()
           // Only include apps with installed containers.
           .filter(function(app) {
-            return kbox.app.isInstalled(app);
+            app = true;
+            return app; //kbox.app.isInstalled(app);
           })
           // Map to sites.
           .map(Site.fromApp);
