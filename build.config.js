@@ -74,6 +74,7 @@ module.exports = {
       'src/lib/vendor/font-awesome/css/font-awesome.min.css'
     ],
     assets: [
+      'src/lib/vendor/font-awesome/fonts/fontawesome-webfont.woff'
     ]
   },
 };
