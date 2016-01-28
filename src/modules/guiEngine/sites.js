@@ -42,7 +42,9 @@ angular.module('kalabox.sites', [])
 			// Signal that site is busy.
 			self.busy = true;
 			// Call fn function.
-			return $q.try(fn)
+			return $q.try(function() {
+				return fn.call(self);
+			})
 			// Signal site is no longer busy.
 			.finally(function() {
 				self.busy = false;
@@ -105,6 +107,8 @@ angular.module('kalabox.sites', [])
     var self = this;
 		// Run as a queued job.
 		return self.queue('Pull site: ' + self.name, function() {
+			// Get reference to job.
+			var job = this;
 			// Get kbox core library.
 			return kbox.then(function(kbox) {
 				// Initialize app context.
@@ -115,18 +119,11 @@ angular.module('kalabox.sites', [])
 				// Do a pull on the site.
 				.then(function() {
 					var pull = kbox.integrations.get(self.providerName).pull();
-					pull.on('ask', function(questions) {
-						_.each(questions, function(question) {
-							if (question.id === 'shouldPullFiles') {
-								question.answer(opts.files);
-							} else if (question.id === 'shouldPullDatabase') {
-								question.answer(opts.database);
-							} else {
-								question.fail(new Error(question));
-							}
-						});
+					// Update job's status message with info from pull.
+					pull.on('update', function(msg) {
+						job.statusMsg = msg;
 					});
-					return pull.run(self.name);
+					return pull.run(opts);
 				});
 			});
 		});
