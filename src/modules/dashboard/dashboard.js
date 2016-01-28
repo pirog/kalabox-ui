@@ -127,7 +127,7 @@ angular.module('kalabox.dashboard', [
       element.on('click', function() {
         guiEngine.try(function() {
           if ($scope.provider.auth) {
-            $scope.provider.refreshSites();
+            $scope.provider.refresh();
           } else {
             var authModal = $scope.open(
               'modules/dashboard/auth-modal.html',
@@ -139,7 +139,7 @@ angular.module('kalabox.dashboard', [
             return authModal.result.then(function(result) {
               $scope.provider.auth = true;
               $scope.provider.username = result.username;
-              $scope.provider.refreshSites();
+              $scope.provider.refresh();
             });
           }
         });
@@ -149,7 +149,7 @@ angular.module('kalabox.dashboard', [
 })
 .controller('DashboardCtrl',
 function ($scope, $uibModal, $timeout, $interval, $q, kbox,
-  sites, siteStates, _, guiEngine) {
+  sites, providers, siteStates, _, guiEngine) {
 
   //Init ui model.
   $scope.ui = {
@@ -200,7 +200,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
       guiEngine.loop.stop()
       // Stop the engine.
       .then(function() {
-        return kbox.then(function(kbox) {
+        return kbox.then(function(/*kbox*/) {
           return kbox.engine.down();
         });
       })
@@ -213,7 +213,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
   });
 
   // Initialize providers.
-  kbox.then(function(kbox) {
+  /*kbox.then(function(kbox) {
     $scope.kbox = kbox;
     // Get list of providers (integration + login = provider).
     var providers = Promise.try(function() {
@@ -270,9 +270,6 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
                 // Handle question events.
                 sites.on('ask', function(questions) {
                   _.each(questions, function(question) {
-                    /*
-                     * @todo: Ask via the modal.
-                     */
                     if (question.id === 'username') {
                       self.getUsername()
                       .then(function(username) {
@@ -287,9 +284,6 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
                 });
                 // Handle update events.
                 sites.on('update', function() {
-                  /*
-                   * @todo: Add some communication between integration and gui.
-                   */
                 });
                 // Run sites action.
                 return sites.run()
@@ -320,7 +314,15 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
       $scope.ui.providers = providers;
     });
 
-  });
+  });*/
+
+  // Initialize providers.
+	guiEngine.try(function() {
+		return providers.list()
+		.then(function(providers) {
+			$scope.ui.providers = providers;
+		});
+	});
 
   // Poll sites.
   guiEngine.loop.add({interval: 1 * 60 * 1000}, function() {
@@ -338,6 +340,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
 		});
 	});
 
+	// Poll engine status.
   guiEngine.loop.add({interval: 0.25 * 60 * 1000}, function() {
     return kbox.then(function(kbox) {
       return kbox.engine.isUp();

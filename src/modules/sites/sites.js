@@ -4,7 +4,7 @@ angular.module('kalabox.sites', [])
 /*
  * Class for encapsulating a site instance.
  */
-.factory('Site', function(kbox, siteStateMap, _) {
+.factory('Site', function(kbox, siteStates, _) {
 
   var images = [
     'http://www.cgdev.org/sites/default/files/cat8.jpg',
@@ -35,7 +35,7 @@ angular.module('kalabox.sites', [])
    */
   Site.prototype.isRunning = function() {
     var self = this;
-    return siteStateMap.get(self.name);
+    return siteStates.get(self.name);
   };
 
   /*
@@ -50,9 +50,6 @@ angular.module('kalabox.sites', [])
       })
       .then(function(app) {
         return kbox.app.start(app);
-      })
-      .then(function() {
-        return siteStateMap.cache.reset();
       });
     });
   };
@@ -69,9 +66,6 @@ angular.module('kalabox.sites', [])
       })
       .then(function(app) {
         return kbox.app.stop(app);
-      })
-      .then(function() {
-        return siteStateMap.cache.reset();
       });
     });
   };
@@ -117,9 +111,6 @@ angular.module('kalabox.sites', [])
       })
       .then(function(app) {
         return kbox.app.destroy(app);
-      })
-      .then(function() {
-        return siteStateMap.cache.reset();
       });
     });
   };
@@ -164,7 +155,6 @@ angular.module('kalabox.sites', [])
  * Object for getting a cached list of site instance states.
  */
 .factory('siteStates', function($q, kbox) {
-  var cache = new Cache(15);
   return {
     get: function(name) {
 			var map = {};
