@@ -32,7 +32,7 @@ angular.module('kalabox.installer', [
 })
 .controller('InstallerCtrl',
 ['$scope', '$q', '$location', 'kbox',
-  function ($scope, $q, $location, kbox) {
+  function($scope, $q, $location, kbox) {
 
     // Init ui model.
     $scope.ui = {

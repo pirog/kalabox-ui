@@ -28,13 +28,22 @@ angular.module('kalabox.guiEngine', [
   var errors = [];
 
   function report(err) {
+
+    /* jshint camelcase:false */
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     var stack = (function() {
+
       if (err.jse_cause && err.jse_cause.stack) {
         return err.jse_cause.stack;
-      } else {
+      }
+      else {
         return err.stack;
       }
+
     }());
+    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+    /* jshint camelcase:true */
+
     console.log('ERROR: ' + err.message);
     console.log(stack);
     errors.push(err);
