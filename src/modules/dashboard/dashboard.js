@@ -126,7 +126,7 @@ angular.module('kalabox.dashboard', [
     link: function($scope, element) {
       element.on('click', function() {
         guiEngine.try(function() {
-          if ($scope.provider.auth) {
+          if ($scope.provider.authorized()) {
             $scope.provider.refresh();
           } else {
             var authModal = $scope.open(
@@ -137,8 +137,7 @@ angular.module('kalabox.dashboard', [
               }
             );
             return authModal.result.then(function(result) {
-              $scope.provider.auth = true;
-              $scope.provider.username = result.username;
+              $scope.provider.authorize(result.username);
               $scope.provider.refresh();
             });
           }
@@ -200,7 +199,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
       guiEngine.loop.stop()
       // Stop the engine.
       .then(function() {
-        return kbox.then(function(/*kbox*/) {
+        return kbox.then(function(kbox) {
           return kbox.engine.down();
         });
       })
@@ -318,7 +317,7 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
 
   // Initialize providers.
 	guiEngine.try(function() {
-		return providers.list()
+		return providers.get()
 		.then(function(providers) {
 			$scope.ui.providers = providers;
 		});

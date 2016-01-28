@@ -1,11 +1,6 @@
 'use strict';
 
 angular.module('kalabox.dashboard')
-.factory('providers', function(Provider) {
-	return {
-		list: Provider.list
-	};
-})
 .factory('Provider', function(kbox, _, $q) {
 
 	/*
@@ -20,9 +15,6 @@ angular.module('kalabox.dashboard')
 		// Optional.
 		this.username = opts.username;
 
-		// @todo: remove
-		this.auth = true;
-
 		// Init.
 		this.sites = [];
 		this.refreshing = false;
@@ -31,6 +23,20 @@ angular.module('kalabox.dashboard')
 			this.name;
 
 	}
+
+	/*
+	 * Return true if this provider has been authorized.
+	 */
+	Provider.prototype.authorized = function() {
+		return !!this.username;
+	};
+
+	/*
+	 * Authorize provider with username.
+	 */
+	Provider.prototype.authorize = function(username) {
+		this.username = username;
+	};
 
 	/*
 	 * Refresh provider's state.
@@ -44,17 +50,14 @@ angular.module('kalabox.dashboard')
 			// Signal provider is refreshing.
 			self.refreshing = true;
 			var sites = self.integration.sites();
-			// @todo: fix.
-			/*sites.on('ask', function() {
-			
-			});*/
 			// Get list of sites.
-			return sites.run()
+			return sites.run(self.username)
 			// Map sites.
 			.map(function(site) {
 				self.sites.push({
 					name: site.name,
-					environments: site.environments
+					environments: site.environments,
+					provider: self
 				});
 			});
 		})
@@ -67,7 +70,7 @@ angular.module('kalabox.dashboard')
 			self.refreshing = false;
 		})
 		// Wrap errors.
-		.wrap('Error refreshing sites.');
+		.wrap('Error refreshing sites: %s', self.username);
 	};
 
 	/*
@@ -111,4 +114,28 @@ angular.module('kalabox.dashboard')
 	// Return constructor.
 	return Provider;
 
+})
+.factory('providers', function(Provider, _) {
+	return {
+		get: function(name) {
+			// Get a list of providers.
+			return Provider.list()
+			// Either return list or if a name is given then search.
+			.then(function(providers) {
+				if (name) {
+					// Search for provider buy name.
+					var found = _.find(providers, function(provider) {
+						return provider.name === name;
+					});
+					if (!found) {
+						throw new Error('Provider not found: ' + name);
+					}
+					return found;
+				} else {
+					// Return full list.
+					return providers;
+				}
+			});
+		}
+	};
 });

@@ -4,7 +4,7 @@ angular.module('kalabox.sites', [])
 /*
  * Class for encapsulating a site instance.
  */
-.factory('Site', function(kbox, siteStates, _) {
+.factory('Site', function(kbox, siteStates, _, providers, guiEngine, $q) {
 
   var images = [
     'http://www.cgdev.org/sites/default/files/cat8.jpg',
@@ -26,9 +26,29 @@ angular.module('kalabox.sites', [])
     this.codeFolder = opts.codeFolder;
     this.image = getImage(opts.name);
     //this.image = 'http://placehold.it/300x250';
-    this.provider = 'pantheon';
-    this.framework = 'drupal';
+    this.providerName = 'pantheon';
+		this.providerInfo = opts.providerInfo;
+    this.framework = opts.providerInfo.framework;
+		this.busy = false;
   }
+
+	/*
+	 * Call fn function within a gui engine queue.
+	 **/
+	Site.prototype.queue = function(desc, fn) {
+		var self = this;
+		// Add job to queue.
+		return guiEngine.queue.add(desc, function() {
+			// Signal that site is busy.
+			self.busy = true;
+			// Call fn function.
+			return $q.try(fn)
+			// Signal site is no longer busy.
+			.finally(function() {
+				self.busy = false;
+			});
+		});
+	};
 
   /*
    * Returns boolean set to true if site is running.
@@ -37,6 +57,14 @@ angular.module('kalabox.sites', [])
     var self = this;
     return siteStates.get(self.name);
   };
+
+	/*
+	 * Get this sites provider.
+	 */
+	Site.prototype.getProvider = function() {
+		var self = this;
+		return providers.get(self.providerName);
+	};
 
   /*
    * Start site.
@@ -73,19 +101,40 @@ angular.module('kalabox.sites', [])
   /*
    * Pull site.
    */
-  Site.prototype.pull = function() {
+  Site.prototype.pull = function(opts) {
     var self = this;
-    return kbox.then(function(kbox) {
-      return kbox.app.get(self.name)
-      .then(function(app) {
-        return kbox.setAppContext(app);
-      })
-      .then(function() {
-        return kbox.integrations.get('pantheon').pull();
-      });
-    });
+		// Run as a queued job.
+		return self.queue('Pull site: ' + self.name, function() {
+			// Get kbox core library.
+			return kbox.then(function(kbox) {
+				// Initialize app context.
+				return kbox.app.get(self.name)
+				.then(function(app) {
+					return kbox.setAppContext(app);
+				})
+				// Do a pull on the site.
+				.then(function() {
+					var pull = kbox.integrations.get(self.providerName).pull();
+					pull.on('ask', function(questions) {
+						_.each(questions, function(question) {
+							if (question.id === 'shouldPullFiles') {
+								question.answer(opts.files);
+							} else if (question.id === 'shouldPullDatabase') {
+								question.answer(opts.database);
+							} else {
+								question.fail(new Error(question));
+							}
+						});
+					});
+					return pull.run(self.name);
+				});
+			});
+		});
   };
 
+	/*
+	 * Push site.
+	 */
   Site.prototype.push = function() {
     var self = this;
     return kbox.then(function(kbox) {
@@ -121,7 +170,8 @@ angular.module('kalabox.sites', [])
       name: app.name,
       url: app.url,
       folder: app.root,
-      codeFolder: app.config.codeRoot
+      codeFolder: app.config.codeRoot,
+			providerInfo: app.config.pluginconfig[app.config.type]
     });
   };
 
