@@ -1,14 +1,18 @@
 /**
  * This file/module contains all configuration for the build process.
  */
+
+var vendorDir = 'src/lib/vendor/';
+
 module.exports = {
+
   /**
    * The `build_dir` folder is where our projects are compiled during
    * development and the `compile_dir` folder is where our app resides once it's
    * completely built.
    */
-  build_dir: 'build',
-  compile_dir: 'generated',
+  buildDir: 'build',
+  compileDir: 'generated',
 
   /**
    * This is a collection of file patterns that refer to our app code (the
@@ -19,21 +23,21 @@ module.exports = {
    * main HTML file, `sass` is our main stylesheet, and `unit` contains our
    * app's unit tests.
    */
-  app_files: {
-    js: [ 'src/modules/**/*.js', '!src/modules/**/*.spec.js' ],
-    jsunit: [ 'src/**/*.spec.js' ],
+  appFiles: {
+    js: ['src/modules/**/*.js', '!src/modules/**/*.spec.js'],
+    jsunit: ['src/**/*.spec.js'],
 
-    atpl: [ 'src/**/*.html' ],
-    ctpl: [ 'src/**/*.html' ],
+    atpl: ['src/**/*.html'],
+    ctpl: ['src/**/*.html'],
 
-    html: [ 'src/index.html' ],
+    html: ['src/index.html'],
     sass: 'src/scss/main.scss'
   },
 
   /**
    * This is a collection of files used during testing only.
    */
-  test_files: {
+  testFiles: {
     js: [
       'vendor/angular-mocks/angular-mocks.js'
     ]
@@ -57,18 +61,18 @@ module.exports = {
    * with our app's assets. This structure is flattened, so it is not
    * recommended that you use wildcards.
    */
-  vendor_files: {
+  vendorFiles: {
     js: [
-      'src/lib/vendor/bluebird/js/browser/bluebird.js',
-      'src/lib/vendor/jquery/dist/jquery.js',
-      'src/lib/vendor/d3/d3.js',
-      'src/lib/vendor/angular-ui-utils/modules/route/route.js',
-      'src/lib/vendor/angular/angular.js',
-      'src/lib/vendor/angular-ui-router/release/angular-ui-router.min.js',
-      'src/lib/vendor/angular-bootstrap/ui-bootstrap.min.js',
-      'src/lib/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
-      'src/lib/vendor/angular-bluebird-promises/dist/angular-bluebird-promises.js',
-      'src/lib/vendor/jasny-bootstrap/dist/js/jasny-bootstrap.min.js'
+      vendorDir + 'bluebird/js/browser/bluebird.js',
+      vendorDir + 'jquery/dist/jquery.js',
+      vendorDir + 'd3/d3.js',
+      vendorDir + 'angular-ui-utils/modules/route/route.js',
+      vendorDir + 'angular/angular.js',
+      vendorDir + 'angular-ui-router/release/angular-ui-router.min.js',
+      vendorDir + 'angular-bootstrap/ui-bootstrap.min.js',
+      vendorDir + 'angular-bootstrap/ui-bootstrap-tpls.min.js',
+      vendorDir + 'angular-bluebird-promises/dist/angular-bluebird-promises.js',
+      vendorDir + 'jasny-bootstrap/dist/js/jasny-bootstrap.min.js'
     ],
     css: [
       'src/lib/vendor/font-awesome/css/font-awesome.min.css'
@@ -78,4 +82,3 @@ module.exports = {
     ]
   },
 };
-

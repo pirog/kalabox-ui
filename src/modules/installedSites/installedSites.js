@@ -52,6 +52,7 @@ angular.module('kalabox.installedSites', [])
  */
 .factory('Site', function(kbox, siteStateMap, _) {
 
+  // jscs:disable
   var images = [
     'http://www.cgdev.org/sites/default/files/cat8.jpg',
     'http://www.medhatspca.ca/sites/default/files/news_photos/2014-Apr-15/node-147/cute-little-cat.jpg',
@@ -59,6 +60,7 @@ angular.module('kalabox.installedSites', [])
     'http://www.gordonrigg.com/the-hub/wp-content/uploads/2015/06/cat-matlock-derbyshire.jpg',
     'http://d2118lkw40i39g.cloudfront.net/wp-content/uploads/2015/06/cats.jpg'
   ];
+  // jscs:enable
 
   var getImage = _.memoize(function() {
     return images[_.random(0, images.length - 1)];
