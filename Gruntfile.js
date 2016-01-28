@@ -219,7 +219,7 @@ module.exports = function(grunt) {
           }
         ]
       },
-      buildVendorjs: {
+      buildVendorJs: {
         files: [
           {
             src: ['<%= vendorFiles.js %>'],
@@ -229,7 +229,7 @@ module.exports = function(grunt) {
           }
         ]
       },
-      buildVendorcss: {
+      buildVendorCss: {
         files: [
           {
             src: ['<%= vendorFiles.css %>'],
