@@ -172,6 +172,33 @@ angular.module('kalabox.sites', [])
     });
   };
 
+	/*
+	 * Static function for adding a site.
+	 */
+	Site.add = function(opts) {
+		// Add job to queue.
+		return guiEngine.queue.add('Add site: ' + opts.site, function() {
+			return kbox.then(function(kbox) {
+				// Make sure to delete app based dependencies.
+				kbox.core.deps.remove('app');
+				kbox.core.deps.remove('appConfig');
+				// Get config.
+				var config = kbox.core.deps.get('globalConfig');
+				// Option defaults.
+				opts._ = opts._ || [];
+				opts.h = opts.h || false;
+				opts.v = opts.v || false;
+				opts.versbose = opts.versbose || false;
+				opts.needsFramework = opts.needsFramework || false;
+				opts.dir = opts.dir || config.appsRoot;
+				// Get app.
+				var app = kbox.create.get(opts.provider.name);
+				// Create app.
+				return kbox.create.createApp(app, opts);
+			});
+		});
+	};
+
   return Site;
 
 })
@@ -180,6 +207,7 @@ angular.module('kalabox.sites', [])
  */
 .factory('sites', function(kbox, Site) {
   return {
+		add: Site.add,
     get: function(name) {
 			return kbox.then(function(kbox) {
 				// Get list of apps.
