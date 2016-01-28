@@ -149,7 +149,7 @@ angular.module('kalabox.dashboard', [
 })
 .controller('DashboardCtrl',
 function ($scope, $uibModal, $timeout, $interval, $q, kbox,
-  installedSitesService, _, guiEngine) {
+  sites, siteStates, _, guiEngine) {
 
   //Init ui model.
   $scope.ui = {
@@ -322,19 +322,21 @@ function ($scope, $uibModal, $timeout, $interval, $q, kbox,
 
   });
 
-  // Poll installed sites.
+  // Poll sites.
   guiEngine.loop.add({interval: 1 * 60 * 1000}, function() {
-    return installedSitesService.sites()
+		return sites.get()
     .then(function(sites) {
       $scope.ui.sites = sites;
-    })
-    .then(function() {
-      return installedSitesService.states();
-    })
-    .then(function(states) {
-      $scope.ui.states = states;
     });
   });
+
+	// Poll site states.
+	guiEngine.loop.add({interval: 15 * 1000}, function() {
+		return siteStates.get()
+		.then(function(states) {
+			$scope.ui.states = states;
+		});
+	});
 
   guiEngine.loop.add({interval: 0.25 * 60 * 1000}, function() {
     return kbox.then(function(kbox) {
