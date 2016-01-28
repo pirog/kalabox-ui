@@ -11,13 +11,15 @@ angular.module('kalabox', [
   'mwl.bluebird'
 ])
 // Override the default global error handler.
-/* jshint ignore:start */
-.factory('$exceptionHandler', function($window) {
+.factory('$exceptionHandler', function(/*$window*/) {
   return function(exception) {
-    if(exception.message.match(/transition (superseded|prevented|aborted|failed)/)) {
+    if (exception.message.match(/transition (superseded|prevented|aborted|failed)/)) {
       return;
     }
     var err = exception;
+
+    // jshint camelcase:false
+    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
     var stack = (function() {
       if (err.jse_cause && err.jse_cause.stack) {
         return err.jse_cause.stack;
@@ -25,11 +27,13 @@ angular.module('kalabox', [
         return err.stack;
       }
     }());
+    // jshint camelcase:true
+    // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
+
     console.log(err.message);
     console.log(stack);
   };
 })
-/* jshint ignore:end */
 // Global error handing.
 .run(function($q, $exceptionHandler) {
   // Global function for handling errors from bluebird promises.

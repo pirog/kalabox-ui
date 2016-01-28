@@ -7,7 +7,7 @@ angular.module('kalabox.guiEngine')
    * Array for storing promises.
    */
   var fns = [];
-  
+
   /*
    * Apply jitter to n.
    */
@@ -103,7 +103,7 @@ angular.module('kalabox.guiEngine')
    */
   function reset() {
     return $q.map(fns, function(api) {
-      return $q.try(api.fn);  
+      return $q.try(api.fn);
     }, {concurrency: 3});
   }
 

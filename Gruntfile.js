@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function ( grunt ) {
+module.exports = function(grunt) {
 
   // loads all grunt-* tasks based on package.json definitions
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
@@ -10,7 +10,7 @@ module.exports = function ( grunt ) {
   /**
    * Load in our build configuration file.
    */
-  var userConfig = require( './build.config.js' );
+  var userConfig = require('./build.config.js');
 
   /**
    * This is the configuration object Grunt uses to give each plugin its
@@ -31,10 +31,12 @@ module.exports = function ( grunt ) {
     meta: {
       banner:
         '/**\n' +
-        ' * <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+        ' * <%= pkg.name %> - v<%= pkg.version %>\n' +
+        ' * Compiled: <%= grunt.template.today("yyyy-mm-dd") %>\n' +
         ' * <%= pkg.homepage %>\n' +
         ' *\n' +
-        ' * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
+        ' * Copyright (c) <%= grunt.template.today("yyyy") %> ' +
+        '<%= pkg.author %>\n' +
         ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
         ' */\n'
     },
@@ -65,7 +67,6 @@ module.exports = function ( grunt ) {
         template: 'changelog.tpl'
       }
     },
-
 
     /**
      * Increments the version number, etc.
@@ -177,8 +178,8 @@ module.exports = function ( grunt ) {
      * The directories to delete when `grunt clean` is executed.
      */
     clean: [
-      '<%= build_dir %>',
-      '<%= compile_dir %>'
+      '<%= buildDir %>',
+      '<%= compileDir %>'
     ],
 
     /**
@@ -187,68 +188,68 @@ module.exports = function ( grunt ) {
      * `build_dir`, and then to copy the assets to `compile_dir`.
      */
     copy: {
-      build_app_assets: {
+      buildAppAssets: {
         files: [
           {
-            src: [ '**' ],
-            dest: '<%= build_dir %>/images/',
+            src: ['**'],
+            dest: '<%= buildDir %>/images/',
             cwd: 'src/images',
             expand: true
           },
-          {src: ['package.json'], dest: '<%= build_dir %>/package.json'}
+          {src: ['package.json'], dest: '<%= buildDir %>/package.json'}
        ]
       },
-      build_vendor_assets: {
+      buildVendorAssets: {
         files: [
           {
-            src: [ '<%= vendor_files.assets %>' ],
-            dest: '<%= build_dir %>/',
+            src: ['<%= vendorFiles.assets %>'],
+            dest: '<%= buildDir %>/',
             cwd: '.',
             expand: true
           }
        ]
       },
-      build_appjs: {
+      buildAppjs: {
         files: [
           {
-            src: [ '<%= app_files.js %>' ],
-            dest: '<%= build_dir %>/',
+            src: ['<%= appFiles.js %>'],
+            dest: '<%= buildDir %>/',
             cwd: '.',
             expand: true
           }
         ]
       },
-      build_vendorjs: {
+      buildVendorjs: {
         files: [
           {
-            src: [ '<%= vendor_files.js %>' ],
-            dest: '<%= build_dir %>/',
+            src: ['<%= vendorFiles.js %>'],
+            dest: '<%= buildDir %>/',
             cwd: '.',
             expand: true
           }
         ]
       },
-      build_vendorcss: {
+      buildVendorcss: {
         files: [
           {
-            src: [ '<%= vendor_files.css %>' ],
-            dest: '<%= build_dir %>/',
+            src: ['<%= vendorFiles.css %>'],
+            dest: '<%= buildDir %>/',
             cwd: '.',
             expand: true
           }
         ]
       },
-      compile_assets: {
+      compileAssets: {
         files: [
           {
-            src: [ '**' ],
-            dest: '<%= compile_dir %>',
-            cwd: '<%= build_dir %>/assets',
+            src: ['**'],
+            dest: '<%= compileDir %>',
+            cwd: '<%= buildDir %>/assets',
             expand: true
           },
           {
-            src: [ '<%= vendor_files.css %>' ],
-            dest: '<%= compile_dir %>/',
+            src: ['<%= vendorFiles.css %>'],
+            dest: '<%= compileDir %>/',
             cwd: '.',
             expand: true
           }
@@ -264,29 +265,29 @@ module.exports = function ( grunt ) {
        * The `build_css` target concatenates compiled CSS and vendor CSS
        * together.
        */
-      build_css: {
+      buildCss: {
         src: [
-          '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= vendorFiles.css %>',
+          '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
         ],
-        dest: '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+        dest: '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
       },
       /**
        * The `compile_js` target is the concatenation of our application source
        * code and all specified vendor source code into a single file.
        */
-      compile_js: {
+      compileJs: {
         options: {
           banner: '<%= meta.banner %>'
         },
         src: [
-          '<%= vendor_files.js %>',
+          '<%= vendorFiles.js %>',
           //'module.prefix',
-          '<%= build_dir %>/src/modules/**/*.js',
+          '<%= buildDir %>/src/modules/**/*.js',
           '<%= html2js.app.dest %>',
           'module.suffix'
         ],
-        dest: '<%= compile_dir %>/<%= pkg.name %>-<%= pkg.version %>.js'
+        dest: '<%= compileDir %>/<%= pkg.name %>-<%= pkg.version %>.js'
       }
     },
 
@@ -298,9 +299,9 @@ module.exports = function ( grunt ) {
       compile: {
         files: [
           {
-            src: [ '<%= app_files.js %>' ],
-            cwd: '<%= build_dir %>',
-            dest: '<%= build_dir %>',
+            src: ['<%= appFiles.js %>'],
+            cwd: '<%= buildDir %>',
+            dest: '<%= buildDir %>',
             expand: true
           }
         ]
@@ -316,7 +317,7 @@ module.exports = function ( grunt ) {
           'linux32',
           'linux64'
         ],
-        buildDir: '<%= compile_dir %>',
+        buildDir: '<%= compileDir %>',
       },
     },
     nodewebkit: {
@@ -331,9 +332,9 @@ module.exports = function ( grunt ) {
           'linux32',
           'linux64'
         ],
-        buildDir: '<%= compile_dir %>'
+        buildDir: '<%= compileDir %>'
       },
-      src: ['<%= build_dir %>/**/**']
+      src: ['<%= buildDir %>/**/**']
     },
 
     /**
@@ -345,7 +346,7 @@ module.exports = function ( grunt ) {
           banner: '<%= meta.banner %>'
         },
         files: {
-          '<%= concat.compile_js.dest %>': '<%= concat.compile_js.dest %>'
+          '<%= concat.compileJs.dest %>': '<%= concat.compileJs.dest %>'
         }
       }
     },
@@ -358,12 +359,14 @@ module.exports = function ( grunt ) {
     sass: {
       build: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.sass %>'
+          '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css':
+            '<%= appFiles.sass %>'
         }
       },
       compile: {
         files: {
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css': '<%= app_files.sass %>'
+          '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css':
+            '<%= appFiles.sass %>'
         },
         options: {
           cleancss: true,
@@ -386,15 +389,36 @@ module.exports = function ( grunt ) {
         reporter: require('jshint-stylish')
       },
       src: [
-        '<%= app_files.js %>'
+        '<%= appFiles.js %>',
       ],
       test: [
-        '<%= app_files.jsunit %>'
+        '<%= appFiles.jsunit %>'
+      ],
+      config: [
+        'build.config.js'
       ],
       gruntfile: [
         'Gruntfile.js'
+      ]
+    },
+
+    // Some code standards
+    jscs: {
+      options: {
+        config: '.jscsrc'
+      },
+      src: [
+        '<%= appFiles.js %>',
       ],
-      globals: {}
+      test: [
+        '<%= appFiles.jsunit %>'
+      ],
+      config: [
+        'build.config.js'
+      ],
+      gruntfile: [
+        'Gruntfile.js'
+      ]
     },
 
     /**
@@ -411,8 +435,8 @@ module.exports = function ( grunt ) {
         options: {
           base: 'src'
         },
-        src: [ '<%= app_files.atpl %>' ],
-        dest: '<%= build_dir %>/templates-app.js'
+        src: ['<%= appFiles.atpl %>'],
+        dest: '<%= buildDir %>/templates-app.js'
       },
 
       /**
@@ -423,8 +447,8 @@ module.exports = function ( grunt ) {
         options: {
           base: 'src/common'
         },
-        src: [ '<%= app_files.ctpl %>' ],
-        dest: '<%= build_dir %>/templates-common.js'
+        src: ['<%= appFiles.ctpl %>'],
+        dest: '<%= buildDir %>/templates-common.js'
       }
     },
 
@@ -460,13 +484,13 @@ module.exports = function ( grunt ) {
        * `src` property contains the list of included files.
        */
       build: {
-        dir: '<%= build_dir %>',
+        dir: '<%= buildDir %>',
         src: [
-          '<%= vendor_files.js %>',
-          '<%= build_dir %>/src/modules/**/*.js',
+          '<%= vendorFiles.js %>',
+          '<%= buildDir %>/src/modules/**/*.js',
           '<%= html2js.app.dest %>',
-          '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= vendorFiles.css %>',
+          '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
         ]
       },
 
@@ -476,11 +500,11 @@ module.exports = function ( grunt ) {
        * file. Now we're back!
        */
       compile: {
-        dir: '<%= compile_dir %>',
+        dir: '<%= compileDir %>',
         src: [
-          '<%= concat.compile_js.dest %>',
-          '<%= vendor_files.css %>',
-          '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
+          '<%= concat.compileJs.dest %>',
+          '<%= vendorFiles.css %>',
+          '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
         ]
       }
     },
@@ -512,7 +536,7 @@ module.exports = function ( grunt ) {
        */
       gruntfile: {
         files: 'Gruntfile.js',
-        tasks: [ 'jshint:gruntfile' ],
+        tasks: ['jshint:gruntfile'],
         options: {
           livereload: false
         }
@@ -524,9 +548,9 @@ module.exports = function ( grunt ) {
        */
       jssrc: {
         files: [
-          '<%= app_files.js %>'
+          '<%= appFiles.js %>'
         ],
-        tasks: [ 'jshint:src', 'karma:unit:run', 'copy:build_appjs' ]
+        tasks: ['jshint:src', 'karma:unit:run', 'copy:buildAppjs']
       },
 
       /**
@@ -537,15 +561,15 @@ module.exports = function ( grunt ) {
         files: [
           'src/assets/**/*'
         ],
-        tasks: [ 'copy:build_app_assets', 'copy:build_vendor_assets' ]
+        tasks: ['copy:buildAppAssets', 'copy:buildVendorAssets']
       },
 
       /**
        * When index.html changes, we need to compile it.
        */
       html: {
-        files: [ '<%= app_files.html %>' ],
-        tasks: [ 'index:build' ]
+        files: ['<%= appFiles.html %>'],
+        tasks: ['index:build']
       },
 
       /**
@@ -553,18 +577,18 @@ module.exports = function ( grunt ) {
        */
       tpls: {
         files: [
-          '<%= app_files.atpl %>',
-          '<%= app_files.ctpl %>'
+          '<%= appFiles.atpl %>',
+          '<%= appFiles.ctpl %>'
         ],
-        tasks: [ 'html2js' ]
+        tasks: ['html2js']
       },
 
       /**
        * When the CSS files change, we need to compile and minify them.
        */
       sass: {
-        files: [ 'src/**/*.scss' ],
-        tasks: [ 'sass:build' ]
+        files: ['src/**/*.scss'],
+        tasks: ['sass:build']
       },
 
       /**
@@ -573,9 +597,9 @@ module.exports = function ( grunt ) {
        */
       jsunit: {
         files: [
-          '<%= app_files.jsunit %>'
+          '<%= appFiles.jsunit %>'
         ],
-        tasks: [ 'jshint:test', 'karma:unit:run' ],
+        tasks: ['jshint:test', 'karma:unit:run'],
         options: {
           livereload: false
         }
@@ -583,7 +607,7 @@ module.exports = function ( grunt ) {
     },
     shell: {
       nw: {
-        command: pconfig.devBinary + ' <%= build_dir %>',
+        command: pconfig.devBinary + ' <%= buildDir %>',
         options: {
           execOptions: {
             maxBuffer: Infinity
@@ -591,12 +615,16 @@ module.exports = function ( grunt ) {
         }
       },
       build: {
-        command: 'cd ./<%= compile_dir %> && npm install --production --ignore-scripts'
+        command: [
+          'cd ./<%= compileDir %>',
+          '&&',
+          'npm install --production --ignore-scripts'
+        ].join(' ')
       }
     },
   };
 
-  grunt.initConfig( grunt.util._.extend( taskConfig, userConfig ) );
+  grunt.initConfig(grunt.util._.extend(taskConfig, userConfig));
 
   /**
    * In order to make it safe to just compile or copy *only* what was changed,
@@ -605,21 +633,38 @@ module.exports = function ( grunt ) {
    * `delta`) and then add a new task called `watch` that does a clean build
    * before watching for changes.
    */
-  grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'build', 'delta' ] );
+  grunt.renameTask('watch', 'delta');
+  grunt.registerTask('watch', ['build', 'delta']);
 
   /**
    * The default task is to build and compile.
    */
-  grunt.registerTask( 'default', [ 'build' ] );
+  grunt.registerTask('default', ['build']);
+
+  /**
+   * The `code` task runs basic code linting and styling things
+   */
+  grunt.registerTask('code', [
+    'jshint',
+    'jscs'
+  ]);
 
   /**
    * The `build` task gets your app ready to run for development and testing.
    */
-  grunt.registerTask( 'build', [
-    'clean', 'bower-install-simple:install', 'html2js', 'jshint', 'sass:build',
-    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
-    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build',
+  grunt.registerTask('build', [
+    'clean',
+    'bower-install-simple:install',
+    'html2js',
+    'jshint',
+    'sass:build',
+    'concat:buildCss',
+    'copy:buildAppAssets',
+    'copy:buildVendorAssets',
+    'copy:buildAppjs',
+    'copy:buildVendorJs',
+    'copy:buildVendorCss',
+    'index:build',
     'shell:nw'
   ]);
 
@@ -627,28 +672,38 @@ module.exports = function ( grunt ) {
    * The `compile` task gets your app ready for deployment by concatenating and
    * minifying your code.
    */
-  grunt.registerTask( 'compile', [
-    'sass:compile', 'copy:compile_assets', 'ngAnnotate', 'concat:compile_js',
-    'uglify', 'index:compile', 'shell:build', 'nwjs', 'compress:win32',
-    'compress:win64', 'compress:osx32', 'compress:osx64', 'compress:linux32',
+  grunt.registerTask('compile', [
+    'sass:compile',
+    'copy:compileAssets',
+    'ngAnnotate',
+    'concat:compileJs',
+    'uglify',
+    'index:compile',
+    'shell:build',
+    'nwjs',
+    'compress:win32',
+    'compress:win64',
+    'compress:osx32',
+    'compress:osx64',
+    'compress:linux32',
     'compress:linux64'
   ]);
 
   /**
    * A utility function to get all app JavaScript sources.
    */
-  function filterForJS ( files ) {
-    return files.filter( function ( file ) {
-      return file.match( /\.js$/ );
+  function filterForJS (files) {
+    return files.filter(function(file) {
+      return file.match(/\.js$/);
     });
   }
 
   /**
    * A utility function to get all app CSS sources.
    */
-  function filterForCSS ( files ) {
-    return files.filter( function ( file ) {
-      return file.match( /\.css$/ );
+  function filterForCSS (files) {
+    return files.filter(function(file) {
+      return file.match(/\.css$/);
     });
   }
 
@@ -658,22 +713,24 @@ module.exports = function ( grunt ) {
    * the list into variables for the template to use and then runs the
    * compilation.
    */
-  grunt.registerMultiTask( 'index', 'Process index.html template', function () {
-    var dirRE = new RegExp( '^('+grunt.config('build_dir')+'|'+grunt.config('compile_dir')+')\/', 'g' );
-    var jsFiles = filterForJS( this.filesSrc ).map( function ( file ) {
-      return file.replace( dirRE, '' );
+  grunt.registerMultiTask('index', 'Process index.html template', function() {
+    var buildDir = grunt.config('buildDir');
+    var compileDir = grunt.config('compileDir');
+    var dirRE = new RegExp('^(' + buildDir + '|' + compileDir + ')\/', 'g');
+    var jsFiles = filterForJS(this.filesSrc).map(function(file) {
+      return file.replace(dirRE, '');
     });
-    var cssFiles = filterForCSS( this.filesSrc ).map( function ( file ) {
-      return file.replace( dirRE, '' );
+    var cssFiles = filterForCSS(this.filesSrc).map(function(file) {
+      return file.replace(dirRE, '');
     });
 
     grunt.file.copy('src/index.html', this.data.dir + '/index.html', {
-      process: function ( contents ) {
-        return grunt.template.process( contents, {
+      process: function(contents) {
+        return grunt.template.process(contents, {
           data: {
             scripts: jsFiles,
             styles: cssFiles,
-            version: grunt.config( 'pkg.version' )
+            version: grunt.config('pkg.version')
           }
         });
       }
