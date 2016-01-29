@@ -229,7 +229,7 @@ angular.module('kalabox.dashboard', [
   });
 
 	// Poll site states.
-	guiEngine.loop.add({interval: 15 * 1000}, function() {
+	guiEngine.loop.add({interval: 10 * 1000}, function() {
 		return siteStates.get()
 		.then(function(states) {
 			$scope.ui.states = states;
