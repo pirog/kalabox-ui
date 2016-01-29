@@ -30,11 +30,11 @@ angular.module('kalabox.dashboard')
         guiEngine.try(function() {
           $modalInstance.close();
           var site = modalData.site;
-					return site.push({
-						message: message || 'No commit message was given',
-						database: database,
-						files: files
-					});
+          return site.push({
+            message: message || 'No commit message was given',
+            database: database,
+            files: files
+          });
         });
       };
       $scope.cancel = function() {

@@ -148,7 +148,7 @@ angular.module('kalabox.dashboard', [
 })
 .controller(
   'DashboardCtrl',
-  function ($scope, $uibModal, $timeout, $interval, $q, kbox,
+  function($scope, $uibModal, $timeout, $interval, $q, kbox,
     sites, providers, siteStates, _, guiEngine) {
 
   //Init ui model.

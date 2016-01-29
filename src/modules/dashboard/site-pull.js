@@ -29,7 +29,7 @@ angular.module('kalabox.dashboard')
   'SitePullModal',
   function($scope, $modalInstance, _, modalData, guiEngine) {
 
-   guiEngine.try(function() {
+    guiEngine.try(function() {
       $scope.site = modalData.site;
       $scope.environments = modalData.environments;
       $scope.errorMessage = false;
