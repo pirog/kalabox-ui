@@ -1,5 +1,7 @@
+'use strict';
+
 /**
- * This file/module contains all configuration for the build process.
+ * This file/module contains helpful file location config.
  */
 
 var vendorDir = 'src/lib/vendor/';

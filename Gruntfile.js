@@ -8,20 +8,19 @@ module.exports = function(grunt) {
   var pconfig = require('./src/lib/pconfig');
 
   /**
-   * Load in our build configuration file.
+   * Load in our build configuration filez
    */
-  var userConfig = require('./build.config.js');
+  var files = require('./grunt/files.js');
+  var code = require('./grunt/code.js');
 
   /**
    * This is the configuration object Grunt uses to give each plugin its
    * instructions.
    */
   var taskConfig = {
-    /**
-     * We read in our `package.json` file so we can access the package name and
-     * version. It's already there, so we don't repeat ourselves here.
-     */
-    pkg: grunt.file.readJSON('package.json'),
+
+    // Let's use our pkg info here
+    pkg: grunt.file.readJSON('./package.json'),
 
     /**
      * The banner is the comment that is placed at the top of our compiled
@@ -40,6 +39,7 @@ module.exports = function(grunt) {
         ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
         ' */\n'
     },
+
     /**
      * Basic bower task that uses
      * Bower's API's directly.
@@ -90,6 +90,7 @@ module.exports = function(grunt) {
         pushTo: 'origin'
       }
     },
+
     compress: {
       win32: {
         options: {
@@ -369,64 +370,13 @@ module.exports = function(grunt) {
      * point (!); this is useful when code comes from a third party but is
      * nonetheless inside `src/`.
      */
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
-      },
-      src: [
-        '<%= appFiles.js %>',
-      ],
-      test: [
-        '<%= appFiles.jsunit %>'
-      ],
-      config: [
-        'build.config.js'
-      ],
-      gruntfile: [
-        'Gruntfile.js'
-      ]
-    },
+    jshint: code.jshint,
 
     // Some code standards
-    jscs: {
-      options: {
-        config: '.jscsrc'
-      },
-      src: [
-        '<%= appFiles.js %>',
-      ],
-      test: [
-        '<%= appFiles.jsunit %>'
-      ],
-      config: [
-        'build.config.js'
-      ],
-      gruntfile: [
-        'Gruntfile.js'
-      ]
-    },
+    jscs: code.jscs,
 
     // Angular html validate
-    htmlangular: {
-      options: {
-        tmplext: 'html.tmpl',
-        customattrs: [
-          'job-*',
-          'site-*',
-          'provider-*',
-          'placeholder',
-          'start-*'
-        ],
-        relaxerror: [
-          'Empty heading.',
-          'Element “img” is missing required attribute “src”'
-        ]
-      },
-      files: {
-        src: ['<%= appFiles.atpl %>']
-      }
-    },
+    htmlangular: code.htmlangular,
 
     /**
      * HTML2JS is a Grunt plugin that takes all of your template files and
@@ -567,6 +517,7 @@ module.exports = function(grunt) {
         files: ['src/**/*.scss'],
         tasks: ['sass:build']
       }
+
     },
     shell: {
       nw: {
@@ -587,7 +538,7 @@ module.exports = function(grunt) {
     },
   };
 
-  grunt.initConfig(grunt.util._.extend(taskConfig, userConfig));
+  grunt.initConfig(grunt.util._.extend(taskConfig, files));
 
   /**
    * In order to make it safe to just compile or copy *only* what was changed,
