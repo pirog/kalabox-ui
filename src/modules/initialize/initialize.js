@@ -7,14 +7,14 @@ angular.module('kalabox.initialize', [
 .config(function($urlRouterProvider, $stateProvider) {
   $stateProvider.state('initialize', {
     url: '/initialize',
-    templateUrl: 'modules/initialize/initialize.html',
+    templateUrl: 'modules/initialize/initialize.html.tmpl',
     controller: 'InitializeCtrl'
   });
   $urlRouterProvider.otherwise('/initialize');
 })
 .controller('InitializeCtrl',
-['$scope', '$state', 'kbox', 'globalConfig', '$window',
-  function($scope, $state, kbox, globalConfig, $window) {
+['$scope', '$state', 'kbox', 'globalConfig',
+  function($scope, $state, kbox, globalConfig) {
 
     var gui = require('nw.gui');
     var mb = new gui.Menu({type: 'menubar'});
@@ -25,7 +25,9 @@ angular.module('kalabox.initialize', [
 
     var rotateMessage = function() {
       setTimeout(function() {
-        $scope.ui.randomMessage = $scope.ui.messageText[Math.floor(Math.random()*$scope.ui.messageText.length)];
+        $scope.ui.randomMessage = $scope.ui.messageText[
+          Math.floor(Math.random() * $scope.ui.messageText.length)
+        ];
         $scope.$digest();
         rotateMessage();
       }, 3000);
@@ -35,18 +37,24 @@ angular.module('kalabox.initialize', [
     $scope.ui = {
       randomMessage: 'Let\'s get this party started',
       messageText: [
-        'Kicking the tires/tyres', 'We assure you, winter IS coming',
-        'Applying container grease', 'Putting the last "P" on PHP',
-        'Making the world safe for democracy', 'Failing to be afraid of fear itself',
+        'Kicking the tires/tyres',
+        'We assure you, winter IS coming',
+        'Applying container grease',
+        'Putting the last "P" on PHP',
+        'Making the world safe for democracy',
+        'Failing to be afraid of fear itself',
         'Neither snow nor rain nor heat nor gloom of night shall stop us',
-        'Trimming the llama', 'Burning the man', 'Clearing dust out of the box',
-        'Plumbing the series of tubes', 'Crossing the Rubicon',
-        'Rebalancing your portfolio', 'Slicing, dicing, and making french fries',
+        'Trimming the lama',
+        'Burning the man',
+        'Clearing dust out of the box',
+        'Plumbing the series of tubes',
+        'Crossing the Rubicon',
+        'Rebalancing your portfolio',
+        'Slicing, dicing, and making french fries',
         'Improving your child\'s SAT score',
-        'Teaching the virtue of patience', 'Nurturing your web projects',
-        'Waiting is the hardest part', 'Reticulating splines',
-        'Untying the Gordian knot', 'Nearing the singularity',
-        'Tripping the light fantastic'
+        'Teaching the virtue of patience',
+        'Nurturing your web projects',
+        'Waiting is the hardest part'
       ]
     };
 
@@ -59,16 +67,10 @@ angular.module('kalabox.initialize', [
         // Bring engine up then navigate to dashboard.
         return kbox.then(function(kbox) {
           return kbox.engine.up()
-					.wrap('Error starting kalabox.');
-        })
-				// Handle errors.
-				.catch(function(err) {
-					$window.alert(err.message);
-				})
-				// Navigate to dashboard.
-				.then(function() {
-					$state.go('dashboard');
-				});
+          .then(function() {
+            $state.go('dashboard');
+          });
+        });
       } else {
         // Navigate to start.
         $state.go('start');

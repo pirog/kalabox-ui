@@ -5,23 +5,23 @@ module.exports = function(grunt) {
   // loads all grunt-* tasks based on package.json definitions
   require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
-  var pconfig = require('./src/lib/pconfig');
-
   /**
-   * Load in our build configuration file.
+   * Load in our build configuration filez
    */
-  var userConfig = require('./build.config.js');
+  var code = require('./grunt/code.js');
+  var files = require('./grunt/files.js');
+  var frontend = require('./grunt/frontend.js');
+  var nw = require('./grunt/nw.js');
+  var util = require('./grunt/util.js');
 
   /**
    * This is the configuration object Grunt uses to give each plugin its
    * instructions.
    */
   var taskConfig = {
-    /**
-     * We read in our `package.json` file so we can access the package name and
-     * version. It's already there, so we don't repeat ourselves here.
-     */
-    pkg: grunt.file.readJSON('package.json'),
+
+    // Let's use our pkg info here
+    pkg: grunt.file.readJSON('./package.json'),
 
     /**
      * The banner is the comment that is placed at the top of our compiled
@@ -40,630 +40,100 @@ module.exports = function(grunt) {
         ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
         ' */\n'
     },
-    /**
-     * Basic bower task that uses
-     * Bower's API's directly.
-     */
-    'bower-install-simple' : {
-      install: {
-        options: {
-          directory: 'src/lib/vendor'
-        },
-      },
-      ci: {
-        options: {
-          directory: 'src/lib/vendor',
-          interactive: false
-        }
-      }
-    },
 
-    /**
-     * Creates a changelog on a new version.
-     */
-    changelog: {
-      options: {
-        dest: 'CHANGELOG.md',
-        template: 'changelog.tpl'
-      }
-    },
+    // Task to bump versions
+    bump: util.bump,
+    // Cleans out build and complile dirs
+    clean: util.clean,
 
-    /**
-     * Increments the version number, etc.
-     */
-    bump: {
-      options: {
-        files: [
-          'package.json',
-          'bower.json'
-        ],
-        commit: true,
-        commitMessage: 'Release v%VERSION%',
-        commitFiles: [
-          'package.json',
-          'client/bower.json'
-        ],
-        createTag: true,
-        tagName: 'v%VERSION%',
-        tagMessage: 'Version %VERSION%',
-        push: false,
-        pushTo: 'origin'
-      }
+    // Installs bower deps
+    'bower-install-simple': {
+      install: frontend.bower.install,
+      ci: frontend.bower.console
     },
-    compress: {
-      win32: {
-        options: {
-          archive: 'built/kalabox-win32-dev.zip'
-        },
-        files: [
-          {
-            expand: true,
-            cwd: 'dist/Kalabox/win32/',
-            src: ['**'],
-            dest: 'Kalabox/'
-          }
-        ]
-      },
-      win64: {
-        options: {
-          archive: 'built/kalabox-win64-dev.zip'
-        },
-        files: [
-          {
-            expand: true,
-            cwd: 'dist/Kalabox/win64/',
-            src: ['**'],
-            dest: 'Kalabox/'
-          }
-        ]
-      },
-      osx32: {
-        options: {
-          archive: 'built/kalabox-osx32-dev.tar.gz',
-          mode: 'tgz'
-        },
-        files: [
-          {
-            expand: true,
-            cwd: 'dist/Kalabox/osx32/',
-            src: ['**'],
-            dest: 'Kalabox/'
-          }
-        ]
-      },
-      osx64: {
-        options: {
-          archive: 'built/kalabox-osx64-dev.tar.gz',
-          mode: 'tgz'
-        },
-        files: [
-          {
-            expand: true,
-            cwd: 'dist/Kalabox/osx64/',
-            src: ['**'],
-            dest: 'Kalabox/'
-          }
-        ]
-      },
-      linux32: {
-        options: {
-          archive: 'built/kalabox-linux32-dev.tar.gz',
-          mode: 'tgz'
-        },
-        files: [
-          {
-            expand: true,
-            cwd: 'dist/Kalabox/linux32/',
-            src: ['**'],
-            dest: 'Kalabox/'
-          }
-        ]
-      },
-      linux64: {
-        options: {
-          archive: 'built/kalabox-linux64-dev.tar.gz',
-          mode: 'tgz'
-        },
-        files: [
-          {
-            expand: true,
-            cwd: 'dist/Kalabox/linux64/',
-            src: ['**'],
-            dest: 'Kalabox/'
-          }
-        ]
-      }
-    },
-    /**
-     * The directories to delete when `grunt clean` is executed.
-     */
-    clean: [
-      '<%= buildDir %>',
-      '<%= compileDir %>'
-    ],
-
-    /**
-     * The `copy` task just copies files from A to B. We use it here to copy
-     * our project assets (images, fonts, etc.) and javascripts into
-     * `build_dir`, and then to copy the assets to `compile_dir`.
-     */
+    // Copies relevant things from a to b
     copy: {
-      buildAppAssets: {
-        files: [
-          {
-            src: ['**'],
-            dest: '<%= buildDir %>/images/',
-            cwd: 'src/images',
-            expand: true
-          },
-          {src: ['package.json'], dest: '<%= buildDir %>/package.json'}
-       ]
-      },
-      buildVendorAssets: {
-        files: [
-          {
-            src: ['<%= vendorFiles.assets %>'],
-            dest: '<%= buildDir %>/',
-            cwd: '.',
-            expand: true
-          }
-       ]
-      },
-      buildAppjs: {
-        files: [
-          {
-            src: ['<%= appFiles.js %>'],
-            dest: '<%= buildDir %>/',
-            cwd: '.',
-            expand: true
-          }
-        ]
-      },
-      buildVendorJs: {
-        files: [
-          {
-            src: ['<%= vendorFiles.js %>'],
-            dest: '<%= buildDir %>/',
-            cwd: '.',
-            expand: true
-          }
-        ]
-      },
-      buildVendorCss: {
-        files: [
-          {
-            src: ['<%= vendorFiles.css %>'],
-            dest: '<%= buildDir %>/',
-            cwd: '.',
-            expand: true
-          }
-        ]
-      },
-      compileAssets: {
-        files: [
-          {
-            src: ['**'],
-            dest: '<%= compileDir %>',
-            cwd: '<%= buildDir %>/assets',
-            expand: true
-          },
-          {
-            src: ['<%= vendorFiles.css %>'],
-            dest: '<%= compileDir %>/',
-            cwd: '.',
-            expand: true
-          }
-        ]
-      }
+      buildAppAssets: frontend.copy.buildAppAssets,
+      buildVendorAssets: frontend.copy.buildVendorAssets,
+      buildAppJs: frontend.copy.buildAppJs,
+      buildVendorJs: frontend.copy.buildVendorJs,
+      buildVendorCss: frontend.copy.buildVendorCss,
+      compileAssets: frontend.copy.compileAssets
     },
-
-    /**
-     * `grunt concat` concatenates multiple source files into a single file.
-     */
+    // Concatenates multiple source files into a single file.
     concat: {
-      /**
-       * The `build_css` target concatenates compiled CSS and vendor CSS
-       * together.
-       */
-      buildCss: {
-        src: [
-          '<%= vendorFiles.css %>',
-          '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
-        ],
-        dest: '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
-      },
-      /**
-       * The `compile_js` target is the concatenation of our application source
-       * code and all specified vendor source code into a single file.
-       */
-      compileJs: {
-        options: {
-          banner: '<%= meta.banner %>'
-        },
-        src: [
-          '<%= vendorFiles.js %>',
-          //'module.prefix',
-          '<%= buildDir %>/src/modules/**/*.js',
-          '<%= html2js.app.dest %>',
-          'module.suffix'
-        ],
-        dest: '<%= compileDir %>/<%= pkg.name %>-<%= pkg.version %>.js'
-      }
+      buildCss: frontend.concat.buildCss,
+      compileJs: frontend.concat.compileJs
     },
-
-    /**
-     * `ngAnnotate` annotates the sources before minifying. That is, it allows us
-     * to code without the array syntax.
-     */
+    //annotates the sources before minifying.
     ngAnnotate: {
-      compile: {
-        files: [
-          {
-            src: ['<%= appFiles.js %>'],
-            cwd: '<%= buildDir %>',
-            dest: '<%= buildDir %>',
-            expand: true
-          }
-        ]
-      }
+      compile: frontend.ngAnnotate.compile
     },
-    nwjs: {
-      options: {
-        platforms: [
-          'win32',
-          'win64',
-          'osx32',
-          'osx64',
-          'linux32',
-          'linux64'
-        ],
-        buildDir: '<%= compileDir %>',
-      },
-    },
-    nodewebkit: {
-      options: {
-        // Versions listed here: http://dl.node-webkit.org/
-        version: 'v0.11.6',
-        platforms: [
-          'win32',
-          'win64',
-          'osx32',
-          'osx64',
-          'linux32',
-          'linux64'
-        ],
-        buildDir: '<%= compileDir %>'
-      },
-      src: ['<%= buildDir %>/**/**']
-    },
-
-    /**
-     * Minify the sources!
-     */
-    uglify: {
-      compile: {
-        options: {
-          banner: '<%= meta.banner %>'
-        },
-        files: {
-          '<%= concat.compileJs.dest %>': '<%= concat.compileJs.dest %>'
-        }
-      }
-    },
-
-    /**
-     * `grunt-contrib-sass` handles our LESS compilation and uglification automatically.
-     * Only our `main.scss` file is included in compilation; all other files
-     * must be imported from this file.
-     */
+    // Sassify
     sass: {
-      build: {
-        files: {
-          '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css':
-            '<%= appFiles.sass %>'
-        }
-      },
-      compile: {
-        files: {
-          '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css':
-            '<%= appFiles.sass %>'
-        },
-        options: {
-          cleancss: true,
-          compress: true
-        }
-      }
+      build: frontend.sass.build,
+      compile: frontend.sass.compile
     },
-
-    /**
-     * `jshint` defines the rules of our linter as well as which files we
-     * should check. This file, all javascript sources, and all our unit tests
-     * are linted based on the policies listed in `options`. But we can also
-     * specify exclusionary patterns by prefixing them with an exclamation
-     * point (!); this is useful when code comes from a third party but is
-     * nonetheless inside `src/`.
-     */
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
-      },
-      src: [
-        '<%= appFiles.js %>',
-      ],
-      test: [
-        '<%= appFiles.jsunit %>'
-      ],
-      config: [
-        'build.config.js'
-      ],
-      gruntfile: [
-        'Gruntfile.js'
-      ]
-    },
-
-    // Some code standards
-    jscs: {
-      options: {
-        config: '.jscsrc'
-      },
-      src: [
-        '<%= appFiles.js %>',
-      ],
-      test: [
-        '<%= appFiles.jsunit %>'
-      ],
-      config: [
-        'build.config.js'
-      ],
-      gruntfile: [
-        'Gruntfile.js'
-      ]
-    },
-
-    /**
-     * HTML2JS is a Grunt plugin that takes all of your template files and
-     * places them into JavaScript files as strings that are added to
-     * AngularJS's template cache. This means that the templates too become
-     * part of the initial payload as one JavaScript file. Neat!
-     */
+    // Html2JS4Eva
     html2js: {
-      /**
-       * These are the templates from `src/modules`.
-       */
-      app: {
-        options: {
-          base: 'src'
-        },
-        src: ['<%= appFiles.atpl %>'],
-        dest: '<%= buildDir %>/templates-app.js'
-      },
-
-      /**
-       * These are the templates from `src/common`.
-       * @todo: do we need this? Doesn't seem so, disabled in compile.
-       */
-      common: {
-        options: {
-          base: 'src/common'
-        },
-        src: ['<%= appFiles.ctpl %>'],
-        dest: '<%= buildDir %>/templates-common.js'
-      }
+      app: frontend.html2js.app,
+      common: frontend.html2js.common
     },
-
-    /**
-     * Karma unit test runner.
-     *
-     * @todo: If we use karma, copy ngbp's handling of Karma tests so we don't
-     * have to manually add them to our config all the time.
-     */
-    karma: {
-      options: {
-        configFile: 'test/karma.conf.js'
-      },
-      // Required by grunt, can override later.
-      unit: {
-        options: {
-          singleRun: true,
-          browsers: ['NodeWebkit']
-        }
-      }
-    },
-
-    /**
-     * The `index` task compiles the `index.html` file as a Grunt template. CSS
-     * and JS files co-exist here but they get split apart later.
-     */
+    // The `index` task compiles the `index.html` file as a Grunt template.r.
     index: {
-
-      /**
-       * During development, we don't want to have wait for compilation,
-       * concatenation, minification, etc. So to avoid these steps, we simply
-       * add all script files directly to the `<head>` of `index.html`. The
-       * `src` property contains the list of included files.
-       */
-      build: {
-        dir: '<%= buildDir %>',
-        src: [
-          '<%= vendorFiles.js %>',
-          '<%= buildDir %>/src/modules/**/*.js',
-          '<%= html2js.app.dest %>',
-          '<%= vendorFiles.css %>',
-          '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
-        ]
-      },
-
-      /**
-       * When it is time to have a completely compiled application, we can
-       * alter the above to include only a single JavaScript and a single CSS
-       * file. Now we're back!
-       */
-      compile: {
-        dir: '<%= compileDir %>',
-        src: [
-          '<%= concat.compileJs.dest %>',
-          '<%= vendorFiles.css %>',
-          '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
-        ]
-      }
+      build: frontend.index.build,
+      compile: frontend.index.compile
     },
 
-    /**
-     * And for rapid development, we have a watch set up that checks to see if
-     * any of the files listed below change, and then to execute the listed
-     * tasks when they do. This just saves us from having to type "grunt" into
-     * the command-line every time we want to see what we're working on; we can
-     * instead just leave "grunt watch" running in a background terminal. Set it
-     * and forget it, as Ron Popeil used to tell us.
-     *
-     * But we don't need the same thing to happen for all the files.
-     */
-    delta: {
-      /**
-       * By default, we want the Live Reload to work for all tasks; this is
-       * overridden in some tasks (like this file) where browser resources are
-       * unaffected. It runs by default on port 35729, which your browser
-       * plugin should auto-detect.
-       */
-      options: {
-        livereload: true
-      },
+    // Jslinting
+    jshint: code.jshint,
+    // Some code standards
+    jscs: code.jscs,
+    // Angular html validate
+    htmlangular: code.htmlangular,
 
-      /**
-       * When the Gruntfile changes, we just want to lint it. In fact, when
-       * your Gruntfile changes, it will automatically be reloaded!
-       */
-      gruntfile: {
-        files: 'Gruntfile.js',
-        tasks: ['jshint:gruntfile'],
-        options: {
-          livereload: false
-        }
-      },
-
-      /**
-       * When our JavaScript source files change, we want to run lint them and
-       * run our unit tests.
-       */
-      jssrc: {
-        files: [
-          '<%= appFiles.js %>'
-        ],
-        tasks: ['jshint:src', 'karma:unit:run', 'copy:buildAppjs']
-      },
-
-      /**
-       * When assets are changed, copy them. Note that this will *not* copy new
-       * files, so this is probably not very useful.
-       */
-      assets: {
-        files: [
-          'src/assets/**/*'
-        ],
-        tasks: ['copy:buildAppAssets', 'copy:buildVendorAssets']
-      },
-
-      /**
-       * When index.html changes, we need to compile it.
-       */
-      html: {
-        files: ['<%= appFiles.html %>'],
-        tasks: ['index:build']
-      },
-
-      /**
-       * When our templates change, we only rewrite the template cache.
-       */
-      tpls: {
-        files: [
-          '<%= appFiles.atpl %>',
-          '<%= appFiles.ctpl %>'
-        ],
-        tasks: ['html2js']
-      },
-
-      /**
-       * When the CSS files change, we need to compile and minify them.
-       */
-      sass: {
-        files: ['src/**/*.scss'],
-        tasks: ['sass:build']
-      },
-
-      /**
-       * When a JavaScript unit test file changes, we only want to lint it and
-       * run the unit tests. We don't want to do any live reloading.
-       */
-      jsunit: {
-        files: [
-          '<%= appFiles.jsunit %>'
-        ],
-        tasks: ['jshint:test', 'karma:unit:run'],
-        options: {
-          livereload: false
-        }
-      },
-    },
+    // Compress built NW assets
+    compress: nw.compress,
+    // Build the NW binaries
+    nwjs: nw.nwjs,
+    // Run Some NW shell things
     shell: {
-      nw: {
-        command: pconfig.devBinary + ' <%= buildDir %>',
-        options: {
-          execOptions: {
-            maxBuffer: Infinity
-          }
-        }
-      },
-      build: {
-        command: [
-          'cd ./<%= compileDir %>',
-          '&&',
-          'npm install --production --ignore-scripts'
-        ].join(' ')
-      }
+      nw: nw.shell.nw,
+      build: nw.shell.build
     },
   };
 
-  grunt.initConfig(grunt.util._.extend(taskConfig, userConfig));
-
-  /**
-   * In order to make it safe to just compile or copy *only* what was changed,
-   * we need to ensure we are starting from a clean, fresh build. So we rename
-   * the `watch` task to `delta` (that's why the configuration var above is
-   * `delta`) and then add a new task called `watch` that does a clean build
-   * before watching for changes.
-   */
-  grunt.renameTask('watch', 'delta');
-  grunt.registerTask('watch', ['sassBuild', 'delta']);
+  // Init our grunt config
+  grunt.initConfig(grunt.util._.extend(taskConfig, files));
 
   /**
    * The default task is to build and compile.
    */
   grunt.registerTask('default', ['build']);
-
   grunt.registerTask('sassBuild', ['sass:build']);
 
   /**
    * The `code` task runs basic code linting and styling things
    */
-  grunt.registerTask('code', [
+  grunt.registerTask('test', [
     'jshint',
-    'jscs'
+    'jscs',
+    'htmlangular'
   ]);
 
   /**
    * The `build` task gets your app ready to run for development and testing.
    */
   grunt.registerTask('build', [
+    'test',
     'clean',
     'bower-install-simple:install',
     'html2js',
-    'jshint',
     'sass:build',
     'concat:buildCss',
     'copy:buildAppAssets',
     'copy:buildVendorAssets',
-    'copy:buildAppjs',
+    'copy:buildAppJs',
     'copy:buildVendorJs',
     'copy:buildVendorCss',
     'index:build',
@@ -674,21 +144,22 @@ module.exports = function(grunt) {
    * The `compile` task gets your app ready for deployment by concatenating and
    * minifying your code.
    */
-  grunt.registerTask('compile', [
-    'sass:compile',
-    'copy:compileAssets',
-    'ngAnnotate',
-    'concat:compileJs',
-    'uglify',
-    'index:compile',
+  grunt.registerTask('pkg', [
+    'test',
+    'clean',
+    'bower-install-simple:install',
+    'html2js',
+    'sass:build',
+    'concat:buildCss',
+    'copy:buildAppAssets',
+    'copy:buildVendorAssets',
+    'copy:buildAppJs',
+    'copy:buildVendorJs',
+    'copy:buildVendorCss',
+    'index:build',
     'shell:build',
     'nwjs',
-    'compress:win32',
-    'compress:win64',
-    'compress:osx32',
-    'compress:osx64',
-    'compress:linux32',
-    'compress:linux64'
+    'compress'
   ]);
 
   /**

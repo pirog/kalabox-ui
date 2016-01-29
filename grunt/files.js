@@ -1,5 +1,7 @@
+'use strict';
+
 /**
- * This file/module contains all configuration for the build process.
+ * This file/module contains helpful file location config.
  */
 
 var vendorDir = 'src/lib/vendor/';
@@ -27,7 +29,7 @@ module.exports = {
     js: ['src/modules/**/*.js', '!src/modules/**/*.spec.js'],
     jsunit: ['src/**/*.spec.js'],
 
-    atpl: ['src/**/*.html'],
+    atpl: ['src/**/*.html.tmpl'],
     ctpl: ['src/**/*.html'],
 
     html: ['src/index.html'],

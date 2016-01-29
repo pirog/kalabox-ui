@@ -7,27 +7,23 @@
     <div class="form-group">
       <label for="pullDatabase">Database</label>
       <select class="form-control" id="pullDatabase" placeholder="Database" ng-model="database" required>
+        <option label="validator" hidden></option>
         <option ng-repeat="env in environments" value="{{env}}">{{env}}</option>
         <option value="true">YES</option>
         <option value="false">NO</option>
       </select>
     </div>
-    <!--<div class="form-group">
-      <label for="authEmail">Create Backup?</label>
-      <select class="form-control" id="pullCreateBackup" placeholder="Create Backup?" ng-model="createBackup" required>
-        <option value="true">YES</option>
-        <option value="false">NO</option>
-      </select>
-		</div>-->
     <div class="form-group">
-      <label for="authEmail">Files</label>
+      <label for="pullFiles">Files</label>
       <select class="form-control" id="pullFiles" placeholder="Files" ng-model="files" required>
+        <option label="validator" hidden></option>
         <option ng-repeat="env in environments" value="{{env}}">{{env}}</option>
         <option value="true">YES</option>
         <option value="false">NO</option>
       </select>
     </div>
   </form>
+</div>
 <div class="modal-footer">
   <button class="btn btn-primary" type="button" ng-click="ok(database, createBackup, files)">Submit</button>
   <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>

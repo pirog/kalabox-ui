@@ -16,9 +16,9 @@ angular.module('kalabox.nodewrappers', [])
     return kbox.Promise.try(function() {
       return kbox.init('gui');
     })
-		.then(function() {
-			$q.prototype.wrap = kbox.Promise.prototype.wrap;
-		})
+    .then(function() {
+      $q.prototype.wrap = kbox.Promise.prototype.wrap;
+    })
     .then(function() {
       return kbox;
     });

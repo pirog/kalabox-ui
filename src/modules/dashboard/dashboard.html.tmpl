@@ -1,0 +1,52 @@
+<nav ui-view="platforms" id="addSite" class="navmenu navmenu-default navmenu-fixed-right offcanvas"></nav>
+
+<div class="container">
+  <div class="row header">
+    <div class="col-xs-1">
+      <img src="images/kalabox-blue.svg" alt="Really good looking logo of Kalabox" />
+    </div>
+    <div class="col-xs-8">
+      <form class="form-inline">
+        <div class="form-group">
+          <label class="sr-only" for="siteSearch">Site search</label>
+          <input type="search" ng-model="siteSearch" class="form-control" id="siteSearch" placeholder="Type site name">
+        </div>
+      </form>
+    </div>
+    <div class="col-xs-3">
+      <a href="" class="btn btn-primary" data-toggle="offcanvas" data-target="#addSite">Add Site</a>
+    </div>
+  </div>
+  engine: {{ui.engineStatus}}
+  <div ng-repeat="job in ui.jobs">
+    <div>
+      {{job.desc}} - ({{job.status}}) - {{job.err.message}} {{job.err.stack}} {{job.statusMsg}}
+      - <button ng-disabled="job.status === 'running'" job-clear>clear</button>
+      - <button ng-disabled="job.status !== 'failed'" job-retry>retry</button>
+    </div>
+  </div>
+  <div class="sites row">
+    <div ng-repeat="site in ui.sites | filter:siteSearch">
+      <div class="site col-xs-6">
+        <div class="row">
+          <a ng-href="" site-browser><img class="pull-left col-xs-5 img-responsive" alt="Snapshot of your site"  ng-src="{{site.image}}"/></a>
+          <div class="site-info col-xs-7">
+            <h3 ng-bind="site.name"></h3>
+            <div class="site-actions">
+              <a ng-href="" site-toggle ng-class="{'site-up': ui.states[site.name]}"><i class="fa fa-power-off fa-2"></i></a>
+              <a ng-href="" site-trash><i class="fa fa-trash-o fa-2"></i></a>
+              <a ng-href="" site-pull><i class="fa fa-cloud-download fa-2"></i></a>
+              <a ng-href="" site-push><i class="fa fa-cloud-upload fa-2"></i></a>
+              <a ng-href="" site-code><i class="fa fa-desktop fa-2"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-repeat="err in ui.errors">
+    <div>
+      {{err.message}}
+    </div>
+  </div>
+</div>

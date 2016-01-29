@@ -2,19 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Kalabox</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalabox</title>
 
-    <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
-    <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
+    <!-- compiled CSS -->
+    <% styles.forEach( function ( file ) { %>
+    <link rel="stylesheet" type="text/css" href="<%= file %>" />
+    <% }); %>
 
-    <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
-    <script type="text/javascript" src="<%= file %>"></script><% }); %>
+    <!-- compiled JavaScript -->
+    <% scripts.forEach( function ( file ) { %>
+    <script type="text/javascript" src="<%= file %>"></script>
+    <% }); %>
 
   </head>
+
   <body ng-app="kalabox">
     <div id="main" role="main">
       <div id="content" class="container" ui-view></div>
     </div>
   </body>
+
 </html>

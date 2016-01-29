@@ -147,9 +147,9 @@ angular.module('kalabox.dashboard', [
   };
 })
 .controller(
-	'DashboardCtrl',
-	function ($scope, $uibModal, $timeout, $interval, $q, kbox,
-		sites, providers, siteStates, _, guiEngine) {
+  'DashboardCtrl',
+  function ($scope, $uibModal, $timeout, $interval, $q, kbox,
+    sites, providers, siteStates, _, guiEngine) {
 
   //Init ui model.
   $scope.ui = {
@@ -213,30 +213,30 @@ angular.module('kalabox.dashboard', [
   });
 
   // Initialize providers.
-	guiEngine.try(function() {
-		return providers.get()
-		.then(function(providers) {
-			$scope.ui.providers = providers;
-		});
-	});
+  guiEngine.try(function() {
+    return providers.get()
+    .then(function(providers) {
+      $scope.ui.providers = providers;
+    });
+  });
 
   // Poll sites.
   guiEngine.loop.add({interval: 1 * 60 * 1000}, function() {
-		return sites.get()
+    return sites.get()
     .then(function(sites) {
       $scope.ui.sites = sites;
     });
   });
 
-	// Poll site states.
-	guiEngine.loop.add({interval: 10 * 1000}, function() {
-		return siteStates.get()
-		.then(function(states) {
-			$scope.ui.states = states;
-		});
-	});
+  // Poll site states.
+  guiEngine.loop.add({interval: 10 * 1000}, function() {
+    return siteStates.get()
+    .then(function(states) {
+      $scope.ui.states = states;
+    });
+  });
 
-	// Poll engine status.
+  // Poll engine status.
   guiEngine.loop.add({interval: 0.25 * 60 * 1000}, function() {
     return kbox.then(function(kbox) {
       return kbox.engine.isUp();
