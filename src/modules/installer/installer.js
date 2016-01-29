@@ -8,11 +8,11 @@ angular.module('kalabox.installer', [
   $stateProvider
     .state('start', {
       url: '/start',
-      templateUrl: 'modules/installer/start.html',
+      templateUrl: 'modules/installer/start.html.tmpl',
     })
     .state('installer', {
       url: '/installer',
-      templateUrl: 'modules/installer/installer.html',
+      templateUrl: 'modules/installer/installer.html.tmpl',
       controller: 'InstallerCtrl'
     });
 })

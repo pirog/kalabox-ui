@@ -7,7 +7,7 @@ angular.module('kalabox.initialize', [
 .config(function($urlRouterProvider, $stateProvider) {
   $stateProvider.state('initialize', {
     url: '/initialize',
-    templateUrl: 'modules/initialize/initialize.html',
+    templateUrl: 'modules/initialize/initialize.html.tmpl',
     controller: 'InitializeCtrl'
   });
   $urlRouterProvider.otherwise('/initialize');

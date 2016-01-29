@@ -10,7 +10,7 @@ angular.module('kalabox.dashboard')
         // Run inside of a gui task.
         guiEngine.try(function() {
           var sitePushModal = $scope.open(
-            'modules/dashboard/site-push-modal.html',
+            'modules/dashboard/site-push-modal.html.tmpl',
             'SitePushModal',
             {site: $scope.site}
           );
