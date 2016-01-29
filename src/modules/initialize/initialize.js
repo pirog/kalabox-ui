@@ -25,7 +25,9 @@ angular.module('kalabox.initialize', [
 
     var rotateMessage = function() {
       setTimeout(function() {
-        $scope.ui.randomMessage = $scope.ui.messageText[Math.floor(Math.random()*$scope.ui.messageText.length)];
+        $scope.ui.randomMessage = $scope.ui.messageText[
+          Math.floor(Math.random() * $scope.ui.messageText.length)
+        ];
         $scope.$digest();
         rotateMessage();
       }, 3000);
@@ -35,15 +37,23 @@ angular.module('kalabox.initialize', [
     $scope.ui = {
       randomMessage: 'Let\'s get this party started',
       messageText: [
-        'Kicking the tires/tyres', 'We assure you, winter IS coming',
-        'Applying container grease', 'Putting the last "P" on PHP',
-        'Making the world safe for democracy', 'Failing to be afraid of fear itself',
+        'Kicking the tires/tyres',
+        'We assure you, winter IS coming',
+        'Applying container grease',
+        'Putting the last "P" on PHP',
+        'Making the world safe for democracy',
+        'Failing to be afraid of fear itself',
         'Neither snow nor rain nor heat nor gloom of night shall stop us',
-        'Trimming the lama', 'Burning the man', 'Clearing dust out of the box',
-        'Plumbing the series of tubes', 'Crossing the Rubicon',
-        'Rebalancing your portfolio', 'Slicing, dicing, and making french fries',
+        'Trimming the lama',
+        'Burning the man',
+        'Clearing dust out of the box',
+        'Plumbing the series of tubes',
+        'Crossing the Rubicon',
+        'Rebalancing your portfolio',
+        'Slicing, dicing, and making french fries',
         'Improving your child\'s SAT score',
-        'Teaching the virtue of patience', 'Nurturing your web projects',
+        'Teaching the virtue of patience',
+        'Nurturing your web projects',
         'Waiting is the hardest part'
       ]
     };
