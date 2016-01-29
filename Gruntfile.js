@@ -474,25 +474,6 @@ module.exports = function(grunt) {
     },
 
     /**
-     * Karma unit test runner.
-     *
-     * @todo: If we use karma, copy ngbp's handling of Karma tests so we don't
-     * have to manually add them to our config all the time.
-     */
-    karma: {
-      options: {
-        configFile: 'test/karma.conf.js'
-      },
-      // Required by grunt, can override later.
-      unit: {
-        options: {
-          singleRun: true,
-          browsers: ['NodeWebkit']
-        }
-      }
-    },
-
-    /**
      * The `index` task compiles the `index.html` file as a Grunt template. CSS
      * and JS files co-exist here but they get split apart later.
      */
@@ -564,17 +545,6 @@ module.exports = function(grunt) {
       },
 
       /**
-       * When our JavaScript source files change, we want to run lint them and
-       * run our unit tests.
-       */
-      jssrc: {
-        files: [
-          '<%= appFiles.js %>'
-        ],
-        tasks: ['jshint:src', 'karma:unit:run', 'copy:buildAppjs']
-      },
-
-      /**
        * When assets are changed, copy them. Note that this will *not* copy new
        * files, so this is probably not very useful.
        */
@@ -610,21 +580,7 @@ module.exports = function(grunt) {
       sass: {
         files: ['src/**/*.scss'],
         tasks: ['sass:build']
-      },
-
-      /**
-       * When a JavaScript unit test file changes, we only want to lint it and
-       * run the unit tests. We don't want to do any live reloading.
-       */
-      jsunit: {
-        files: [
-          '<%= appFiles.jsunit %>'
-        ],
-        tasks: ['jshint:test', 'karma:unit:run'],
-        options: {
-          livereload: false
-        }
-      },
+      }
     },
     shell: {
       nw: {
