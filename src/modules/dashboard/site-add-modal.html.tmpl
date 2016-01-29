@@ -11,10 +11,12 @@
     <div class="form-group">
       <label for="appEnv">Which environment?</label>
       <select class="form-control" id="appEnv" ng-model="app.env" required>
+        <option label="validator" hidden></option>
         <option ng-repeat="env in site.environments" value="{{env}}">{{env}}</option>
       </select>
     </div>
   </form>
+</div>
 <div class="modal-footer">
   <button class="btn btn-primary" type="button" ng-click="ok(app)">Start</button>
   <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>

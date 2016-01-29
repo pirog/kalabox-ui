@@ -421,6 +421,27 @@ module.exports = function(grunt) {
       ]
     },
 
+    // Angular html validate
+    htmlangular: {
+      options: {
+        tmplext: 'html.tmpl',
+        customattrs: [
+          'job-*',
+          'site-*',
+          'provider-*',
+          'placeholder',
+          'start-*'
+        ],
+        relaxerror: [
+          'Empty heading.',
+          'Element “img” is missing required attribute “src”'
+        ]
+      },
+      files: {
+        src: ['<%= appFiles.atpl %>']
+      }
+    },
+
     /**
      * HTML2JS is a Grunt plugin that takes all of your template files and
      * places them into JavaScript files as strings that are added to
@@ -646,7 +667,8 @@ module.exports = function(grunt) {
    */
   grunt.registerTask('code', [
     'jshint',
-    'jscs'
+    'jscs',
+    'htmlangular'
   ]);
 
   /**

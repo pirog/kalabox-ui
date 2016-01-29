@@ -27,7 +27,7 @@ module.exports = {
     js: ['src/modules/**/*.js', '!src/modules/**/*.spec.js'],
     jsunit: ['src/**/*.spec.js'],
 
-    atpl: ['src/**/*.html'],
+    atpl: ['src/**/*.html.tmpl'],
     ctpl: ['src/**/*.html'],
 
     html: ['src/index.html'],

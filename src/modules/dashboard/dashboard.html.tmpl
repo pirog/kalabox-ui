@@ -1,10 +1,9 @@
-<nav ui-view="platforms" id="addSite" class="navmenu navmenu-default navmenu-fixed-right offcanvas" role="navigation">
-</nav>
+<nav ui-view="platforms" id="addSite" class="navmenu navmenu-default navmenu-fixed-right offcanvas"></nav>
 
 <div class="container">
   <div class="row header">
     <div class="col-xs-1">
-      <img src="images/kalabox-blue.svg" />
+      <img src="images/kalabox-blue.svg" alt="Really good looking logo of Kalabox" />
     </div>
     <div class="col-xs-8">
       <form class="form-inline">
@@ -30,7 +29,7 @@
     <div ng-repeat="site in ui.sites | filter:siteSearch">
       <div class="site col-xs-6">
         <div class="row">
-          <a ng-href="" site-browser><img class="pull-left col-xs-5 img-responsive" ng-src="{{site.image}}"/></a>
+          <a ng-href="" site-browser><img class="pull-left col-xs-5 img-responsive" alt="Snapshot of your site"  ng-src="{{site.image}}"/></a>
           <div class="site-info col-xs-7">
             <h3 ng-bind="site.name"></h3>
             <div class="site-actions">
