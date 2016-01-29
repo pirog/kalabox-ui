@@ -23,10 +23,35 @@ angular.module('kalabox.initialize', [
     }
     gui.Window.get().menu = mb;
 
+    var rotateMessage = function() {
+      setTimeout(function() {
+        $scope.ui.randomMessage = $scope.ui.messageText[Math.floor(Math.random()*$scope.ui.messageText.length)];
+        $scope.$digest();
+        rotateMessage();
+      }, 3000);
+    };
+
     // Best practices is to manage our data in a scope object
     $scope.ui = {
-      messageText: 'initializing...'
+      randomMessage: 'Let\'s get this party started',
+      messageText: [
+        'Kicking the tires/tyres', 'We assure you, winter IS coming',
+        'Applying container grease', 'Putting the last "P" on PHP',
+        'Making the world safe for democracy', 'Failing to be afraid of fear itself',
+        'Neither snow nor rain nor heat nor gloom of night shall stop us',
+        'Trimming the llama', 'Burning the man', 'Clearing dust out of the box',
+        'Plumbing the series of tubes', 'Crossing the Rubicon',
+        'Rebalancing your portfolio', 'Slicing, dicing, and making french fries',
+        'Improving your child\'s SAT score',
+        'Teaching the virtue of patience', 'Nurturing your web projects',
+        'Waiting is the hardest part', 'Reticulating splines',
+        'Untying the Gordian knot', 'Nearing the singularity',
+        'Tripping the light fantastic'
+      ]
     };
+
+    // Start message rotating.
+    rotateMessage();
 
     // Decide on next location.
     globalConfig.then(function(globalConfig) {
