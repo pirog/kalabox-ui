@@ -110,6 +110,7 @@ module.exports = function(grunt) {
    * The default task is to build and compile.
    */
   grunt.registerTask('default', ['build']);
+  grunt.registerTask('sassBuild', ['sass:build']);
 
   /**
    * The `code` task runs basic code linting and styling things

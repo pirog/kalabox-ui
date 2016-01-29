@@ -1,7 +1,14 @@
 /* Copyright 2013 Kalamuna LLC */
+//@import "_customVariables.scss";
 @import "../lib/vendor/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "../lib/vendor/jasny-bootstrap/scss/jasny-bootstrap.scss";
+@import "initialize.scss";
 @import "dashboard.scss";
+
+.btn {
+  border: 1px solid #dfe2e6;
+  border-radius: 3px;
+}
 
 a.btn-help {
   text-decoration: none;

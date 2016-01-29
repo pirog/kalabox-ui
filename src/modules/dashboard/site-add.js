@@ -21,7 +21,7 @@ angular.module('kalabox.dashboard')
 })
 .controller(
   'SiteAddModal',
-  function($scope, $q, $modalInstance, kbox, _, modalData, guiEngine) {
+  function($scope, $q, $modalInstance, kbox, _, modalData, guiEngine, sites) {
 
     guiEngine.try(function() {
       // Set provider.
@@ -30,6 +30,7 @@ angular.module('kalabox.dashboard')
       $scope.site = modalData.site;
       // Modal function.
       $scope.ok = function(appConfig) {
+
         // Run inside a gui task.
         guiEngine.try(function() {
           // Get
@@ -65,6 +66,20 @@ angular.module('kalabox.dashboard')
               // Create app.
               return kbox.create.createApp(app, opts);
             });
+=======
+
+        // Run inside a gui task.
+        guiEngine.try(function() {
+          var provider = modalData.provider;
+          var site = modalData.site;
+          // Add site.
+          sites.add({
+            provider: provider,
+            email: provider.username,
+            site: site.name,
+            env: appConfig.env,
+            name: appConfig.name
+>>>>>>> master
           });
 
           // Close the modal.

@@ -15,6 +15,7 @@
     "position": "center",
     "resizeable": "false"
   },
+  "chromium-args": "--enable-threaded-compositing",
   "scripts": {
     "test": "grunt test"
   },
