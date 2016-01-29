@@ -2,7 +2,7 @@
 
 angular.module('kalabox.dashboard')
 
-.directive('sitePull', function(guiEngine/*, kbox, _*/) {
+.directive('sitePull', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
@@ -29,7 +29,7 @@ angular.module('kalabox.dashboard')
   'SitePullModal',
   function($scope, $modalInstance, _, modalData, guiEngine) {
 
-    guiEngine.try(function() {
+   guiEngine.try(function() {
       $scope.site = modalData.site;
       $scope.environments = modalData.environments;
       $scope.errorMessage = false;
@@ -37,26 +37,10 @@ angular.module('kalabox.dashboard')
         guiEngine.try(function() {
           $modalInstance.close();
           var site = modalData.site;
-          var desc = 'Pull Site: ' + site.name;
-          guiEngine.queue.add(desc, function() {
-            var job = this;
-            return site.pull().then(function(pull) {
-              pull.on('ask', function(questions) {
-                _.each(questions, function(question) {
-                  if (question.id === 'shouldPullFiles') {
-                    question.answer(files);
-                  } else if (question.id === 'shouldPullDatabase') {
-                    question.answer(database);
-                  } else {
-                    question.fail(new Error(question));
-                  }
-                });
-              });
-              pull.on('update', function() {
-                job.update(pull.status);
-              });
-              return pull.run(site.name);
-            });
+          return site.pull({
+            createBackup: createBackup,
+            database: database,
+            files: files
           });
         });
       };
