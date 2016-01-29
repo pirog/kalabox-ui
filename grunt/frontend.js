@@ -51,7 +51,7 @@ module.exports = {
         }
      ]
     },
-    buildAppjs: {
+    buildAppJs: {
       files: [
         {
           src: ['<%= appFiles.js %>'],
@@ -61,7 +61,7 @@ module.exports = {
         }
       ]
     },
-    buildVendorjs: {
+    buildVendorJs: {
       files: [
         {
           src: ['<%= vendorFiles.js %>'],
@@ -71,7 +71,7 @@ module.exports = {
         }
       ]
     },
-    buildVendorcss: {
+    buildVendorCss: {
       files: [
         {
           src: ['<%= vendorFiles.css %>'],

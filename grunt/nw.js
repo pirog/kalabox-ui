@@ -55,13 +55,15 @@ module.exports = {
   compress: nwCompress(platforms),
   nwjs: {
     options: {
+      version: '0.12.3',
       platforms: [
         'win64',
         'osx64',
         'linux64'
       ],
-      buildDir: '<%= compileDir %>',
+      buildDir: 'build',
     },
+    src: '<%= compileDir %>'
   },
   shell: {
     nw: {

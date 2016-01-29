@@ -55,9 +55,9 @@ module.exports = function(grunt) {
     copy: {
       buildAppAssets: frontend.copy.buildAppAssets,
       buildVendorAssets: frontend.copy.buildVendorAssets,
-      buildAppjs: frontend.copy.buildAppjs,
-      buildVendorjs: frontend.copy.buildVendorjs,
-      buildVendorcss: frontend.copy.buildVendorcss,
+      buildAppJs: frontend.copy.buildAppJs,
+      buildVendorJs: frontend.copy.buildVendorJs,
+      buildVendorCss: frontend.copy.buildVendorCss,
       compileAssets: frontend.copy.compileAssets
     },
     // Concatenates multiple source files into a single file.
@@ -132,7 +132,7 @@ module.exports = function(grunt) {
     'concat:buildCss',
     'copy:buildAppAssets',
     'copy:buildVendorAssets',
-    'copy:buildAppjs',
+    'copy:buildAppJs',
     'copy:buildVendorJs',
     'copy:buildVendorCss',
     'index:build',
