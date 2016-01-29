@@ -41,6 +41,7 @@
     "grunt-ng-annotate": "^1.0.1",
     "grunt-nw-builder": "^2.0.0",
     "grunt-shell": "~1.0.1",
+    "grunt-contrib-watch": "^0.6.1",
     "jshint-stylish": "~1.0.0",
     "matchdep": "~0.3.0",
     "nw": "^0.12.3",

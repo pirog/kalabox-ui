@@ -39,7 +39,7 @@ module.exports = {
           expand: true
         },
         {src: ['package.json'], dest: '<%= buildDir %>/package.json'}
-     ]
+    ]
     },
     buildVendorAssets: {
       files: [
@@ -49,7 +49,7 @@ module.exports = {
           cwd: '.',
           expand: true
         }
-     ]
+    ]
     },
     buildAppJs: {
       files: [
@@ -59,7 +59,7 @@ module.exports = {
           cwd: '.',
           expand: true
         }
-      ]
+     ]
     },
     buildVendorJs: {
       files: [
@@ -69,7 +69,7 @@ module.exports = {
           cwd: '.',
           expand: true
         }
-      ]
+     ]
     },
     buildVendorCss: {
       files: [
@@ -79,7 +79,7 @@ module.exports = {
           cwd: '.',
           expand: true
         }
-      ]
+     ]
     },
     compileAssets: {
       files: [
@@ -95,7 +95,7 @@ module.exports = {
           cwd: '.',
           expand: true
         }
-      ]
+     ]
     }
   },
 
@@ -111,7 +111,7 @@ module.exports = {
       src: [
         '<%= vendorFiles.css %>',
         '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
-      ],
+     ],
       dest: '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
     },
     /**
@@ -128,7 +128,7 @@ module.exports = {
         '<%= buildDir %>/src/modules/**/*.js',
         '<%= html2js.app.dest %>',
         'module.suffix'
-      ],
+     ],
       dest: '<%= compileDir %>/<%= pkg.name %>-<%= pkg.version %>.js'
     }
   },
@@ -146,7 +146,7 @@ module.exports = {
           dest: '<%= buildDir %>',
           expand: true
         }
-      ]
+     ]
     }
   },
 
@@ -225,7 +225,7 @@ module.exports = {
         '<%= html2js.app.dest %>',
         '<%= vendorFiles.css %>',
         '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
-      ]
+     ]
     },
 
     /**
@@ -239,8 +239,92 @@ module.exports = {
         '<%= concat.compileJs.dest %>',
         '<%= vendorFiles.css %>',
         '<%= buildDir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
-      ]
+     ]
     }
-  }
+  },
+  delta: {
+    /**
+     * By default, we want the Live Reload to work for all tasks; this is
+     * overridden in some tasks (like this file) where browser resources are
+     * unaffected. It runs by default on port 35729, which your browser
+     * plugin should auto-detect.
+     */
+    options: {
+      livereload: true
+    },
 
+    /**
+     * When the Gruntfile changes, we just want to lint it. In fact, when
+     * your Gruntfile changes, it will automatically be reloaded!
+     */
+    gruntfile: {
+      files: 'Gruntfile.js',
+      tasks: ['jshint:gruntfile'],
+      options: {
+        livereload: false
+      }
+    },
+
+    /**
+     * When our JavaScript source files change, we want to run lint them and
+     * run our unit tests.
+     */
+    jssrc: {
+      files: [
+        '<%= appFiles.js %>'
+     ],
+      tasks: ['jshint:src', 'copy:build_appjs']
+    },
+
+    /**
+     * When assets are changed, copy them. Note that this will *not* copy new
+     * files, so this is probably not very useful.
+     */
+    assets: {
+      files: [
+        'src/assets/**/*'
+     ],
+      tasks: ['copy:build_app_assets', 'copy:build_vendor_assets']
+    },
+
+    /**
+     * When index.html changes, we need to compile it.
+     */
+    html: {
+      files: ['<%= appFiles.html %>'],
+      tasks: ['index:build']
+    },
+
+    /**
+     * When our templates change, we only rewrite the template cache.
+     */
+    tpls: {
+      files: [
+        '<%= appFiles.atpl %>'
+     ],
+      tasks: ['html2js']
+    },
+
+    /**
+     * When the CSS files change, we need to compile and minify them.
+     */
+    sass: {
+      files: ['src/**/*.scss'],
+      tasks: ['sass:build']
+    },
+
+    /**
+     * When a JavaScript unit test file changes, we only want to lint it and
+     * run the unit tests. We don't want to do any live reloading.
+     */
+    jsunit: {
+      files: [
+        '<%= appFiles.jsunit %>'
+     ],
+      tasks: ['jshint:test'],
+      options: {
+        livereload: false
+      }
+    },
+  }
 };

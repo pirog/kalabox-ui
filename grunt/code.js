@@ -50,7 +50,9 @@ module.exports = {
         'site-*',
         'provider-*',
         'placeholder',
-        'start-*'
+        'start-*',
+        'uib-*',
+        'auto-close'
       ],
       relaxerror: [
         'Empty heading.',

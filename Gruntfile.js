@@ -101,6 +101,7 @@ module.exports = function(grunt) {
       nw: nw.shell.nw,
       build: nw.shell.build
     },
+    delta: frontend.delta,
   };
 
   // Init our grunt config
@@ -109,6 +110,9 @@ module.exports = function(grunt) {
   /**
    * The default task is to build and compile.
    */
+  grunt.renameTask('watch', 'delta');
+  grunt.registerTask('watch', ['delta']);
+
   grunt.registerTask('default', ['build']);
   grunt.registerTask('sassBuild', ['sass:build']);
 
@@ -119,7 +123,7 @@ module.exports = function(grunt) {
     'jshint',
     'jscs',
     'htmlangular'
-  ]);
+ ]);
 
   /**
    * The `build` task gets your app ready to run for development and testing.
@@ -138,7 +142,7 @@ module.exports = function(grunt) {
     'copy:buildVendorCss',
     'index:build',
     'shell:nw'
-  ]);
+ ]);
 
   /**
    * The `compile` task gets your app ready for deployment by concatenating and
@@ -160,7 +164,7 @@ module.exports = function(grunt) {
     'shell:build',
     'nwjs',
     'compress'
-  ]);
+ ]);
 
   /**
    * A utility function to get all app JavaScript sources.
