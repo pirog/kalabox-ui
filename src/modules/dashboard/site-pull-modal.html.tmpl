@@ -9,12 +9,6 @@
       <select class="form-control" id="pullDatabase" placeholder="Database" ng-model="database" required>
         <option label="validator" hidden></option>
         <option ng-repeat="env in environments" value="{{env}}">{{env}}</option>
-        <option value="none">none</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="pullCreateBackup">Create Backup?</label>
-      <select class="form-control" size="2" id="pullCreateBackup" placeholder="Create Backup?" ng-model="createBackup" required>
         <option value="true">YES</option>
         <option value="false">NO</option>
       </select>
@@ -24,7 +18,8 @@
       <select class="form-control" id="pullFiles" placeholder="Files" ng-model="files" required>
         <option label="validator" hidden></option>
         <option ng-repeat="env in environments" value="{{env}}">{{env}}</option>
-        <option value="none">none</option>
+        <option value="true">YES</option>
+        <option value="false">NO</option>
       </select>
     </div>
   </form>
