@@ -1,3 +1,4 @@
+
 .header {
   margin-top: 10px;
   img {
@@ -6,18 +7,60 @@
   }
 }
 
+.site-wrapper {
+  margin: 10px 0px;
+}
 .site {
-  padding: 20px;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(43,59,93,.29);
+  .btn {
+    font-size: 11px;
+  }
+  .image {
+    height: 200px;
+    overflow: hidden;
+  }
   .site-info {
     h3 {
-      margin-top: 0px;
+      margin: 20px 0 10px;
+      font-size: 18px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-align: center;
     }
   .site-actions {
+    margin: 10px;
     .fa-2 {
       font-size: 1.5em;
+    }
+    a.site-power, div.site-actions-dropdown {
+      text-align: left;
+      width: 40px;
+      transition: width .2s ease;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+    a.site-power:hover, div.site-actions-dropdown:hover {
+      width: 80px;
+      span {
+        display: inline;
+      }
+    }
+    a.site-power span, div.site-actions-dropdown span {
+      transition: display .2s ease;
+      display: none;
+    }
+    a.site-power:hover {
+      background-color: $btn-primary-bg;
+      border-color: $btn-primary-bg;
+      color: $btn-primary-color;
+    }
+    div.site-actions-dropdown:hover {
+      width: 90px;
+      background-color: $btn-info-bg;
+      border-color: $btn-info-bg;
+      color: $btn-info-color;
     }
     a.site-up {
       color: $brand-success;
@@ -25,6 +68,21 @@
         color: $brand-success;
       }
     }
+    .dropdown-menu li a{
+      color: $gray-light;
+    }
+    li span {
+      position: absolute;
+      left: 55px;
+    }
+    .dropdown-menu li:hover span {
+      color: $text-color;
+    }
+    .dropdown-menu li a:hover {
+      background-color: $body-bg;
+      cursor: pointer;
+    }
+
   }
   }
 }

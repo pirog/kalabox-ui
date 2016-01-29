@@ -13,9 +13,12 @@ angular.module('kalabox.nodewrappers', [])
   .factory('kbox', function($q) {
     // Lazy load a fully initialized kbox core library.
     var kbox = require('kalabox');
-    return $q.try(function() {
+    return kbox.Promise.try(function() {
       return kbox.init('gui');
     })
+		.then(function() {
+			$q.prototype.wrap = kbox.Promise.prototype.wrap;
+		})
     .then(function() {
       return kbox;
     });

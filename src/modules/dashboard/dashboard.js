@@ -126,8 +126,8 @@ angular.module('kalabox.dashboard', [
     link: function($scope, element) {
       element.on('click', function() {
         guiEngine.try(function() {
-          if ($scope.provider.auth) {
-            $scope.provider.refreshSites();
+          if ($scope.provider.authorized()) {
+            $scope.provider.refresh();
           } else {
             var authModal = $scope.open(
               'modules/dashboard/auth-modal.html',
@@ -137,9 +137,8 @@ angular.module('kalabox.dashboard', [
               }
             );
             return authModal.result.then(function(result) {
-              $scope.provider.auth = true;
-              $scope.provider.username = result.username;
-              $scope.provider.refreshSites();
+              $scope.provider.authorize(result.username);
+              $scope.provider.refresh();
             });
           }
         });
@@ -147,9 +146,10 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.controller('DashboardCtrl',
-function($scope, $uibModal, $timeout, $interval, $q, kbox,
-  installedSitesService, _, guiEngine) {
+.controller(
+	'DashboardCtrl',
+	function ($scope, $uibModal, $timeout, $interval, $q, kbox,
+		sites, providers, siteStates, _, guiEngine) {
 
   //Init ui model.
   $scope.ui = {
@@ -213,129 +213,30 @@ function($scope, $uibModal, $timeout, $interval, $q, kbox,
   });
 
   // Initialize providers.
-  kbox.then(function(kbox) {
-    $scope.kbox = kbox;
-    // Get list of providers (integration + login = provider).
-    var providers = Promise.try(function() {
-      // Get list of installed integrations.
-      return _.values(kbox.integrations.get());
-    })
-    .reduce(function(acc, integration) {
-      // Get list of logins for this integration.
-      return integration.logins().run().then(function(logins) {
-        // Get list of emails for this integration.
-        var emails = _.map(logins, function(login) {
-          return login;
-        });
-        // Add a null email for an unathorized integration.
-        emails.push(null);
-        // Reverse the array so the null email is at the start.
-        emails.reverse();
-        // Build a provider for each integration + email.
-        _.each(emails, function(email) {
-          acc.push({
-            name: integration.name,
-            auth: !!email,
-            username: email,
-            showSites: false,
-            displayName: function() {
-              var self = this;
-              if (self.auth) {
-                return self.name + ' (' + self.username + ')';
-              } else {
-                return self.name;
-              }
-            },
-            getUsername: function() {
-              var self = this;
-              // Run inside of a promise.
-              return Promise.try(function() {
-                if (self.auth) {
-                  // Already authorized.
-                  return self.username;
-                }
-              });
-            },
-            sites : [],
-            refreshSites: function() {
-              var self = this;
-              // Run inside of a promise.
-              Promise.try(function() {
-                // Clear sites.
-                self.sites = [];
-                self.showSites = false;
-                self.loadingSites = true;
-                // Get sites action of integration.
-                var sites = integration.sites();
-                // Handle question events.
-                sites.on('ask', function(questions) {
-                  _.each(questions, function(question) {
-                    /*
-                     * @todo: Ask via the modal.
-                     */
-                    if (question.id === 'username') {
-                      self.getUsername()
-                      .then(function(username) {
-                        question.answer(username);
-                      });
-                    } else {
-                      question.fail(new Error(
-                        'Unanswered question: ' + question.id
-                      ));
-                    }
-                  });
-                });
-                // Handle update events.
-                sites.on('update', function() {
-                  /*
-                   * @todo: Add some communication between integration and gui.
-                   */
-                });
-                // Run sites action.
-                return sites.run()
-                // Map integration sites to GUI sites.
-                .map(function(site) {
-                  return {
-                    name: site.name,
-                    platform: 'Drupal',
-                    environments: site.environments
-                  };
-                })
-                // Set sites.
-                .then(function(sites) {
-                  self.sites = sites;
-                  self.showSites = true;
-                  self.loadingSites = false;
-                });
-              });
-            }
-          });
-        });
-        // Return accumulator.
-        return acc;
-      });
-    }, []);
+	guiEngine.try(function() {
+		return providers.get()
+		.then(function(providers) {
+			$scope.ui.providers = providers;
+		});
+	});
 
-    providers.then(function(providers) {
-      $scope.ui.providers = providers;
-    });
-
-  });
-
-  // Poll installed sites.
+  // Poll sites.
   guiEngine.loop.add({interval: 1 * 60 * 1000}, function() {
-    return installedSitesService.sites()
+		return sites.get()
     .then(function(sites) {
       $scope.ui.sites = sites;
-    })
-    .then(function() {
-      return installedSitesService.states();
-    })
-    .then(function(states) {
-      $scope.ui.states = states;
     });
   });
 
+	// Poll site states.
+	guiEngine.loop.add({interval: 15 * 1000}, function() {
+		return siteStates.get()
+		.then(function(states) {
+			$scope.ui.states = states;
+		});
+	});
+
+	// Poll engine status.
   guiEngine.loop.add({interval: 0.25 * 60 * 1000}, function() {
     return kbox.then(function(kbox) {
       return kbox.engine.isUp();
