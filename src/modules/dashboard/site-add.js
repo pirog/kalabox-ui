@@ -52,7 +52,7 @@ angular.module('kalabox.dashboard')
               verbose: false,
               email: provider.username,
               site: site.name,
-              needsFramework: fase,
+              needsFramework: false,
               env: appConfig.env,
               name: appConfig.name,
               dir: dir

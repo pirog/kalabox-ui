@@ -1,13 +1,16 @@
-<div class="panel panel-default">
-  <div class="panel-body">
-
-    <h1>Initializing Kalabox</h1>
-    <p>{{ui.messageText}}</p>
-    <ul>
-      <li ng-repeat="dependency in ui.dependencies">
-        {{dependency.name}} {{dependency.version}}
-      </li>
-    </ul>
-
+<div class="container initialize">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1> Loading</h1>
+      <h2 class="random-message" ng-bind="ui.randomMessage"></h2>
+    </div>
   </div>
+</div>
+
+<div class="clouds">
+  <i id="cloud-light" class="cloud"></i>
+  <i id="cloud-white" class="cloud"></i>
+  <i id="cloud-gray" class="cloud"></i>
+  <i id="cloud-dark" class="cloud"></i>
+  <i id="cloud-front" class="cloud"></i>
 </div>
