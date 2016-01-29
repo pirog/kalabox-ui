@@ -6,7 +6,7 @@ angular.module('kalabox', [
   'kalabox.dashboard',
   'kalabox.initialize',
   'kalabox.installer',
-  'kalabox.sites',
+  'kalabox.installedSites',
   'ui.bootstrap',
   'mwl.bluebird'
 ])

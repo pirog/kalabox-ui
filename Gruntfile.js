@@ -60,7 +60,7 @@ module.exports = function(grunt) {
       buildVendorCss: frontend.copy.buildVendorCss,
       compileAssets: frontend.copy.compileAssets
     },
-    // Concat things
+    // Concatenates multiple source files into a single file.
     concat: {
       buildCss: frontend.concat.buildCss,
       compileJs: frontend.concat.compileJs
