@@ -30,29 +30,11 @@ angular.module('kalabox.dashboard')
         guiEngine.try(function() {
           $modalInstance.close();
           var site = modalData.site;
-          var desc = 'Push Site: ' + site.name;
-          guiEngine.queue.add(desc, function() {
-            var job = this;
-            return site.push().then(function(push) {
-              push.on('ask', function(questions) {
-                _.each(questions, function(question) {
-                  if (question.id === 'message') {
-                    question.answer(message);
-                  } else if (question.id === 'database') {
-                    question.answer(database);
-                  } else if (question.id === 'files') {
-                    question.answer(files);
-                  } else {
-                    question.fail(new Error(question.id));
-                  }
-                });
-              });
-              push.on('update', function() {
-                job.update(push.status);
-              });
-              return push.run();
-            });
-          });
+					return site.push({
+						message: message || 'No commit message was given',
+						database: database,
+						files: files
+					});
         });
       };
       $scope.cancel = function() {

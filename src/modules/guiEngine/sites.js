@@ -129,20 +129,33 @@ angular.module('kalabox.sites', [])
 		});
   };
 
-	/*
-	 * Push site.
-	 */
-  Site.prototype.push = function() {
+  /*
+   * Push site.
+   */
+  Site.prototype.push = function(opts) {
     var self = this;
-    return kbox.then(function(kbox) {
-      return kbox.app.get(self.name)
-      .then(function(app) {
-        return kbox.setAppContext(app);
-      })
-      .then(function() {
-        return kbox.integrations.get('pantheon').push();
-      });
-    });
+		// Run as a queued job.
+		return self.queue('Push site: ' + self.name, function() {
+			// Get reference to job.
+			var job = this;
+			// Get kbox core library.
+			return kbox.then(function(kbox) {
+				// Initialize app context.
+				return kbox.app.get(self.name)
+				.then(function(app) {
+					return kbox.setAppContext(app);
+				})
+				// Do a pull on the site.
+				.then(function() {
+					var push = kbox.integrations.get(self.providerName).push();
+					// Update job's status message with info from push.
+					push.on('update', function(msg) {
+						job.statusMsg = msg;
+					});
+					return push.run(opts);
+				});
+			});
+		});
   };
 
   /*

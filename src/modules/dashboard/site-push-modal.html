@@ -5,19 +5,25 @@
   <div class="alert alert-error" ng-bind="errorMessage" ng-if="errorMessage"></div>
   <form>
     <div class="form-group">
-      <label for="authEmail">Message</label>
-      <input type="email" class="form-control" id="sitePullMessage" placeholder="Message" ng-model="message" required>
+      <label for="pushMessage">Commit message</label>
+      <input type="email" class="form-control" id="sitePushMessage" placeholder="Message" ng-model="message" required>
     </div>
     <div class="form-group">
-      <label for="authEmail">Database</label>
-      <input type="email" class="form-control" id="sitePullDatabase" placeholder="Database" ng-model="database" required>
+      <label for="pushDatabase">Push database?</label>
+      <select class="form-control" id="pushDatabase" placeholder="Database" ng-model="database" required>
+        <option value="true">YES</option>
+        <option value="false">NO</option>
+      </select>
     </div>
     <div class="form-group">
-      <label for="authEmail">Files</label>
-      <input type="email" class="form-control" id="sitePullFiles" placeholder="Files" ng-model="files" required>
+      <label for="pushFiles">Push files?</label>
+      <select class="form-control" id="pushFiles" placeholder="Files" ng-model="files" required>
+        <option value="true">YES</option>
+        <option value="false">NO</option>
+      </select>
     </div>
   </form>
 <div class="modal-footer">
-  <button class="btn btn-primary" type="button" ng-click="ok(message, database, files)">Submit</button>
+	<button class="btn btn-primary" type="button" ng-click="ok(message, database, files)">Submit</button>
   <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
 </div>
