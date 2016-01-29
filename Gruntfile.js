@@ -634,12 +634,14 @@ module.exports = function(grunt) {
    * before watching for changes.
    */
   grunt.renameTask('watch', 'delta');
-  grunt.registerTask('watch', ['build', 'delta']);
+  grunt.registerTask('watch', ['sassBuild', 'delta']);
 
   /**
    * The default task is to build and compile.
    */
   grunt.registerTask('default', ['build']);
+
+  grunt.registerTask('sassBuild', ['sass:build']);
 
   /**
    * The `code` task runs basic code linting and styling things

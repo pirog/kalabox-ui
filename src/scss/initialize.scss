@@ -11,7 +11,8 @@
   h1 {
     font-weight: 500;
     font-size: $font-size-h2;
-    color: #9ECBEA;
+    color: #4295D1;
+    //color: #9ECBEA;
   }
 
   h2 {
@@ -20,6 +21,7 @@
     line-height: $headings-line-height + .7;
     transition: opacity .25s ease-in-out;
     margin: 10px 0px;
+    color: $gray-light;
   }
 }
 
