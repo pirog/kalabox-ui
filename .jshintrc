@@ -1,9 +1,10 @@
 {
   "node": true,
   "browser": true,
+  "validthis": true,
   "esnext": true,
   "bitwise": true,
-  "camelcase": false,
+  "camelcase": true,
   "curly": true,
   "eqeqeq": true,
   "immed": true,
@@ -18,13 +19,14 @@
   "strict": true,
   "trailing": true,
   "smarttabs": true,
+  "loopfunc": true,
   "globals": {
-    "angular": false,
     "describe": false,
+    "angular": true,
     "it": false,
+    "before": false,
     "beforeEach": false,
-    "expect": false,
     "afterEach": false,
-    "inject": false
+    "Promise": true
   }
 }
