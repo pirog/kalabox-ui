@@ -114,7 +114,7 @@ module.exports = function(grunt) {
   /**
    * The `code` task runs basic code linting and styling things
    */
-  grunt.registerTask('code', [
+  grunt.registerTask('test', [
     'jshint',
     'jscs',
     'htmlangular'
@@ -127,7 +127,6 @@ module.exports = function(grunt) {
     'clean',
     'bower-install-simple:install',
     'html2js',
-    'jshint',
     'sass:build',
     'concat:buildCss',
     'copy:buildAppAssets',
@@ -143,17 +142,11 @@ module.exports = function(grunt) {
    * The `compile` task gets your app ready for deployment by concatenating and
    * minifying your code.
    */
-  grunt.registerTask('compile', [
-    'sass:compile',
-    'copy:compileAssets',
-    'ngAnnotate',
-    'concat:compileJs',
-    'index:compile',
+  grunt.registerTask('pkg', [
+    'test',
+    'build',
     'shell:build',
-    'nwjs',
-    'compress:win64',
-    'compress:osx64',
-    'compress:linux64'
+    'nwjs'
   ]);
 
   /**

@@ -61,9 +61,9 @@ module.exports = {
         'osx64',
         'linux64'
       ],
-      buildDir: 'build',
+      buildDir: 'nw',
     },
-    src: '<%= compileDir %>'
+    src: '<%= buildDir %>'
   },
   shell: {
     nw: {
@@ -76,7 +76,7 @@ module.exports = {
     },
     build: {
       command: [
-        'cd ./<%= compileDir %>',
+        'cd ./<%= buildDir %>',
         '&&',
         'npm install --production --ignore-scripts'
       ].join(' ')
