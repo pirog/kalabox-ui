@@ -8,9 +8,9 @@
 <div class="row">
   <div class="col-xs-12 bootcards-list">
     <ul class="nav navmenu-nav list-group">
-      <li class="provider list-group-item" ng-repeat="provider in ui.providers" ng-class="{'provider-reauth': !provider.auth}"><a ng-href="" ng-bind="provider.displayName(ui.providers)" provider-click></a>
-        <div ng-if="provider.loadingSites" class="alert alert-warning" role="alert"><i class="fa fa-spinner fa-spin"></i> Waiting for sites to load...</div>
-        <form ng-hide="!provider.showSites" class="form-inline">
+      <li class="provider list-group-item" ng-repeat="provider in ui.providers" ng-class="{'provider-reauth': !provider.authorized()}"><a ng-href="" ng-bind="provider.displayName" provider-click></a>
+         <div ng-if="provider.refreshing" class="alert alert-warning" role="alert"><i class="fa fa-spinner fa-spin"></i> Waiting for sites to load...</div>
+         <form ng-hide="!provider.sites.length" class="form-inline">
           <div class="form-group">
             <label class="sr-only" for="siteAvailableSearch">Site search</label>
             <input type="search" ng-model="siteAvailableSearch" class="form-control" id="siteAvailableSearch" placeholder="Type site name">
