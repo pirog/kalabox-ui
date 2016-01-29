@@ -338,20 +338,6 @@ module.exports = function(grunt) {
     },
 
     /**
-     * Minify the sources!
-     */
-    uglify: {
-      compile: {
-        options: {
-          banner: '<%= meta.banner %>'
-        },
-        files: {
-          '<%= concat.compileJs.dest %>': '<%= concat.compileJs.dest %>'
-        }
-      }
-    },
-
-    /**
      * `grunt-contrib-sass` handles our LESS compilation and uglification automatically.
      * Only our `main.scss` file is included in compilation; all other files
      * must be imported from this file.
@@ -655,15 +641,11 @@ module.exports = function(grunt) {
     'copy:compileAssets',
     'ngAnnotate',
     'concat:compileJs',
-    'uglify',
     'index:compile',
     'shell:build',
     'nwjs',
-    'compress:win32',
     'compress:win64',
-    'compress:osx32',
     'compress:osx64',
-    'compress:linux32',
     'compress:linux64'
   ]);
 
