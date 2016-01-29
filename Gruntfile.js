@@ -59,16 +59,6 @@ module.exports = function(grunt) {
     },
 
     /**
-     * Creates a changelog on a new version.
-     */
-    changelog: {
-      options: {
-        dest: 'CHANGELOG.md',
-        template: 'changelog.tpl'
-      }
-    },
-
-    /**
      * Increments the version number, etc.
      */
     bump: {
