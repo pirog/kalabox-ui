@@ -31,14 +31,14 @@ var nwCompress = function(platforms) {
     // Build our copress object
     compress[platform] = {
       options: {
-        archive: 'built/kalabox-' + platform + '-' + version + zippyExt
+        archive: 'dist/kalabox-' + platform + '-' + version + zippyExt
       },
       files: [
         {
           expand: true,
-          cwd: 'dist/kalabox/' + platform + '/',
+          cwd: 'nw/kalabox/' + platform + '/',
           src: ['**'],
-          dest: 'kalabox/'
+          dest: 'Kalabox/'
         }
       ]
     };
@@ -63,7 +63,10 @@ module.exports = {
       ],
       buildDir: 'nw',
     },
-    src: '<%= buildDir %>'
+    src: [
+      './build/*',
+      './build/**/*'
+    ]
   },
   shell: {
     nw: {

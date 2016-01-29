@@ -2,22 +2,22 @@
 
 angular.module('kalabox.dashboard')
 
-.directive('sitePull', function(guiEngine, kbox, _) {
+.directive('sitePull', function(guiEngine/*, kbox, _*/) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
         // Run inside of a gui task.
         guiEngine.try(function() {
-					var sitePullModal = $scope.open(
-						'modules/dashboard/site-pull-modal.html.tmpl',
-						'SitePullModal',
-						{
-							site: $scope.site,
-							environments: []
-						}
-					);
-					return sitePullModal.result;
+          var sitePullModal = $scope.open(
+            'modules/dashboard/site-pull-modal.html.tmpl',
+            'SitePullModal',
+            {
+              site: $scope.site,
+              environments: []
+            }
+          );
+          return sitePullModal.result;
         });
       });
     }

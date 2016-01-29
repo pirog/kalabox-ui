@@ -1,12 +1,10 @@
-.
-S_Store
+.DS_Store
 .idea/
 *.log
 .sass-cache
 cache
 dist
 build
-built
 downloads
 generated
 node_modules
@@ -15,3 +13,4 @@ vendor
 style.css
 coverage
 html-angular*
+nw

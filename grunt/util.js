@@ -34,7 +34,9 @@ module.exports = {
    */
   clean: [
     '<%= buildDir %>',
-    '<%= compileDir %>'
+    '<%= compileDir %>',
+    './nw',
+    './dist'
   ]
 
 };

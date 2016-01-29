@@ -144,9 +144,20 @@ module.exports = function(grunt) {
    */
   grunt.registerTask('pkg', [
     'test',
-    'build',
+    'clean',
+    'bower-install-simple:install',
+    'html2js',
+    'sass:build',
+    'concat:buildCss',
+    'copy:buildAppAssets',
+    'copy:buildVendorAssets',
+    'copy:buildAppJs',
+    'copy:buildVendorJs',
+    'copy:buildVendorCss',
+    'index:build',
     'shell:build',
-    'nwjs'
+    'nwjs',
+    'compress'
   ]);
 
   /**
