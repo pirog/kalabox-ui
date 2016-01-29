@@ -39,12 +39,14 @@ angular.module('kalabox.initialize', [
         'Applying container grease', 'Putting the last "P" on PHP',
         'Making the world safe for democracy', 'Failing to be afraid of fear itself',
         'Neither snow nor rain nor heat nor gloom of night shall stop us',
-        'Trimming the lama', 'Burning the man', 'Clearing dust out of the box',
+        'Trimming the llama', 'Burning the man', 'Clearing dust out of the box',
         'Plumbing the series of tubes', 'Crossing the Rubicon',
         'Rebalancing your portfolio', 'Slicing, dicing, and making french fries',
         'Improving your child\'s SAT score',
         'Teaching the virtue of patience', 'Nurturing your web projects',
-        'Waiting is the hardest part'
+        'Waiting is the hardest part', 'Reticulating splines',
+        'Untying the Gordian knot', 'Nearing the singularity',
+        'Tripping the light fantastic'
       ]
     };
 
