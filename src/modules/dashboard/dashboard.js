@@ -12,11 +12,11 @@ angular.module('kalabox.dashboard', [
     views: {
       '': {
         controller: 'DashboardCtrl',
-        templateUrl: 'modules/dashboard/dashboard.html'
+        templateUrl: 'modules/dashboard/dashboard.html.tmpl'
       },
       'platforms@dashboard': {
         controller: 'DashboardCtrl',
-        templateUrl: 'modules/dashboard/platforms.html'
+        templateUrl: 'modules/dashboard/platforms.html.tmpl'
       }
     }
   });
@@ -130,7 +130,7 @@ angular.module('kalabox.dashboard', [
             $scope.provider.refresh();
           } else {
             var authModal = $scope.open(
-              'modules/dashboard/auth-modal.html',
+              'modules/dashboard/auth-modal.html.tmpl',
               'AuthModal',
               {
                 provider: $scope.provider
@@ -187,7 +187,7 @@ angular.module('kalabox.dashboard', [
       // Open a modal window to inform the user that app is shutting down.
       $q.try(function() {
         var shutdownModal = $scope.open(
-          'modules/dashboard/shutdown.html',
+          'modules/dashboard/shutdown.html.tmpl',
           'ShutdownModal',
           {win: self}
         );

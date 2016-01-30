@@ -9,7 +9,7 @@ angular.module('kalabox.dashboard')
       element.on('click', function() {
         guiEngine.try(function() {
           var siteAddModal = $scope.open(
-            'modules/dashboard/site-add-modal.html',
+            'modules/dashboard/site-add-modal.html.tmpl',
             'SiteAddModal',
             {provider: $scope.provider, site: $scope.site}
           );

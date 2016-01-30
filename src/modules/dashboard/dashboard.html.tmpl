@@ -1,4 +1,5 @@
-<nav ui-view="platforms" id="addSite" class="navmenu navmenu-default navmenu-fixed-right offcanvas"></nav>
+<nav ui-view="platforms" id="addSite" class="navmenu navmenu-default navmenu-fixed-right offcanvas">
+</nav>
 
 <div class="container">
   <div class="row header">
@@ -9,7 +10,7 @@
       <form class="form-inline">
         <div class="form-group">
           <label class="sr-only" for="siteSearch">Site search</label>
-          <input type="search" ng-model="siteSearch" class="form-control" id="siteSearch" placeholder="Type site name">
+          <input type="search" ng-model="siteSearch" class="form-control" id="siteSearch" placeholder="Filter by site name">
         </div>
       </form>
     </div>
@@ -27,17 +28,29 @@
   </div>
   <div class="sites row">
     <div ng-repeat="site in ui.sites | filter:siteSearch">
-      <div class="site col-xs-6">
-        <div class="row">
-          <a ng-href="" site-browser><img class="pull-left col-xs-5 img-responsive" alt="Snapshot of your site"  ng-src="{{site.image}}"/></a>
-          <div class="site-info col-xs-7">
-            <h3 ng-bind="site.name"></h3>
-            <div class="site-actions">
-              <a ng-href="" site-toggle ng-class="{'site-up': ui.states[site.name]}"><i class="fa fa-power-off fa-2"></i></a>
-              <a ng-href="" site-trash><i class="fa fa-trash-o fa-2"></i></a>
-              <a ng-href="" site-pull><i class="fa fa-cloud-download fa-2"></i></a>
-              <a ng-href="" site-push><i class="fa fa-cloud-upload fa-2"></i></a>
-              <a ng-href="" site-code><i class="fa fa-desktop fa-2"></i></a>
+      <div class="site-wrapper col-xs-6">
+        <div class="site">
+          <div class="row image">
+            <a ng-href="" site-browser><img class="col-xs-12 img-responsive" alt="Snapshot of your site"  ng-src="{{site.image}}"/></a>
+          </div>
+          <div class="row">
+            <div class="site-info col-xs-12">
+              <h3 ng-bind="site.name"></h3>
+              <div class="site-actions">
+                <a ng-href="" site-toggle class="btn btn-default site-power" ng-class="{'site-up': ui.states[site.name]}"><i class="fa fa-power-off fa-2"></i><span> Start</span></a>
+                <div class="btn-group dropdown" uib-dropdown auto-close="outsideClick">
+                  <div class="btn btn-default site-actions-dropdown" uib-dropdown-toggle>
+                    <i class="fa fa-cog fa-2"></i>
+                    <span> Actions</span>
+                  </div>
+                  <ul uib-dropdown-menu>
+                    <li><a ng-href="" site-code><i class="fa fa-desktop fa-2"></i> <span>View</span></a></li>
+                    <li><a ng-href="" site-pull><i class="fa fa-cloud-download fa-2"></i> <span>Pull</span></a></li>
+                    <li><a ng-href="" site-push><i class="fa fa-cloud-upload fa-2"></i> <span>Push</span></a></li>
+                    <li><a ng-href="" site-trash><i class="fa fa-trash-o fa-2"></i> <span>Delete</span></a></li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
