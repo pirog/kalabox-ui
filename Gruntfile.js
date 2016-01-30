@@ -238,7 +238,7 @@ module.exports = function(grunt) {
   // Add NW build to finish it off
   pkgTask.push('shell:build');
   pkgTask.push('nwjs');
-  //pkgTask.push('compress');
+  pkgTask.push('compress');
   // Finanly, register the packaging task
   grunt.registerTask('pkg', pkgTask);
 
