@@ -4,41 +4,63 @@
  * This file/module contains helpful download config.
  */
 
+// Node modules
+var path = require('path');
+
+// Kalabox modzz
+var kbox = require('kalabox');
+var yaml = kbox.util.yaml;
+
+// Config files that hold our deps
+// @todo: can we use srcroot here?
+var kboxPath = path.resolve(__dirname, '..', 'node_modules', 'kalabox');
+
+// Get engine conf path
+var enginePath = path.join(kboxPath, 'plugins', 'kalabox-engine-docker');
+var engineConf = path.join(enginePath, 'provider', 'docker', 'config.yml');
+
+// Get sycnthing conf path
+var syncthingPath = path.join(kboxPath, 'plugins', 'kalabox-syncthing');
+var syncthingConf = path.join(syncthingPath, 'lib', 'config.yml');
+
+// get actual conf
+var engine = yaml.toJson(engineConf);
+var syncthing = yaml.toJson(syncthingConf);
+
 module.exports = {
 
   /*
    * Download admin deps to package with GUI
-   * @todo: grab these directly from kalabox
    */
   // jscs:disable
   downloads: {
     osx64Deps: {
       src: [
-        'http://download.virtualbox.org/virtualbox/5.0.12/VirtualBox-5.0.12-104815-OSX.dmg',
-        'https://github.com/docker/machine/releases/download/v0.5.6/docker-machine_darwin-amd64',
-        'https://github.com/docker/compose/releases/download/1.5.2/docker-compose-Darwin-x86_64',
-        'https://raw.githubusercontent.com/kalabox/kalabox/v0.10/dockerfiles/syncthing/config.xml',
-        'https://github.com/syncthing/syncthing/releases/download/v0.11.26/syncthing-macosx-amd64-v0.11.26.tar.gz'
+        engine.virtualbox.pkg.darwin,
+        engine.machine.pkg.darwin,
+        engine.compose.pkg.darwin,
+        syncthing.pkg.darwin,
+        syncthing.configfile
       ],
       dest: './deps/osx64'
     },
     win64Deps: {
       src: [
-        'http://download.virtualbox.org/virtualbox/5.0.12/VirtualBox-5.0.12-104815-Win.exe',
-        'https://github.com/docker/machine/releases/download/v0.5.6/docker-machine_windows-amd64.exe',
-        'https://github.com/docker/compose/releases/download/1.5.2/docker-compose-Windows-x86_64.exe',
-        'https://github.com/msysgit/msysgit/releases/download/Git-1.9.5-preview20150319/Git-1.9.5-preview20150319.exe',
-        'https://raw.githubusercontent.com/kalabox/kalabox/v0.10/dockerfiles/syncthing/config.xml',
-        'https://github.com/syncthing/syncthing/releases/download/v0.11.26/syncthing-windows-amd64-v0.11.26.zip'
+        engine.virtualbox.pkg.win32,
+        engine.machine.pkg.win32,
+        engine.compose.pkg.win32,
+        engine.msysgit.pkg.win32,
+        syncthing.pkg.win32,
+        syncthing.configfile
       ],
       dest: './deps/win64'
     },
     linux64Deps: {
       src: [
-        'https://github.com/docker/machine/releases/download/v0.5.6/docker-machine_linux-amd64',
-        'https://github.com/docker/compose/releases/download/1.5.2/docker-compose-Linux-x86_64',
-        'https://raw.githubusercontent.com/kalabox/kalabox/v0.10/dockerfiles/syncthing/config.xml',
-        'https://github.com/syncthing/syncthing/releases/download/v0.11.26/syncthing-linux-amd64-v0.11.26.tar.gz'
+        engine.machine.pkg.linux,
+        engine.compose.pkg.linux,
+        syncthing.pkg.linux,
+        syncthing.configfile
       ],
       dest: './deps/linux64'
     },
