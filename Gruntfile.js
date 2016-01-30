@@ -20,7 +20,7 @@ module.exports = function(grunt) {
    */
   var commonBuildTasks = function() {
     return [
-      //'test',
+      'test',
       'clean:build',
       'bower-install-simple:install',
       'html2js',
