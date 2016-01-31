@@ -39,7 +39,7 @@ module.exports = {
         engine.virtualbox.pkg.darwin,
         engine.machine.pkg.darwin,
         engine.compose.pkg.darwin,
-        syncthing.pkg.darwin,
+        //syncthing.pkg.darwin,
         syncthing.configfile
       ],
       dest: './deps/osx64'
@@ -50,7 +50,7 @@ module.exports = {
         engine.machine.pkg.win32,
         engine.compose.pkg.win32,
         engine.msysgit.pkg.win32,
-        syncthing.pkg.win32,
+        //syncthing.pkg.win32,
         syncthing.configfile
       ],
       dest: './deps/win64'
@@ -59,7 +59,7 @@ module.exports = {
       src: [
         engine.machine.pkg.linux,
         engine.compose.pkg.linux,
-        syncthing.pkg.linux,
+        //syncthing.pkg.linux,
         syncthing.configfile
       ],
       dest: './deps/linux64'
