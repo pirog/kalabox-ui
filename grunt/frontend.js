@@ -273,7 +273,7 @@ module.exports = {
       files: [
         '<%= appFiles.js %>'
      ],
-      tasks: ['jshint:src', 'copy:build_appjs']
+      tasks: ['jshint:src', 'copy:buildAppJs']
     },
 
     /**
@@ -284,7 +284,7 @@ module.exports = {
       files: [
         'src/assets/**/*'
      ],
-      tasks: ['copy:build_app_assets', 'copy:build_vendor_assets']
+      tasks: ['copy:buildAppAssets', 'copy:buildVendorAssets']
     },
 
     /**
