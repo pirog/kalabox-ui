@@ -6,6 +6,10 @@
 
 // Node modules
 var path = require('path');
+var fs = require('fs');
+
+// NPM modules
+var _ = require('lodash');
 
 // Kalabox modzz
 var kbox = require('kalabox');
@@ -27,12 +31,80 @@ var syncthingConf = path.join(syncthingPath, 'lib', 'config.yml');
 var engine = yaml.toJson(engineConf);
 var syncthing = yaml.toJson(syncthingConf);
 
+/*
+ * Helper function to get the images we want to export
+ */
+var getDockerImages = function() {
+
+  // Get the image tag and home directory
+  // @todo: we need a way to get this for pantheon images, right now we assume
+  // the pantheon image version is the same as the core image version
+  var imgVersion = kbox.core.config.getEnvConfig().imgVersion;
+
+  // @todo: get these directly from kalabox
+  return [
+    ['kalabox/proxy', imgVersion].join(':'),
+    ['kalabox/dns', imgVersion].join(':'),
+    ['kalabox/syncthing', imgVersion].join(':'),
+    ['kalabox/cli', imgVersion].join(':'),
+    ['kalabox/pantheon-solr', imgVersion].join(':'),
+    ['kalabox/pantheon-redis', imgVersion].join(':'),
+    ['kalabox/terminus', imgVersion].join(':'),
+    ['kalabox/pantheon-mariadb', imgVersion].join(':'),
+    ['kalabox/pantheon-edge', imgVersion].join(':'),
+    ['kalabox/pantheon-appserver', imgVersion].join(':'),
+    'busybox'
+  ];
+
+};
+
+/*
+ * Helper function to get docker-machine bin
+ */
+var getDockerMachineBin = function() {
+
+  // This is where our docker-machine bin should exist if we've installed
+  // kalabox
+  var binDir = path.join(kbox.core.config.getEnvConfig().sysConfRoot, 'bin');
+  var dockerMachine = path.join(binDir, 'docker-machine');
+
+  // Use the kalabox shipped docker-machine if it exists, else assume
+  // it exists in the path
+  return (fs.existsSync(dockerMachine)) ? dockerMachine : 'docker-machine';
+
+};
+
+/*
+ * Helper function to get docker-machine ssh prefix
+ * @todo: for now we assume the created name is "kbox-gui-helper"
+ */
+var runDockerCmd = function(cmd) {
+  return [getDockerMachineBin(), 'ssh', 'kbox-gui-helper', cmd].join(' ');
+};
+
+/*
+ * Helper function to build pull commands
+ * NOTE: we need to do this because docker pull only runs with a single
+ * argument
+ */
+var dockerPull = function(images) {
+  return _.map(images, function(image) {
+    return runDockerCmd(['docker', 'pull', image].join(' '));
+  }).join(' && ');
+};
+
+/*
+ * Helper function to build export command
+ */
+var dockerExport = function(images) {
+  return runDockerCmd(['docker', 'save', images.join(' ')].join(' '));
+};
+
 module.exports = {
 
   /*
    * Download admin deps to package with GUI
    */
-  // jscs:disable
   downloads: {
     osx64Deps: {
       src: [
@@ -69,14 +141,15 @@ module.exports = {
      * Downlaod the iso image for our kalabox VM
      * @todo: get this from Kalabox as well
      */
+    // jscs:disable
     iso: {
       src: [
         'https://github.com/kalabox/kalabox-iso/releases/download/v0.11.0/boot2docker.iso'
       ],
       dest: './deps/iso'
     }
+    // jscs:enable
   },
-  // jscs:enable
 
   /**
    * Clean out the build dirs
@@ -103,5 +176,31 @@ module.exports = {
         }
      ]
     }
-  }
+  },
+
+  /*
+   * Helpers shell commands
+   */
+  shell: {
+
+    /*
+     * Export images to deps/images/images.tar.gz
+     * NOTE: For now we assume the following
+     *
+     *  1. docker-machine binary exists in PATH or at ~/.kalabox/bin
+     *
+     */
+    exportImages: {
+      command: [
+        'mkdir -p deps/images',
+        'cd deps/images',
+        getDockerMachineBin() + ' create -d virtualbox kbox-gui-helper',
+        dockerPull(getDockerImages()),
+        dockerExport(getDockerImages()) + ' | gzip -9c > images.tar.gz',
+        getDockerMachineBin() + ' rm -f kbox-gui-helper'
+      ].join(' && ')
+    }
+
+  },
+
 };
