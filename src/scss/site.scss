@@ -1,0 +1,182 @@
+// Loading animation.
+@mixin ellipsis-keyframes($width) {
+  @-webkit-keyframes ellipsis {
+    to {width: $width;}
+  }
+  @keyframes ellipsis {
+  to {width: $width;}
+  }
+}
+
+@include ellipsis-keyframes(1.25em);
+
+.loading:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4,end) 1800ms infinite;
+  animation: ellipsis steps(4,end) 1800ms infinite;
+  content: "\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+  position: absolute;
+}
+
+// Site pull/push animations.
+@mixin arrow-keyframes($name, $y-position) {
+  @-webkit-keyframes #{$name} {
+    to {transform: translateY($y-position);}
+  }
+  @keyframes #{$name} {
+    to {transform: translateY($y-position);}
+  }
+}
+
+@include arrow-keyframes(site-pull, 80px);
+@include arrow-keyframes(site-push, -80px);
+
+
+// Site styling.
+.site-wrapper {
+  margin: 10px 0px;
+}
+.site.site-up {
+  img, h3 {
+    opacity: 1;
+    transition: opacity 4s ease;
+  }
+}
+.site.start, .site.stop, .site.pull, .site.push {
+  overflow: hidden;
+  .site-info, .image, .site-actions {
+    display: none;
+  }
+  .push-pull {
+    display: block;
+    text-align: center;
+    .arrow {
+      position: relative;
+      display: block;
+      bottom: 85px;
+      font-size: 3em;
+      color: pink;
+    }
+    .cloud-static {
+      position: relative;
+      fill: #9FCAEA;
+      height: 220px;
+      top: -10px;
+    }
+    .cloud-static-fill {
+      fill: #9FCAEA;
+    }
+    h2 {
+      top: -50px;
+    }
+  }
+  .pull {
+    .arrow {
+      top: 130px;
+      @include animation(site-pull 2s linear infinite);
+    }
+  }
+  .push {
+    .arrow {
+      bottom: -50px;
+      @include animation(site-push 2s linear infinite);
+    }
+  }
+  h2 {
+    text-transform: uppercase;
+    z-index: 100;
+    position: relative;
+    text-align: center;
+    top: 80px;
+    opacity: 1;
+    font-weight: 400;
+    font-size: $font-size-h3;
+  }
+
+}
+.site {
+  .push-pull {
+    display: none;
+  }
+  height: 295px;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(43,59,93,.29);
+  position: relative;
+  .btn {
+    font-size: 11px;
+  }
+  .image {
+    height: 200px;
+    overflow: hidden;
+    opacity: .7;
+  }
+  .site-info {
+    h3 {
+      opacity: .7;
+      margin: 20px 0 10px;
+      font-size: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+    }
+  .site-actions {
+    margin: 10px;
+    .fa-2 {
+      font-size: 1.5em;
+    }
+    a.site-power, div.site-actions-dropdown {
+      text-align: left;
+      width: 40px;
+      transition: width .2s ease;
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+    a.site-power:hover, div.site-actions-dropdown:hover {
+      width: 80px;
+      span {
+        display: inline;
+      }
+    }
+    a.site-power span, div.site-actions-dropdown span {
+      transition: display .2s ease;
+      display: none;
+    }
+    a.site-power:hover {
+      background-color: $btn-primary-bg;
+      border-color: $btn-primary-bg;
+      color: $btn-primary-color;
+    }
+    div.site-actions-dropdown:hover {
+      width: 90px;
+      background-color: $btn-info-bg;
+      border-color: $btn-info-bg;
+      color: $btn-info-color;
+    }
+    a.site-up {
+      color: $brand-success;
+      i {
+        color: $brand-success;
+      }
+    }
+    .dropdown-menu li a{
+      color: $gray-light;
+    }
+    li span {
+      position: absolute;
+      left: 55px;
+    }
+    .dropdown-menu li:hover span {
+      color: $text-color;
+    }
+    .dropdown-menu li a:hover {
+      background-color: $body-bg;
+      cursor: pointer;
+    }
+
+  }
+  }
+}

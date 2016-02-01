@@ -258,6 +258,22 @@ angular.module('kalabox.dashboard', [
 
 })
 .controller(
+  'SiteCtrl',
+  function($scope) {
+  // Code for setting site state on view.
+  $scope.siteClasses = function() {
+    var currentAction = $scope.site.currentAction ? $scope.site.currentAction : '';
+    var siteUp = $scope.ui.states[$scope.site.name] ? 'site-up' : '';
+    return currentAction + ' ' + siteUp;
+  };
+  $scope.currentActionName = function() {
+    if ($scope.site.currentAction) {
+      return $scope.site.currentAction == 'stop' ? 'Stopping' : $scope.site.currentAction + 'ing';
+    }
+    return false;
+  }
+})
+.controller(
   'AuthModal',
   function($scope, $modalInstance, kbox, _, modalData, guiEngine) {
 
