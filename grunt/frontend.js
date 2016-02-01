@@ -7,6 +7,16 @@
 module.exports = {
 
   /**
+   * Clean out the build dirs
+   */
+  clean: {
+    build: [
+      '<%= buildDir %>',
+      '<%= compileDir %>'
+    ]
+  },
+
+  /**
    * Basic bower task that uses
    * Bower's API's directly.
    */

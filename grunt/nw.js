@@ -50,25 +50,65 @@ var nwCompress = function(platforms) {
 
 };
 
+/*
+ * Helper function to generate our nw-builder objects
+ * NOTE: we need to do this because our deps are different for each
+ * platform
+ */
+var nwBuilder = function(platforms) {
+
+  // Start up an empty
+  var builder = {};
+
+  // Iterate through our platforms and add to the compress array
+  _.forEach(platforms, function(platform) {
+
+    // Build our copress object
+    builder[platform] = {
+      options: {
+        version: '0.12.3',
+        platforms: [platform],
+        buildDir: 'nw',
+      },
+      src: [
+        './build/*',
+        './build/assets/**/*',
+        './build/deps/iso/*',
+        './build/deps/' + platform + '/*',
+        './build/images/**/*',
+        './build/node_modules/**/*',
+        './build/src/**/*'
+      ]
+    };
+
+  });
+
+  // And finally return that which is compressed
+  return builder;
+
+};
+
 // Return the codes
 module.exports = {
+
+  /*
+   * Compress our built NW packages
+   */
   compress: nwCompress(platforms),
-  nwjs: {
-    options: {
-      version: '0.12.3',
-      platforms: [
-        'win64',
-        'osx64',
-        'linux64'
-      ],
-      buildDir: 'nw',
-    },
-    src: [
-      './build/*',
-      './build/**/*'
-    ]
-  },
+
+  /*
+   * Build our NW packages
+   */
+  nwjs: nwBuilder(platforms),
+
+  /*
+   * Helpers shell commands
+   */
   shell: {
+
+    /*
+     * Run our NW app from built source
+     */
     nw: {
       command: nw.findpath() + ' <%= buildDir %>',
       options: {
@@ -77,6 +117,10 @@ module.exports = {
         }
       }
     },
+
+    /*
+     * Npm install our prod deps before we nwjs task
+     */
     build: {
       command: [
         'cd ./<%= buildDir %>',
@@ -84,5 +128,17 @@ module.exports = {
         'npm install --production --ignore-scripts'
       ].join(' ')
     }
+
   },
+
+  /**
+   * Clean out the nw dirs
+   */
+  clean: {
+    nw: [
+      './nw',
+      './dist'
+    ]
+  }
+
 };
