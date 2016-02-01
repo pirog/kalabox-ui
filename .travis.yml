@@ -1,13 +1,14 @@
 language: node_js
+sudo: false
 node_js:
 - '4.2'
 before_install:
 - cp ci/travis-ci.sh $HOME/
 - chmod +x $HOME/travis-ci.sh
-- cp ci/cfindex.sh $HOME/
-- chmod +x $HOME/cfindex.sh
-- cp ci/index-gen.sh $HOME/
-- chmod +x $HOME/index-gen.sh
+#- cp ci/cfindex.sh $HOME/
+#- chmod +x $HOME/cfindex.sh
+#- cp ci/index-gen.sh $HOME/
+#- chmod +x $HOME/index-gen.sh
 - $HOME/travis-ci.sh before-install
 before_script:
 - $HOME/travis-ci.sh before-script
@@ -18,33 +19,33 @@ after_script:
 after_success:
 - $HOME/travis-ci.sh after-success
 before_deploy:
-- $HOME/travis-ci.sh before-deploy
-- cd built
+#- $HOME/travis-ci.sh before-deploy
+#- cd built
 after_deploy:
-- $HOME/travis-ci.sh after-deploy
-deploy:
-- provider: releases
-  api_key:
-    secure: ay6Y16MbnOFAfyxBgW/C4Z0V1QLj9h9t4pLXPziDw3+KE4Olh3qOxVP5HNEF5VpwNBmXzKeRGlC88LGn93sW8x+A5CfYNZxBoNWGASUSkuRfoAB6oLaqAwJlm9GViq4m/qtuFzJJ5+ZpSWw6JE1GZnS/hzgcYZVdKyhlf4PA4XA=
-  file:
-  - kalabox2-win64-$TRAVIS_TAG.zip
-  - kalabox2-osx64-$TRAVIS_TAG.tar.gz
-  - kalabox2-linux64-$TRAVIS_TAG.tar.gz
-  skip_cleanup: true
-  on:
-    repo: kalabox/kalabox-ui
-    all_branches: true
-    tags: true
-- provider: cloudfiles
-  username: kalamuna
-  api_key:
-    secure: kZ1n6iNPWbs9ENeH4bJoEwKoJ0jn/V1tY+BwNXMeVsf86theVeePZTqRKaAz76IpHVRwZnFVPbzjzdYKEm8Qnz45rUnfwyBDsn+/RC/76i09AnZ/oeX+21h9IoabA5N7cMg4Gu10eFmjQDvJKm8z1v+jZB6A1tP1sXyi+Q2xazQ=
-  region: ord
-  container: kb2
-  skip_cleanup: true
-  on:
-    repo: kalabox/kalabox-ui
-    branch: master
+#- $HOME/travis-ci.sh after-deploy
+#deploy:
+#- provider: releases
+#  api_key:
+#    secure: ay6Y16MbnOFAfyxBgW/C4Z0V1QLj9h9t4pLXPziDw3+KE4Olh3qOxVP5HNEF5VpwNBmXzKeRGlC88LGn93sW8x+A5CfYNZxBoNWGASUSkuRfoAB6oLaqAwJlm9GViq4m/qtuFzJJ5+ZpSWw6JE1GZnS/hzgcYZVdKyhlf4PA4XA=
+#  file:
+#  - kalabox2-win64-$TRAVIS_TAG.zip
+#  - kalabox2-osx64-$TRAVIS_TAG.tar.gz
+#  - kalabox2-linux64-$TRAVIS_TAG.tar.gz
+#  skip_cleanup: true
+#  on:
+#    repo: kalabox/kalabox-ui
+#    all_branches: true
+#    tags: true
+#- provider: cloudfiles
+#  username: kalamuna
+#  api_key:
+#    secure: kZ1n6iNPWbs9ENeH4bJoEwKoJ0jn/V1tY+BwNXMeVsf86theVeePZTqRKaAz76IpHVRwZnFVPbzjzdYKEm8Qnz45rUnfwyBDsn+/RC/76i09AnZ/oeX+21h9IoabA5N7cMg4Gu10eFmjQDvJKm8z1v+jZB6A1tP1sXyi+Q2xazQ=
+#  region: ord
+#  container: kb2
+#  skip_cleanup: true
+#  on:
+#    repo: kalabox/kalabox-ui
+#    branch: master
 cache:
   directories:
   - node_modules
