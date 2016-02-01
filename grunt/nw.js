@@ -11,6 +11,9 @@ var nw = require('nw');
 // Current app version
 var version = require('./../package.json').version;
 
+// Version of nw.
+var nwVersion = '0.12.3';
+
 // Platforms to expect for the compression
 var platforms = ['win64', 'osx64', 'linux64'];
 
@@ -55,7 +58,7 @@ module.exports = {
   compress: nwCompress(platforms),
   nwjs: {
     options: {
-      version: '0.12.3',
+      version: nwVersion,
       platforms: [
         'win64',
         'osx64',
@@ -76,6 +79,17 @@ module.exports = {
           maxBuffer: Infinity
         }
       }
+    },
+    pty: {
+      command: [
+        'npm install nw-gyp',
+        '&&',
+        'cd ./node_modules/child_pty/',
+        '&&',
+        'nw-gyp configure --target=' + nwVersion,
+        '&&',
+        'nw-gyp build'
+      ].join(' ')
     },
     build: {
       command: [

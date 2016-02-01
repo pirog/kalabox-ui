@@ -20,6 +20,7 @@
     "test": "grunt test"
   },
   "dependencies": {
+    "child_pty": "^3.0.1",
     "kalabox": "https://github.com/kalabox/kalabox/tarball/v0.11",
     "lodash": "^3.10.1",
     "moment": "^2.10.6"
