@@ -287,6 +287,17 @@ module.exports = {
     },
 
     /**
+     * When app js files are changed, copy them. Note that this will
+     * *not* copy new files.
+     */
+    appJS: {
+      files: [
+        'src/modules/**/*'
+     ],
+      tasks: ['copy:buildAppJs']
+    },
+
+    /**
      * When assets are changed, copy them. Note that this will *not* copy new
      * files, so this is probably not very useful.
      */
