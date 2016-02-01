@@ -46,6 +46,8 @@ module.exports = function(grunt) {
    * Options:
    *  deps = [true|false]: Will download the platform specific install deps
    *  iso = [true|false]: Will download the VM iso image
+   *  images = [true|false]: Will export images into a compressed tar
+   *
    */
   var parseBuildOptions = function(task) {
 
@@ -64,6 +66,11 @@ module.exports = function(grunt) {
     // Add in download iso if needed
     if (grunt.option('iso')) {
       task.push('curl-dir:iso');
+    }
+
+    // Add in exported images if needed
+    if (grunt.option('images')) {
+      task.push('shell:exportImages');
     }
 
     // Return the task back
@@ -187,7 +194,8 @@ module.exports = function(grunt) {
     // Run Some NW shell things
     shell: {
       nw: nw.shell.nw,
-      build: nw.shell.build
+      build: nw.shell.build,
+      exportImages: deps.shell.exportImages
     },
     delta: frontend.delta,
   };
