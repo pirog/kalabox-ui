@@ -75,7 +75,7 @@ var nwBuilder = function(platforms) {
         './build/assets/**/*',
         './build/deps/iso/*',
         './build/deps/' + platform + '/*',
-        './build/images/**/*',
+        './build/images/*',
         './build/node_modules/**/*',
         './build/src/**/*'
       ]
