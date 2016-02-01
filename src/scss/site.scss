@@ -31,8 +31,8 @@
   }
 }
 
-@include arrow-keyframes(site-pull, 80px);
-@include arrow-keyframes(site-push, -80px);
+@include arrow-keyframes(site-pull, 60px);
+@include arrow-keyframes(site-push, -60px);
 
 
 // Site styling.
@@ -56,9 +56,8 @@
     .arrow {
       position: relative;
       display: block;
-      bottom: 85px;
       font-size: 3em;
-      color: pink;
+      color: #D54688;
     }
     .cloud-static {
       position: relative;
@@ -75,13 +74,13 @@
   }
   .pull {
     .arrow {
-      top: 130px;
+      bottom: 90px;
       @include animation(site-pull 2s linear infinite);
     }
   }
   .push {
     .arrow {
-      bottom: -50px;
+      bottom: 30px;
       @include animation(site-push 2s linear infinite);
     }
   }
