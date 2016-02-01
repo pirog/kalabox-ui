@@ -118,18 +118,6 @@ module.exports = {
       }
     },
 
-    pty: {
-      command: [
-        'npm install nw-gyp',
-        '&&',
-        'cd ./node_modules/child_pty/',
-        '&&',
-        'nw-gyp configure --target=0.12.3',
-        '&&',
-        'nw-gyp build'
-      ].join(' ')
-    },
-
     /*
      * Npm install our prod deps before we nwjs task
      */
@@ -137,7 +125,7 @@ module.exports = {
       command: [
         'cd ./<%= buildDir %>',
         '&&',
-        'npm install --production --ignore-scripts'
+        'npm install --production'
       ].join(' ')
     }
 

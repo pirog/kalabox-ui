@@ -17,7 +17,8 @@
   },
   "chromium-args": "--enable-threaded-compositing",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "postinstall": "./scripts/nw-child-pty-compile.sh"
   },
   "dependencies": {
     "child_pty": "^3.0.1",
