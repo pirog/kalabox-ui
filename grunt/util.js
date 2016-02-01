@@ -27,16 +27,6 @@ module.exports = {
       push: false,
       pushTo: 'origin'
     }
-  },
-
-  /**
-   * The directories to delete when `grunt clean` is executed.
-   */
-  clean: [
-    '<%= buildDir %>',
-    '<%= compileDir %>',
-    './nw',
-    './dist'
-  ]
+  }
 
 };

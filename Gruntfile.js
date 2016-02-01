@@ -9,10 +9,92 @@ module.exports = function(grunt) {
    * Load in our build configuration filez
    */
   var code = require('./grunt/code.js');
+  var deps = require('./grunt/deps.js');
   var files = require('./grunt/files.js');
   var frontend = require('./grunt/frontend.js');
   var nw = require('./grunt/nw.js');
   var util = require('./grunt/util.js');
+
+  /*
+   * Helper funct to return some common build tasks
+   */
+  var commonBuildTasks = function() {
+    return [
+      'test',
+      'clean:build',
+      'bower-install-simple:install',
+      'html2js',
+      'sass:build',
+      'concat:buildCss',
+      'copy:buildAppAssets',
+      'copy:buildVendorAssets',
+      'copy:buildAppJs',
+      'copy:buildVendorJs',
+      'copy:buildVendorCss',
+      'index:build'
+    ];
+  };
+
+  /*
+   * Helper funct to add tasks to build and package based on options
+   * @todo: we dont want to download every time we build so some sort of
+   * cache would be good?
+   *
+   * NOTE: Grunt does not currently support multi-boolean options so you will
+   * need to epxlicitly set the value of the options to true|false
+   *
+   * Options:
+   *  deps = [true|false]: Will download the platform specific install deps
+   *  iso = [true|false]: Will download the VM iso image
+   *  images = [true|false]: Will export images into a compressed tar
+   *
+   */
+  var parseBuildOptions = function(task) {
+
+    // Start with generic pre tasks
+    if (grunt.option('deps') || grunt.option('iso')) {
+      task.push('clean:deps');
+    }
+
+    // Add in download deps if needed
+    if (grunt.option('deps')) {
+      task.push('curl-dir:osx64Deps');
+      task.push('curl-dir:win64Deps');
+      task.push('curl-dir:linux64Deps');
+    }
+
+    // Add in download iso if needed
+    if (grunt.option('iso')) {
+      task.push('curl-dir:iso');
+    }
+
+    // Add in exported images if needed
+    if (grunt.option('images')) {
+      task.push('shell:exportImages');
+    }
+
+    // Return the task back
+    return task;
+
+  };
+
+  /**
+   * A utility function to get all app JavaScript sources.
+   */
+  function filterForJS (files) {
+    return files.filter(function(file) {
+      return file.match(/\.js$/);
+    });
+  }
+
+  /**
+   * A utility function to get all app CSS sources.
+   */
+  function filterForCSS (files) {
+    return files.filter(function(file) {
+      return file.match(/\.css$/);
+    });
+  }
 
   /**
    * This is the configuration object Grunt uses to give each plugin its
@@ -43,8 +125,21 @@ module.exports = function(grunt) {
 
     // Task to bump versions
     bump: util.bump,
-    // Cleans out build and complile dirs
-    clean: util.clean,
+
+    // Cleans out various dirs
+    clean: {
+      build: frontend.clean.build,
+      deps: deps.clean.deps,
+      nw: nw.clean.nw
+    },
+
+    // Also download other dependencies we might need
+    'curl-dir': {
+      osx64Deps: deps.downloads.osx64Deps,
+      win64Deps: deps.downloads.win64Deps,
+      linux64Deps: deps.downloads.linux64Deps,
+      iso: deps.downloads.iso
+    },
 
     // Installs bower deps
     'bower-install-simple': {
@@ -58,7 +153,8 @@ module.exports = function(grunt) {
       buildAppJs: frontend.copy.buildAppJs,
       buildVendorJs: frontend.copy.buildVendorJs,
       buildVendorCss: frontend.copy.buildVendorCss,
-      compileAssets: frontend.copy.compileAssets
+      compileAssets: frontend.copy.compileAssets,
+      deps: deps.copy.deps
     },
     // Concatenates multiple source files into a single file.
     concat: {
@@ -91,7 +187,6 @@ module.exports = function(grunt) {
     jscs: code.jscs,
     // Angular html validate
     htmlangular: code.htmlangular,
-
     // Compress built NW assets
     compress: nw.compress,
     // Build the NW binaries
@@ -99,7 +194,8 @@ module.exports = function(grunt) {
     // Run Some NW shell things
     shell: {
       nw: nw.shell.nw,
-      build: nw.shell.build
+      build: nw.shell.build,
+      exportImages: deps.shell.exportImages
     },
     delta: frontend.delta,
   };
@@ -128,61 +224,35 @@ module.exports = function(grunt) {
   /**
    * The `build` task gets your app ready to run for development and testing.
    */
-  grunt.registerTask('build', [
-    'test',
-    'clean',
-    'bower-install-simple:install',
-    'html2js',
-    'sass:build',
-    'concat:buildCss',
-    'copy:buildAppAssets',
-    'copy:buildVendorAssets',
-    'copy:buildAppJs',
-    'copy:buildVendorJs',
-    'copy:buildVendorCss',
-    'index:build',
-    'shell:nw'
- ]);
+  // Start by grabbing our common build options
+  var buildTask = commonBuildTasks();
+  // Now parse our build opts
+  buildTask = parseBuildOptions(buildTask);
+  // Copy any deps over
+  buildTask.push('copy:deps');
+  // Add the NW run task
+  buildTask.push('shell:nw');
+  // Finally, register the build
+  grunt.registerTask('build', buildTask);
 
   /**
-   * The `compile` task gets your app ready for deployment by concatenating and
+   * The `pkg` task gets your app ready for deployment by concatenating and
    * minifying your code.
    */
-  grunt.registerTask('pkg', [
-    'test',
-    'clean',
-    'bower-install-simple:install',
-    'html2js',
-    'sass:build',
-    'concat:buildCss',
-    'copy:buildAppAssets',
-    'copy:buildVendorAssets',
-    'copy:buildAppJs',
-    'copy:buildVendorJs',
-    'copy:buildVendorCss',
-    'index:build',
-    'shell:build',
-    'nwjs',
-    'compress'
- ]);
-
-  /**
-   * A utility function to get all app JavaScript sources.
-   */
-  function filterForJS (files) {
-    return files.filter(function(file) {
-      return file.match(/\.js$/);
-    });
-  }
-
-  /**
-   * A utility function to get all app CSS sources.
-   */
-  function filterForCSS (files) {
-    return files.filter(function(file) {
-      return file.match(/\.css$/);
-    });
-  }
+  // Start with our common build tasks
+  var pkgTask = commonBuildTasks();
+  // Now parse our build opts
+  pkgTask = parseBuildOptions(pkgTask);
+  // Copy any deps over
+  pkgTask.push('copy:deps');
+  // Clean out our NW dirs before we build
+  pkgTask.push('clean:nw');
+  // Add NW build to finish it off
+  pkgTask.push('shell:build');
+  pkgTask.push('nwjs');
+  pkgTask.push('compress');
+  // Finanly, register the packaging task
+  grunt.registerTask('pkg', pkgTask);
 
   /**
    * The index.html template includes the stylesheet and javascript sources
