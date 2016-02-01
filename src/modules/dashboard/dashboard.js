@@ -161,7 +161,7 @@ angular.module('kalabox.dashboard', [
 
   // Modal creator.
   $scope.open = function(templateUrl, controllerName, data) {
-    var modalInstance = $uibModal.open({
+    var uibModalInstance = $uibModal.open({
       animation: true,
       templateUrl: templateUrl,
       controller: controllerName,
@@ -172,7 +172,7 @@ angular.module('kalabox.dashboard', [
         }
       }
     });
-    return modalInstance;
+    return uibModalInstance;
   };
 
   // Handle shutting down of kalabox.
@@ -256,6 +256,24 @@ angular.module('kalabox.dashboard', [
     $scope.ui.errors = guiEngine.errors.list();
   });
 
+  if ($scope.ui.errors) {
+    $scope.open(
+      'modules/dashboard/error-modal.html.tmpl',
+      'ErrorModal',
+      {errors: $scope.ui.errors, parentScope: $scope}
+    );
+  }
+
+})
+.controller(
+  'ErrorModal',
+  function($scope, $q, $uibModalInstance, kbox, _, modalData) {
+
+  $scope.errors = modalData.errors;
+  $scope.ok = function() {
+    modalData.parentScope.ui.errors = [];
+    $uibModalInstance.close();
+  };
 })
 .controller(
   'SiteCtrl',
@@ -277,7 +295,7 @@ angular.module('kalabox.dashboard', [
 })
 .controller(
   'AuthModal',
-  function($scope, $modalInstance, kbox, _, modalData, guiEngine) {
+  function($scope, $uibModalInstance, kbox, _, modalData, guiEngine) {
 
     guiEngine.try(function() {
       $scope.errorMessage = false;
@@ -302,7 +320,7 @@ angular.module('kalabox.dashboard', [
           .then(function(result) {
             if (result !== false) {
               // Close modal on success.
-              $modalInstance.close({
+              $uibModalInstance.close({
                 username: email
               });
             } else {
@@ -316,7 +334,7 @@ angular.module('kalabox.dashboard', [
         });
       };
       $scope.cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
       };
     });
 
@@ -324,7 +342,7 @@ angular.module('kalabox.dashboard', [
 )
 .controller(
   'ShutdownModal',
-  function($scope, $q, $modalInstance, kbox, _, modalData, guiEngine) {
+  function($scope, $q, $uibModalInstance, kbox, _, modalData, guiEngine) {
 
     guiEngine.try(function() {
       $scope.ok = function() {

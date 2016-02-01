@@ -19,7 +19,7 @@ angular.module('kalabox.initialize', [
     var gui = require('nw.gui');
     var mb = new gui.Menu({type: 'menubar'});
     if (process.platform === 'darwin') {
-      mb.createMacBuiltin('Kalabox', {hideEdit: true, hideWindow: true});
+      mb.createMacBuiltin('Kalabox', {hideEdit: false, hideWindow: true});
     }
     gui.Window.get().menu = mb;
 

@@ -18,14 +18,6 @@
       <a href="" class="btn btn-primary" data-toggle="offcanvas" data-target="#addSite">Add Site</a>
     </div>
   </div>
-  engine: {{ui.engineStatus}}
-  <div ng-repeat="job in ui.jobs">
-    <div>
-      {{job.desc}} - ({{job.status}}) - {{job.err.message}} {{job.err.stack}} {{job.statusMsg}}
-      - <button ng-disabled="job.status === 'running'" job-clear>clear</button>
-      - <button ng-disabled="job.status !== 'failed'" job-retry>retry</button>
-    </div>
-  </div>
   <div class="sites row">
     <div ng-repeat="site in ui.sites | filter:siteSearch" ng-controller="SiteCtrl">
       <div class="site-wrapper col-xs-6">
@@ -69,11 +61,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div ng-repeat="err in ui.errors">
-    <div>
-      {{err.message}}
     </div>
   </div>
 </div>
