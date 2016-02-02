@@ -8,6 +8,16 @@ In order to get started you will need to install the underlying dependencies req
 
 **On Windows**
 
+Make sure you have installed Node 4.2 and GIT. See https://github.com/kalabox/kalabox-ted/tree/master/scripts/build for some helpful scripts.
+
+You also will need to [install ruby](http://dl.bintray.com/oneclick/rubyinstaller/rubyinstaller-2.0.0-p647-x64.exe)
+
+```
+gem install sass
+npm install -g grunt-cli
+git clone https://github.com/kalabox/kalabox-ui.git
+```
+
 **On Debian**
 
 NOTE: You might want to make sure you get npm set up so you can install
@@ -20,6 +30,7 @@ curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get -y install nodejs
 sudo gem install sass
 npm install -g grunt-cli
+git clone https://github.com/kalabox/kalabox-ui.git
 ```
 
 **On Fedora**
@@ -29,17 +40,16 @@ npm install -g grunt-cli
 
 
 ```
-git clone https://github.com/kalabox/kalabox-ui.git
-cd kalabox-ui
-npm install
-grunt buil
+cd /path/to/kalabox-ui/source
+npm install # need to also pass in --ignore-scripts on windows
+grunt build
 ```
 
 ### Building binaries from source
 
 ```
 cd /path/to/kalabox-ui/source
-npm install
+npm install # need to also pass in --ignore-scripts on windows
 grunt pkg
 ```
 
