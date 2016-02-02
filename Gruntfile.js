@@ -26,6 +26,7 @@ module.exports = function(grunt) {
       'html2js',
       'sass:build',
       'concat:buildCss',
+      'copy:buildAppScripts',
       'copy:buildAppAssets',
       'copy:buildVendorAssets',
       'copy:buildAppJs',
@@ -148,6 +149,7 @@ module.exports = function(grunt) {
     },
     // Copies relevant things from a to b
     copy: {
+      buildAppScripts: frontend.copy.buildAppScripts,
       buildAppAssets: frontend.copy.buildAppAssets,
       buildVendorAssets: frontend.copy.buildVendorAssets,
       buildAppJs: frontend.copy.buildAppJs,
