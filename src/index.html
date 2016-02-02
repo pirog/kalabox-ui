@@ -17,7 +17,7 @@
 
   </head>
 
-  <body ng-app="kalabox">
+  <body ng-app="kalabox" ng-controller="AppController as appController" class="{{ appController.bodyClasses }}">
     <div id="main" role="main">
       <div id="content" class="container" ui-view></div>
     </div>
