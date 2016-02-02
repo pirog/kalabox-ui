@@ -2,6 +2,13 @@ language: node_js
 sudo: false
 node_js:
 - '4.2'
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - gcc-4.8
+    - g++-4.8
 before_install:
 - cp ci/travis-ci.sh $HOME/
 - chmod +x $HOME/travis-ci.sh
@@ -60,4 +67,5 @@ notifications:
     on_success: always
 env:
   global:
-    secure: Zx94toqGScUIRZ/LBx0h8L/y/Lff4YFV+5QMbec+73ZpQMlATLqa4bl0PFy9Cp2RNNN9ljqkMoUQLanBetaPdL3Wxqo6qUloCrnPN/mzIVrL/mbbmG7bz6dVjtcB3CmheYTmdSBjNv+5n/gtb6DWfuX5Pdd9gVxruRqwHT3tW3g=
+    - CXX=g++-4.8
+    - secure: Zx94toqGScUIRZ/LBx0h8L/y/Lff4YFV+5QMbec+73ZpQMlATLqa4bl0PFy9Cp2RNNN9ljqkMoUQLanBetaPdL3Wxqo6qUloCrnPN/mzIVrL/mbbmG7bz6dVjtcB3CmheYTmdSBjNv+5n/gtb6DWfuX5Pdd9gVxruRqwHT3tW3g=
