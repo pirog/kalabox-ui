@@ -2,7 +2,8 @@
 
 angular.module('kalabox.installer', [
   'ui.router',
-  'kalabox.nodewrappers'
+  'kalabox.nodewrappers',
+  'kalabox.misc'
 ])
 .config(function($stateProvider) {
   $stateProvider

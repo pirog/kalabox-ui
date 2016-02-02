@@ -7,9 +7,24 @@ angular.module('kalabox', [
   'kalabox.initialize',
   'kalabox.installer',
   'kalabox.sites',
+  'kalabox.misc',
   'ui.bootstrap',
   'mwl.bluebird'
 ])
+.controller('AppController',
+  function($scope) {
+  var vm = this;
+  vm.bodyClasses = 'default';
+
+  // this'll be called on every state change in the app
+  $scope.$on('$stateChangeSuccess', function(event, toState) {
+    if (angular.isDefined(toState.name)) {
+      vm.bodyClasses = toState.name;
+      return;
+    }
+    vm.bodyClasses = 'default';
+  });
+})
 // Override the default global error handler.
 .factory('$exceptionHandler', function(/*$window*/) {
   return function(exception) {

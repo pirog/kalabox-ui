@@ -1,6 +1,22 @@
-.initialize {
+
+body.installer {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  background:#15212C;
+  -webkit-animation: bgChange 300s linear infinite;
+   -moz-animation: bgChange 300s linear infinite;
+     -o-animation: bgChange 300s linear infinite;
+        animation: bgChange 300s linear infinite;
+}
+
+.initialize, .install {
   text-align: center;
   margin: 80px 0px;
+
+  .col-xs-12 {
+    z-index: 20;
+  }
 
   h1, h2 {
     display: inline-block;
@@ -12,7 +28,10 @@
     font-weight: 500;
     font-size: $font-size-h2;
     color: #4295D1;
-    //color: #9ECBEA;
+    -webkit-animation: headerChange 300s linear infinite;
+     -moz-animation: headerChange 300s linear infinite;
+       -o-animation: headerChange 300s linear infinite;
+          animation: headerChange 300s linear infinite;
   }
 
   h2 {
@@ -22,6 +41,13 @@
     transition: opacity .25s ease-in-out;
     margin: 10px 0px;
     color: $gray-light;
+    -webkit-animation: subHeaderChange 300s linear infinite;
+     -moz-animation: subHeaderChange 300s linear infinite;
+       -o-animation: subHeaderChange 300s linear infinite;
+          animation: subHeaderChange 300s linear infinite;
+  }
+  .detail {
+    color: $gray;
   }
 }
 
@@ -106,4 +132,82 @@
        background-color: #E8E8E8;
      }
   }
+}
+
+/* Standard syntax */
+@keyframes bgChange{
+  0% {background:#15212C;}
+  50% {background: white;}
+  100% {background:#15212C;}
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes bgChange{
+  0% {background:#15212C;}
+  25% {background:skyblue;}
+  50% {background:white;}
+  75% {background:skyblue;}
+  100% {background:#15212C;}
+}
+
+@keyframes headerChange{
+  0% {color:#9ECBEA;}
+  50% {color: #4295D1;}
+  100% {color:#9ECBEA;}
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes headerChange{
+  0% {color:#9ECBEA;}
+  25% {color:#4295D1;}
+  50% {color:#4295D1;}
+  75% {color:#4295D1;}
+  100% {color:#9ECBEA;}
+}
+
+@keyframes subHeaderChange{
+  0% {color:$gray-lighter;}
+  50% {color:$gray-light;}
+  100% {color:$gray-lighter;}
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes subHeaderChange{
+  0% {color:$gray-lighter;}
+  25% {color:$gray-light;}
+  50% {color:$gray-light;}
+  75% {color:$gray-light;}
+  100% {color:$gray-lighter;}
+}
+
+.theSun {
+  width:100px;
+  height:100px;
+  z-index: 7;
+  position:absolute;
+  animation:sunRising 300s infinite;
+  border-radius:50%;
+  -moz-border-radius:50%;
+  /* Safari and Chrome */
+  -webkit-animation:sunRising 300s infinite;
+  background-image: -moz-radial-gradient(45px 45px 45deg, circle cover, yellow 0%, orange 100%, red 95%);
+  background-image: -webkit-radial-gradient(45px 45px, circle cover, yellow, orange);
+  background-image: radial-gradient(45px 45px 45deg, circle cover, yellow 0%, orange 100%, red 95%);
+}
+
+@keyframes sunRising
+{
+  0%   {top:70%;left:-10%;}
+  25%  {top:30%;left:25%;}
+  50%  {top:5%;left:50%;}
+  75%  {top:30%;left:75%;}
+  100% {top:70%;left:110%;}
+}
+
+@-webkit-keyframes sunRising /* Safari and Chrome */{
+  0%   {top:70%;left:-10%;}
+  25%  {top:30%;left:25%;}
+  50%  {top:5%;left:50%;}
+  75%  {top:30%;left:75%;}
+  100% {top:70%;left:110%;}
 }
