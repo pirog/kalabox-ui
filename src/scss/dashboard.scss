@@ -1,10 +1,11 @@
 .header {
   margin-top: 10px;
   img {
-    width: 50px;
     margin-top: -6px;
   }
 }
+
+img.logo { width: 50px; }
 
 #addSite {
   .close {

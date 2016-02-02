@@ -21,8 +21,6 @@
   }
 }
 
-img { width: 50px; }
-
 .speech-bubble {
   @include speech-bubble(15px, $alert-danger-bg);
   width: 60%;
