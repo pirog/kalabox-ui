@@ -287,8 +287,8 @@ angular.module('kalabox.dashboard', [
   };
   $scope.currentActionName = function() {
     if ($scope.site.currentAction) {
-      return $scope.site.currentAction === 'stop' ? 'Stopping' :
-        $scope.site.currentAction + 'ing';
+      var actions = {stop: 'Stopping', start: 'Starting', 'delete': 'Deleting'};
+      return actions[$scope.site.currentAction];
     }
     return false;
   };

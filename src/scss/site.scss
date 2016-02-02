@@ -45,7 +45,7 @@
     transition: opacity 4s ease;
   }
 }
-.site.start, .site.stop, .site.pull, .site.push {
+.site.start, .site.stop, .site.pull, .site.push, .site.delete {
   overflow: hidden;
   .site-info, .image, .site-actions {
     display: none;

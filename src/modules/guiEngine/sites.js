@@ -168,6 +168,7 @@ angular.module('kalabox.sites', [])
         return kbox.setAppContext(app);
       })
       .then(function(app) {
+        self.currentAction = 'delete';
         return kbox.app.destroy(app);
       });
     });
