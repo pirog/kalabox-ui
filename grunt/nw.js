@@ -125,7 +125,7 @@ module.exports = {
       command: [
         'cd ./<%= buildDir %>',
         '&&',
-        'npm install --production --ignore-scripts'
+        'npm install --production'
       ].join(' ')
     }
 
