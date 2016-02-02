@@ -37,9 +37,9 @@ before-install() {
 # Setup Drupal to run the tests.
 #
 before-script() {
-  sudo apt-get install jq
-  sudo apt-get install python-pip
-  sudo pip install --upgrade httpie
+  #sudo apt-get install jq
+  #sudo apt-get install python-pip
+  #sudo pip install --upgrade httpie
   npm install -g grunt-cli bower
   bower install
 }
@@ -49,7 +49,7 @@ before-script() {
 # Run the tests.
 #
 script() {
-  DISPLAY=:99.0 grunt code
+  DISPLAY=:99.0 grunt test
 }
 
 # after-script
@@ -65,9 +65,10 @@ after-script() {
 # Clean up after the tests.
 #
 after-success() {
-  cd $TRAVIS_BUILD_DIR
+  #cd $TRAVIS_BUILD_DIR
   #DISPLAY=:99.0 grunt build
-  cd $TRAVIS_BUILD_DIR
+  #cd $TRAVIS_BUILD_DIR
+  echo
 }
 
 # before-deploy
@@ -177,11 +178,11 @@ case $COMMAND in
     ;;
 
   before-deploy)
-    #run_command before-deploy
+    run_command before-deploy
     ;;
 
   after-deploy)
-    #run_command after-deploy
+    run_command after-deploy
     ;;
 esac
 
