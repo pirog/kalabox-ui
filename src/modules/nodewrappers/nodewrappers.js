@@ -7,6 +7,9 @@ angular.module('kalabox.nodewrappers', [])
   .factory('fs', [function() {
     return require('fs');
   }])
+  .factory('path', [function() {
+    return require('path');
+  }])
   .factory('http', [function() {
     return require('http');
   }])
