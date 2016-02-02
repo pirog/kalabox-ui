@@ -4,14 +4,7 @@ angular.module('kalabox.sites', [])
 /*
  * Class for encapsulating a site instance.
  */
-.factory('Site', function(kbox, siteStates, _, providers, guiEngine, $q) {
-
-  var images = [
-  ];
-
-  var getImage = _.memoize(function() {
-    return images[_.random(0, images.length - 1)];
-  });
+.factory('Site', function(kbox, siteStates, _, providers, guiEngine, $q, path) {
 
   // Constructor.
   function Site(opts) {
@@ -19,8 +12,7 @@ angular.module('kalabox.sites', [])
     this.url = opts.url;
     this.folder = opts.folder;
     this.codeFolder = opts.codeFolder;
-    this.image = getImage(opts.name);
-    //this.image = 'http://placehold.it/300x250';
+    this.image = path.join(opts.folder, 'screenshot.png');
     this.providerName = 'pantheon';
     this.providerInfo = opts.providerInfo;
     this.framework = opts.providerInfo.framework;
