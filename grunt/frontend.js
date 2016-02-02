@@ -51,6 +51,16 @@ module.exports = {
         {src: ['package.json'], dest: '<%= buildDir %>/package.json'}
     ]
     },
+    buildAppScripts: {
+      files: [
+        {
+          src: ['**'],
+          dest: '<%= buildDir %>/scripts/',
+          cwd: 'scripts',
+          expand: true
+        }
+    ]
+    },
     buildVendorAssets: {
       files: [
         {
@@ -284,6 +294,17 @@ module.exports = {
         '<%= appFiles.js %>'
      ],
       tasks: ['jshint:src', 'copy:buildAppJs']
+    },
+
+    /**
+     * When app js files are changed, copy them. Note that this will
+     * *not* copy new files.
+     */
+    appJS: {
+      files: [
+        'src/modules/**/*'
+     ],
+      tasks: ['copy:buildAppJs']
     },
 
     /**

@@ -12,22 +12,17 @@ EXIT_VALUE=0
 # Do some stuff before npm install
 #
 before-install() {
-  # This is to locally simulate travis
-  if [ -z $TRAVIS ]; then
-    TRAVIS_BUILD_DIR="$HOME/Desktop/kalabox"
-    #TRAVIS_TAG=v0.12.0
-  else
-    sudo apt-get install curl
-    export DISPLAY=:99.0
-    sh -e /etc/init.d/xvfb start +extension RANDR
-    sleep 5
-  fi
+  #sudo apt-get install curl
+  #export DISPLAY=:99.0
+  #sh -e /etc/init.d/xvfb start +extension RANDR
+  #sleep 5
   # Add our key
   if ([ $TRAVIS_BRANCH == "master" ] || [ ! -z $TRAVIS_TAG ]) &&
     [ $TRAVIS_PULL_REQUEST == "false" ] &&
     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
       openssl aes-256-cbc -K $encrypted_1855b2cf27b1_key -iv $encrypted_1855b2cf27b1_iv -in ci/travis.id_rsa.enc -out $HOME/.ssh/travis.id_rsa -d
   fi
+
 }
 
 #$ node -pe 'JSON.parse(process.argv[1]).foo' "$(cat foobar.json)"

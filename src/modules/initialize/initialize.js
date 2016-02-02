@@ -19,7 +19,7 @@ angular.module('kalabox.initialize', [
     var gui = require('nw.gui');
     var mb = new gui.Menu({type: 'menubar'});
     if (process.platform === 'darwin') {
-      mb.createMacBuiltin('Kalabox', {hideEdit: true, hideWindow: true});
+      mb.createMacBuiltin('Kalabox', {hideEdit: false, hideWindow: true});
     }
     gui.Window.get().menu = mb;
 
@@ -44,7 +44,7 @@ angular.module('kalabox.initialize', [
         'Making the world safe for democracy',
         'Failing to be afraid of fear itself',
         'Neither snow nor rain nor heat nor gloom of night shall stop us',
-        'Trimming the lama',
+        'Trimming the llama',
         'Burning the man',
         'Clearing dust out of the box',
         'Plumbing the series of tubes',
@@ -54,7 +54,7 @@ angular.module('kalabox.initialize', [
         'Improving your child\'s SAT score',
         'Teaching the virtue of patience',
         'Nurturing your web projects',
-        'Waiting is the hardest part'
+        'The waiting is the hardest part'
       ]
     };
 

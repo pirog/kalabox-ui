@@ -17,6 +17,7 @@ angular.module('kalabox.sites', [])
     this.providerInfo = opts.providerInfo;
     this.framework = opts.providerInfo.framework;
     this.busy = false;
+    this.currentAction = false;
   }
 
   /*
@@ -66,6 +67,7 @@ angular.module('kalabox.sites', [])
         return kbox.setAppContext(app);
       })
       .then(function(app) {
+        self.currentAction = 'start';
         return kbox.app.start(app);
       });
     });
@@ -82,6 +84,7 @@ angular.module('kalabox.sites', [])
         return kbox.setAppContext(app);
       })
       .then(function(app) {
+        self.currentAction = 'stop';
         return kbox.app.stop(app);
       });
     });
@@ -105,6 +108,7 @@ angular.module('kalabox.sites', [])
         })
         // Do a pull on the site.
         .then(function() {
+          self.currentAction = 'pull';
           var pull = kbox.integrations.get(self.providerName).pull();
           // Update job's status message with info from pull.
           pull.on('update', function(msg) {
@@ -156,6 +160,7 @@ angular.module('kalabox.sites', [])
         return kbox.setAppContext(app);
       })
       .then(function(app) {
+        self.currentAction = 'delete';
         return kbox.app.destroy(app);
       });
     });
