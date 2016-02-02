@@ -77,6 +77,7 @@ var nwBuilder = function(platforms) {
         './build/deps/' + platform + '/*',
         './build/images/*',
         './build/node_modules/**/*',
+        './build/scripts/*',
         './build/src/**/*'
       ]
     };
@@ -85,6 +86,31 @@ var nwBuilder = function(platforms) {
 
   // And finally return that which is compressed
   return builder;
+
+};
+
+/*
+ * Helper function to generate npm build commands for a given platform
+ */
+var npmBuildCmd = function() {
+
+  // Start a command collector
+  var cmd = [];
+
+  // Normal CMDz
+  cmd.push('cd ./<%= buildDir %>');
+
+  // If we aren't on windows we need the faux PTY stuff
+  if (process.platform === 'win32') {
+    cmd.push('npm install --production --ignore-script');
+  }
+  else {
+    cmd.push('chmod +x scripts/nw-child-pty-compile.sh');
+    cmd.push('npm install --production');
+  }
+
+  // Give up all the glory
+  return cmd.join(' && ');
 
 };
 
@@ -122,11 +148,7 @@ module.exports = {
      * Npm install our prod deps before we nwjs task
      */
     build: {
-      command: [
-        'cd ./<%= buildDir %>',
-        '&&',
-        'npm install --production'
-      ].join(' ')
+      command: npmBuildCmd()
     }
 
   },
