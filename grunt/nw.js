@@ -63,12 +63,18 @@ var nwBuilder = function(platforms) {
   // Iterate through our platforms and add to the compress array
   _.forEach(platforms, function(platform) {
 
-    // Build our copress object
+    // Build our compressed object
     builder[platform] = {
       options: {
         version: '0.12.3',
         platforms: [platform],
         buildDir: 'nw',
+        window: {
+          toolbar: false,
+          icon: './build/src/images/kalaboxv2-ico.png',
+          frame: false
+        },
+        macIcns: './build/images/kalabox.icns'
       },
       src: [
         './build/*',
