@@ -51,16 +51,6 @@ module.exports = {
         {src: ['package.json'], dest: '<%= buildDir %>/package.json'}
     ]
     },
-    buildAppScripts: {
-      files: [
-        {
-          src: ['**'],
-          dest: '<%= buildDir %>/scripts/',
-          cwd: 'scripts',
-          expand: true
-        }
-    ]
-    },
     buildVendorAssets: {
       files: [
         {
