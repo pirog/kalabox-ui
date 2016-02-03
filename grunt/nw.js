@@ -77,7 +77,6 @@ var nwBuilder = function(platforms) {
         './build/deps/' + platform + '/*',
         './build/images/**/*',
         './build/node_modules/**/*',
-        './build/scripts/*',
         './build/src/**/*'
       ]
     };
@@ -99,15 +98,7 @@ var npmBuildCmd = function() {
 
   // Normal CMDz
   cmd.push('cd ./<%= buildDir %>');
-
-  // If we aren't on windows we need the faux PTY stuff
-  if (process.platform === 'win32') {
-    cmd.push('npm install --production --ignore-script');
-  }
-  else {
-    cmd.push('chmod +x scripts/nw-child-pty-compile.sh');
-    cmd.push('npm install --production');
-  }
+  cmd.push('npm install --production --ignore-script');
 
   // Give up all the glory
   return cmd.join(' && ');

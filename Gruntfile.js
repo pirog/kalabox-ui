@@ -26,7 +26,6 @@ module.exports = function(grunt) {
       'html2js',
       'sass:build',
       'concat:buildCss',
-      'copy:buildAppScripts',
       'copy:buildAppAssets',
       'copy:buildVendorAssets',
       'copy:buildAppJs',
