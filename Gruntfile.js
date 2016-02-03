@@ -215,8 +215,6 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['build']);
   grunt.registerTask('sassBuild', ['sass:build']);
 
-  grunt.registerTask('copyIcns', ['copy:icns']);
-
   /**
    * The `code` task runs basic code linting and styling things
    */

@@ -74,14 +74,15 @@ var nwBuilder = function(platforms) {
           icon: './build/src/images/kalaboxv2-ico.png',
           frame: false
         },
-        macIcns: './build/images/kalabox.icns',
-        winIco: './build/images/kalabox.ico'
+        macIcns: './build/images/kalabox.icns'
+        // @todo: Breaks mac build, see kalabox/kalabox#929
+        //winIco: './build/images/kalabox.ico'
       },
       src: [
         './build/*',
         './build/assets/**/*',
         './build/deps/iso/*',
-        './build/deps/' + platform + '/*'
+        './build/deps/' + platform + '/*',
         './build/images/**/*',
         './build/node_modules/**/*',
         './build/scripts/*',
@@ -138,14 +139,12 @@ module.exports = {
     icns: {
       files: [
         {
-          src: ['**'],
-          dest: 'nw/Kalabox/osx64/Kalabox.app/Contents/Resources/nw.icns',
-          cwd: 'src/images/kalabox.icns'
+          src: 'src/images/kalabox.icns',
+          dest: 'nw/Kalabox/osx64/Kalabox.app/Contents/Resources/nw.icns'
         }
       ]
     }
   },
-
 
   /*
    * Helpers shell commands
