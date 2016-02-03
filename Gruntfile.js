@@ -156,7 +156,8 @@ module.exports = function(grunt) {
       buildVendorJs: frontend.copy.buildVendorJs,
       buildVendorCss: frontend.copy.buildVendorCss,
       compileAssets: frontend.copy.compileAssets,
-      deps: deps.copy.deps
+      deps: deps.copy.deps,
+      icns: nw.copy.icns
     },
     // Concatenates multiple source files into a single file.
     concat: {
@@ -214,6 +215,8 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['build']);
   grunt.registerTask('sassBuild', ['sass:build']);
 
+  grunt.registerTask('copyIcns', ['copy:icns']);
+
   /**
    * The `code` task runs basic code linting and styling things
    */
@@ -252,6 +255,7 @@ module.exports = function(grunt) {
   // Add NW build to finish it off
   pkgTask.push('shell:build');
   pkgTask.push('nwjs');
+  pkgTask.push('copy:icns');
   pkgTask.push('compress');
   // Finanly, register the packaging task
   grunt.registerTask('pkg', pkgTask);

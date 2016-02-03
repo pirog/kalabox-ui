@@ -60,10 +60,10 @@ var nwBuilder = function(platforms) {
   // Start up an empty
   var builder = {};
 
-  // Iterate through our platforms and add to the compress array
+  // Iterate through our platforms and add to the build array
   _.forEach(platforms, function(platform) {
 
-    // Build our compressed object
+    // Command options to build the nw app.
     builder[platform] = {
       options: {
         version: '0.12.3',
@@ -74,13 +74,14 @@ var nwBuilder = function(platforms) {
           icon: './build/src/images/kalaboxv2-ico.png',
           frame: false
         },
-        macIcns: './build/images/kalabox.icns'
+        macIcns: './build/images/kalabox.icns',
+        winIco: './build/images/kalabox.ico'
       },
       src: [
         './build/*',
         './build/assets/**/*',
         './build/deps/iso/*',
-        './build/deps/' + platform + '/*',
+        './build/deps/' + platform + '/*'
         './build/images/**/*',
         './build/node_modules/**/*',
         './build/scripts/*',
@@ -90,7 +91,7 @@ var nwBuilder = function(platforms) {
 
   });
 
-  // And finally return that which is compressed
+  // And finally return the nwjs-builder commands.
   return builder;
 
 };
@@ -132,6 +133,19 @@ module.exports = {
    * Build our NW packages
    */
   nwjs: nwBuilder(platforms),
+
+  copy: {
+    icns: {
+      files: [
+        {
+          src: ['**'],
+          dest: 'nw/Kalabox/osx64/Kalabox.app/Contents/Resources/nw.icns',
+          cwd: 'src/images/kalabox.icns'
+        }
+      ]
+    }
+  },
+
 
   /*
    * Helpers shell commands
