@@ -47,6 +47,7 @@
   "dependencies": {
     "kalabox": "https://github.com/kalabox/kalabox/tarball/v0.11",
     "lodash": "^3.10.1",
+    "lpad-align": "^1.0.0",
     "moment": "^2.10.6"
   },
   "devDependencies": {
