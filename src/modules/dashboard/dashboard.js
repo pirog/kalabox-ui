@@ -19,7 +19,8 @@ angular.module('kalabox.dashboard', [
         templateUrl: 'modules/dashboard/platforms.html.tmpl'
       }
     }
-  });
+  })
+  .state('dashboard.provider-auth');
 })
 /*
  * Start site if site is stopped, stop site if site is started.
@@ -123,12 +124,13 @@ angular.module('kalabox.dashboard', [
 .directive('providerClick', function(guiEngine) {
   return {
     scope: true,
-    link: function($scope, element) {
+    link: function($scope, element, $state) {
       element.on('click', function() {
         guiEngine.try(function() {
           if ($scope.provider.authorized()) {
             $scope.provider.refresh();
           } else {
+            $state.go('provider.auth')
             var authModal = $scope.open(
               'modules/dashboard/auth-modal.html.tmpl',
               'AuthModal',
