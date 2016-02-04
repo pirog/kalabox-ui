@@ -94,32 +94,6 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('jobClear', function(guiEngine) {
-  return {
-    scope: true,
-    link: function($scope, element) {
-      element.on('click', function() {
-        guiEngine.try(function() {
-          return guiEngine.queue.clear($scope.job);
-        });
-      });
-    }
-  };
-})
-.directive('jobRetry', function(guiEngine) {
-  return {
-    scope: true,
-    link: function($scope, element) {
-      element.on('click', function() {
-        guiEngine.try(function() {
-          if ($scope.job.status === 'failed') {
-            return guiEngine.queue.retry($scope.job);
-          }
-        });
-      });
-    }
-  };
-})
 .directive('providerClick', function(guiEngine) {
   return {
     scope: true,
@@ -196,14 +170,8 @@ angular.module('kalabox.dashboard', [
         });
       });
 
-      // Stop the polling service.
-      guiEngine.loop.stop()
-      // Stop the engine.
-      .then(function() {
-        return kbox.then(function(kbox) {
-          return kbox.engine.down();
-        });
-      })
+      // Stop the gui engine.
+      guiEngine.stop()
       // Close.
       .then(function() {
         self.close(true);
@@ -244,11 +212,6 @@ angular.module('kalabox.dashboard', [
     .then(function(isUp) {
       $scope.ui.engineStatus = isUp;
     });
-  });
-
-  // Poll list of jobs.
-  guiEngine.loop.add({interval: 0.25 * 100}, function() {
-    $scope.ui.jobs = guiEngine.queue.jobs();
   });
 
   // Poll list of errors.
