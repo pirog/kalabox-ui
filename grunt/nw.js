@@ -69,11 +69,6 @@ var nwBuilder = function(platforms) {
         version: '0.12.3',
         platforms: [platform],
         buildDir: 'nw',
-        window: {
-          toolbar: false,
-          icon: './build/src/images/kalaboxv2-ico.png',
-          frame: false
-        },
         macIcns: './build/images/kalabox.icns'
         // @todo: Breaks mac build, see kalabox/kalabox#929
         //winIco: './build/images/kalabox.ico'
