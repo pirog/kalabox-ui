@@ -110,10 +110,7 @@ angular.module('kalabox.dashboard', [
                 provider: $scope.provider
               }
             );
-            return authModal.result.then(function(result) {
-              $scope.provider.authorize(result.username);
-              $scope.provider.refresh();
-            });
+            return authModal.result;
           }
         });
       });
@@ -123,15 +120,16 @@ angular.module('kalabox.dashboard', [
 .controller(
   'DashboardCtrl',
   function($scope, $uibModal, $timeout, $interval, $q, kbox,
-    sites, providers, siteStates, _, guiEngine) {
+    sites, providers, siteStates, _, guiEngine, $rootScope) {
 
   //Init ui model.
   $scope.ui = {
     sites: [],
     states: {},
-    jobs: [],
-    providers: []
+    jobs: []
   };
+
+  $rootScope.providers = [];
 
   // Modal creator.
   $scope.open = function(templateUrl, controllerName, data) {
@@ -184,7 +182,7 @@ angular.module('kalabox.dashboard', [
   guiEngine.try(function() {
     return providers.get()
     .then(function(providers) {
-      $scope.ui.providers = providers;
+      $rootScope.providers = providers;
     });
   });
 
@@ -258,42 +256,24 @@ angular.module('kalabox.dashboard', [
 })
 .controller(
   'AuthModal',
-  function($scope, $uibModalInstance, kbox, _, modalData, guiEngine) {
+  function($scope, $uibModalInstance, kbox, _, modalData, guiEngine,
+    providers, $rootScope) {
 
     guiEngine.try(function() {
       $scope.errorMessage = false;
       // Auth on submission.
       $scope.ok = function(email, password) {
-        return kbox.then(function(kbox) {
-          var provider = modalData.provider.name;
-          var integration = kbox.integrations.get(provider);
-          var auth = integration.auth();
-          auth.on('ask', function(questions) {
-            _.each(questions, function(question) {
-              if (question.id === 'username') {
-                question.answer(email);
-              } else if (question.id === 'password') {
-                question.answer(password);
-              } else {
-                throw new Error(JSON.stringify(question, null, '  '));
-              }
-            });
+        return modalData.provider.authorize(email, password)
+        .then(function() {
+          $uibModalInstance.close({username: email});
+          return providers.get()
+          .then(function(providers) {
+            $rootScope.providers = providers;
           });
-          return auth.run(email)
-          .then(function(result) {
-            if (result !== false) {
-              // Close modal on success.
-              $uibModalInstance.close({
-                username: email
-              });
-            } else {
-              throw new Error('Auth failed.');
-            }
-          })
-          .catch(function(err) {
-            $scope.errorMessage = 'Failed to validate: ' + err.message;
-            throw err;
-          });
+        })
+        .catch(function(err) {
+          $scope.errorMessage = 'Failed to validate: ' + err.message;
+          throw err;
         });
       };
       $scope.cancel = function() {
