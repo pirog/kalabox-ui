@@ -27,7 +27,7 @@ angular.module('kalabox.dashboard')
 .controller(
 
   'SitePullModal',
-  function($scope, $modalInstance, _, modalData, guiEngine) {
+  function($scope, $uibModalInstance, _, modalData, guiEngine) {
 
     guiEngine.try(function() {
       $scope.site = modalData.site;
@@ -35,7 +35,7 @@ angular.module('kalabox.dashboard')
       $scope.errorMessage = false;
       $scope.ok = function(database, createBackup, files) {
         guiEngine.try(function() {
-          $modalInstance.close();
+          $uibModalInstance.close();
           var site = modalData.site;
           return site.pull({
             createBackup: createBackup,
@@ -45,7 +45,7 @@ angular.module('kalabox.dashboard')
         });
       };
       $scope.cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.close();
       };
     });
 
