@@ -33,11 +33,13 @@ angular.module('kalabox.sidebar', [
   'ProviderAuth',
   function($scope, kbox, _, guiEngine, $state, $stateParams) {
     $scope.provider = $stateParams.provider;
+    $scope.authorizing = false;
 
     guiEngine.try(function() {
       $scope.errorMessage = false;
       // Auth on submission.
       $scope.ok = function(email, password) {
+        $scope.authorizing = true;
         return kbox.then(function(kbox) {
 
           var provider = $scope.provider.name;
@@ -67,9 +69,11 @@ angular.module('kalabox.sidebar', [
           })
           .then(function() {
             // Navigate back to main provider view.
+            $scope.authorizing = false;
             $state.go('dashboard.sidebar', {}, {location: false});
           })
           .catch(function(err) {
+            $scope.authorizing = false;
             $scope.errorMessage = 'Failed to validate: ' + err.message;
             throw err;
           });

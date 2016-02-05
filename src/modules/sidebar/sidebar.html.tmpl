@@ -28,11 +28,9 @@
             <input type="search" ng-model="siteAvailableSearch" class="form-control" id="siteAvailableSearch" placeholder="Type site name">
           </div>
         </form>
-        <div class="">
-          <ul class="">
-            <li ng-repeat="site in provider.sites | filter:siteAvailableSearch" class="site" site-add>{{site.name}}</li>
-          </ul>
-        </div>
+        <ul class="sites">
+          <li ng-repeat="site in provider.sites | filter:siteAvailableSearch" class="site" site-add>{{site.name}}</li>
+        </ul>
       </li>
     </ul>
   </div>
