@@ -1,0 +1,83 @@
+@mixin provider-pic($provider-name) {
+  background: url(../images/providers/#{$provider-name}.svg) no-repeat;
+  background-size: 20px;
+  background-position: center;
+  color: $gray-lightest;
+  fill: $gray-lightest;
+  width: 50px;
+  height: 39px;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#addSite{
+  background-color: $dark-bg;
+  color: $gray-lightest;
+  width: 280px;
+  text-align: right;
+  .close {
+    color: $gray-lightest;
+    opacity: .7;
+    margin: 10px 0px;
+  }
+  h4 {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding-right: 15px;
+  }
+  li.provider {
+    &.integration a{
+      text-transform: capitalize;
+    }
+    &:hover {
+      background-color: #23374A;
+      cursor: pointer;
+      a {
+        color: $gray-lightest;
+      }
+    }
+    a {
+      vertical-align: middle;
+      display: inline-block;
+      padding: 10px 0px;
+    }
+  }
+  form {
+    padding: 15px;
+    .form-group {
+      label {
+        display: none;
+      }
+      .form-control {
+        border: none;
+        border-bottom: 1px grey solid;
+        background: #1D2E3D;
+        box-shadow: none;
+        border-radius: 0px;
+        color: #ccc;
+      }
+    }
+  }
+  .form-actions {
+    padding: 15px;
+    .btn {
+      border: none;
+      border-radius: 1px;
+    }
+    .btn-default {
+      &:hover {
+        background-color: $gray-light;
+        color: $gray-dark;
+      }
+      background-color: $gray-lighter;
+    }
+  }
+}
+
+
+
+i.pantheon {
+  @include provider-pic('pantheon');
+}

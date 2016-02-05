@@ -7,23 +7,33 @@
     </div>
   </div>
   <div class="row" ui-view>
-    <div class="col-xs-12 bootcards-list">
-      <ul class="nav navmenu-nav list-group">
-        <li class="provider list-group-item" ng-repeat="provider in ui.providers" ng-class="{'provider-reauth': !provider.authorized()}"><a ng-href="" ng-bind="provider.displayName" provider-click></a>
-          <div ng-if="provider.refreshing" class="alert alert-warning" role="alert"><i class="fa fa-spinner fa-spin"></i> Waiting for sites to load...</div>
-          <form ng-hide="!provider.sites.length" class="form-inline">
-            <div class="form-group">
-              <label class="sr-only" for="siteAvailableSearch">Site search</label>
-              <input type="search" ng-model="siteAvailableSearch" class="form-control" id="siteAvailableSearch" placeholder="Type site name">
-            </div>
-          </form>
-          <div class="bootcards-list">
-            <ul class="list-group">
-              <li ng-repeat="site in provider.sites | filter:siteAvailableSearch" class="site list-group-item" site-add>{{site.name}}</li>
-            </ul>
+    <h4>Add Account</h4>
+    <ul class="nav navmenu-nav">
+      <li class="provider integration" ng-repeat="provider in ui.providers | filter : { username : '!' }" ng-controller="ProviderCtrl" ng-class="providerClasses(provider)">
+        <a ng-href="" ng-bind="provider.displayName" provider-click></a>
+        <i ng-class="provider.name"></i>
+      </li>
+    </ul>
+    <h4>Existing Accounts</h4>
+    <ul class="nav navmenu-nav">
+      <li class="provider" ng-repeat="provider in ui.providers | filter : { username : '!!' }" ng-class="providerClasses(provider)" ng-controller="ProviderCtrl">
+        <a ng-href="" ng-bind="provider.displayName" provider-click></a>
+        <i ng-class="provider.name"></i>
+        <div ng-if="provider.refreshing" class="alert alert-warning" role="alert">
+          <i class="fa fa-spinner fa-spin"></i> Waiting for sites to load...
+        </div>
+        <form ng-hide="!provider.sites.length" class="form-inline">
+          <div class="form-group">
+            <label class="sr-only" for="siteAvailableSearch">Site search</label>
+            <input type="search" ng-model="siteAvailableSearch" class="form-control" id="siteAvailableSearch" placeholder="Type site name">
           </div>
-        </li>
-      </ul>
-    </div>
+        </form>
+        <div class="">
+          <ul class="">
+            <li ng-repeat="site in provider.sites | filter:siteAvailableSearch" class="site" site-add>{{site.name}}</li>
+          </ul>
+        </div>
+      </li>
+    </ul>
   </div>
 </div>

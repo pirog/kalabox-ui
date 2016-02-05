@@ -10,7 +10,7 @@ angular.module('kalabox.sidebar', [
 .config(function($stateProvider) {
   $stateProvider.state('dashboard.sidebar', {
     url: '/dashboard/sidebar',
-    templateUrl: 'modules/sidebar/sidebar.html.tmpl',
+    templateUrl: 'modules/sidebar/sidebar.html.tmpl'
   })
   .state('dashboard.sidebar.provider-auth', {
     url: '/dashboard/sidebar/provider-auth/{provider:json}',
@@ -19,19 +19,31 @@ angular.module('kalabox.sidebar', [
   });
 })
 .controller(
+  'ProviderCtrl',
+  function($scope) {
+    $scope.providerClasses = function() {
+      var providerClasses = !$scope.provider.authorized() ?
+        'provider-reauth ' : '';
+      providerClasses = providerClasses + $scope.provider.name;
+      return providerClasses;
+    };
+  }
+)
+.controller(
   'ProviderAuth',
   function($scope, kbox, _, guiEngine, $state, $stateParams) {
-    console.log($stateParams.provider, $stateParams.provider.name);
+    $scope.provider = $stateParams.provider;
+
     guiEngine.try(function() {
       $scope.errorMessage = false;
       // Auth on submission.
       $scope.ok = function(email, password) {
         return kbox.then(function(kbox) {
 
-          var provider = $stateParams.provider.name;
+          var provider = $scope.provider.name;
           var integration = kbox.integrations.get(provider);
           var auth = integration.auth();
-          $scope.provider = $stateParams.provider;
+
           auth.on('ask', function(questions) {
             _.each(questions, function(question) {
               if (question.id === 'username') {
@@ -62,9 +74,6 @@ angular.module('kalabox.sidebar', [
             throw err;
           });
         });
-      };
-      $scope.cancel = function() {
-        $state.go('dashboard.sidebar', {}, {location: false});
       };
     });
 

@@ -333,7 +333,7 @@ module.exports = {
       files: [
         '<%= appFiles.atpl %>'
      ],
-      tasks: ['html2js']
+      tasks: ['html2js:app']
     },
 
     /**

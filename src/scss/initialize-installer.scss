@@ -3,7 +3,7 @@ body.installer {
   margin: 0;
   padding: 0;
   text-align: center;
-  background:#15212C;
+  background:$dark-bg;
   -webkit-animation: bgChange 300s linear infinite;
    -moz-animation: bgChange 300s linear infinite;
      -o-animation: bgChange 300s linear infinite;
@@ -136,18 +136,18 @@ body.installer {
 
 /* Standard syntax */
 @keyframes bgChange{
-  0% {background:#15212C;}
+  0% {background:$dark-bg;}
   50% {background: white;}
-  100% {background:#15212C;}
+  100% {background:$dark-bg;}
 }
 
 /* Chrome, Safari, Opera */
 @-webkit-keyframes bgChange{
-  0% {background:#15212C;}
+  0% {background:$dark-bg;}
   25% {background:skyblue;}
   50% {background:white;}
   75% {background:skyblue;}
-  100% {background:#15212C;}
+  100% {background:$dark-bg;}
 }
 
 @keyframes headerChange{
