@@ -29,7 +29,7 @@
     text-transform: uppercase;
     padding-right: 15px;
   }
-  li.provider {
+  li {
     &.integration a{
       text-transform: capitalize;
     }
@@ -44,7 +44,24 @@
       vertical-align: middle;
       display: inline-block;
       padding: 10px 0px;
+      color: #777;
     }
+  }
+
+  li > ul > li {
+    background-color: $dark-bg;
+    list-style: none;
+    &:hover {
+      background-color: #23374A;
+    }
+    .loader {
+      margin-top: 0px;
+    }
+    a {
+      padding: 10px 20px;
+      text-decoration: none;
+    }
+
   }
   form {
     padding: 15px;

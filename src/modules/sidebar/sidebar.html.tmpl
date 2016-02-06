@@ -19,8 +19,15 @@
       <li class="provider" ng-repeat="provider in ui.providers | filter : { username : '!!' }" ng-class="providerClasses(provider)" ng-controller="ProviderCtrl">
         <a ng-href="" ng-bind="provider.displayName" provider-click></a>
         <i ng-class="provider.name"></i>
-        <div ng-if="provider.refreshing" class="alert alert-warning" role="alert">
-          <i class="fa fa-spinner fa-spin"></i> Waiting for sites to load...
+        <div ng-if="provider.refreshing" class="loader">
+          <div class="loader-inner line-scale">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <h4>Refreshing site list</h4>
         </div>
         <form ng-hide="!provider.sites.length" class="form-inline">
           <div class="form-group">
@@ -29,7 +36,9 @@
           </div>
         </form>
         <ul class="sites">
-          <li ng-repeat="site in provider.sites | filter:siteAvailableSearch" class="site" site-add>{{site.name}}</li>
+          <li ng-repeat="site in provider.sites | filter:siteAvailableSearch" class="new-site">
+            <a href="" site-add>{{site.name}}</a>
+          </li>
         </ul>
       </li>
     </ul>
