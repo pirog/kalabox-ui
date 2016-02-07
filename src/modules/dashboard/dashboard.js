@@ -190,8 +190,23 @@ angular.module('kalabox.dashboard', [
   guiEngine.loop.add({interval: 1 * 60 * 1000}, function() {
     return sites.get()
     .then(function(sites) {
-      $scope.ui.sites = sites;
+      $scope.$applyAsync(function() {
+        $scope.ui.sites = sites;
+      });
     });
+  });
+
+  // Poll sites when they need to be refreshed.
+  guiEngine.loop.add({interval: 0.3 * 1000}, function() {
+    if (sites.needsRefresh()) {
+      sites.resetNeedsRefresh();
+      return sites.get()
+      .then(function(sites) {
+        $scope.$applyAsync(function() {
+          $scope.ui.sites = sites;
+        });
+      });
+    }
   });
 
   // Poll site states.
