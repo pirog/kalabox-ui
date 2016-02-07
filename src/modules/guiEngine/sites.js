@@ -269,7 +269,7 @@ angular.module('kalabox.sites', [])
 /*
  * Object for getting a cached list of site instances.
  */
-.factory('sites', function(kbox, Site, placeHolders, _, $window, $q) {
+.factory('sites', function(kbox, Site, placeHolders, _) {
   var refreshFlag = true;
   return {
     // Returns true if list of sites should be refreshed.
