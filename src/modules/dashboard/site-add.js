@@ -21,7 +21,8 @@ angular.module('kalabox.dashboard')
 })
 .controller(
   'SiteAddModal',
-  function($scope, $q, $uibModalInstance, kbox, _, modalData, guiEngine, sites) {
+  function($scope, $q, $uibModalInstance, kbox, _, modalData, guiEngine,
+    sites) {
 
     guiEngine.try(function() {
       // Set provider.

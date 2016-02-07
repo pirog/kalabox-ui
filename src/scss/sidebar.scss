@@ -14,7 +14,6 @@
 #addSite{
   box-shadow: -5px 1px 3px rgba(0, 0, 0, 0.12), -1px 1px 2px rgba(0, 0, 0, 0.24);
   border: none;
-  background-color: $dark-bg;
   color: $gray-lightest;
   width: 280px;
   text-align: right;
@@ -29,40 +28,49 @@
     text-transform: uppercase;
     padding-right: 15px;
   }
+  ul.providers-next {
+
+  }
+  ul.providers-existing {
+    li a {
+      padding: 10px 10px;
+      margin-right: -10px;
+    }
+  }
   li {
     &.integration a{
       text-transform: capitalize;
-    }
-    &:hover {
-      background-color: #23374A;
-      cursor: pointer;
-      a {
-        color: $gray-lightest;
-      }
     }
     a {
       vertical-align: middle;
       display: inline-block;
       padding: 10px 0px;
-      color: #777;
-    }
-  }
-
-  li > ul > li {
-    background-color: $dark-bg;
-    list-style: none;
-    &:hover {
-      background-color: #23374A;
     }
     .loader {
       margin-top: 0px;
+      display: inline-block;
+      vertical-align: middle;
+      padding: 10px 0px;
+      div {
+        vertical-align: middle;
+        margin-left: 10px;
+        margin-right: 15px;
+      }
+      span {
+        vertical-align: middle;
+      }
     }
+  }
+
+  ul.providers-existing > li > ul > li {
     a {
       padding: 10px 20px;
-      text-decoration: none;
+      margin-right: 0px;
+      text-align: right;
     }
-
+    text-align: right;
   }
+
   form {
     padding: 15px;
     .form-group {
