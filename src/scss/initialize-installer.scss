@@ -1,13 +1,51 @@
-
-body.installer {
+body.installer, body.initialize {
+  width: 700px;
+  height: 520px;
+  overflow: hidden;
   margin: 0;
   padding: 0;
   text-align: center;
   background:$dark-bg;
+}
+
+body.installer {
   -webkit-animation: bgChange 300s linear infinite;
    -moz-animation: bgChange 300s linear infinite;
      -o-animation: bgChange 300s linear infinite;
         animation: bgChange 300s linear infinite;
+  h1 {
+    -webkit-animation: headerChange 300s linear infinite;
+     -moz-animation: headerChange 300s linear infinite;
+       -o-animation: headerChange 300s linear infinite;
+          animation: headerChange 300s linear infinite;
+  }
+
+  h2 {
+    -webkit-animation: subHeaderChange 300s linear infinite;
+     -moz-animation: subHeaderChange 300s linear infinite;
+       -o-animation: subHeaderChange 300s linear infinite;
+          animation: subHeaderChange 300s linear infinite;
+  }
+}
+
+body.initialize {
+  -webkit-animation: bgChange 60s linear infinite;
+   -moz-animation: bgChange 60s linear infinite;
+     -o-animation: bgChange 60s linear infinite;
+        animation: bgChange 60s linear infinite;
+  h1 {
+    -webkit-animation: headerChange 60s linear infinite;
+     -moz-animation: headerChange 60s linear infinite;
+       -o-animation: headerChange 60s linear infinite;
+          animation: headerChange 60s linear infinite;
+  }
+
+  h2 {
+    -webkit-animation: subHeaderChange 60s linear infinite;
+     -moz-animation: subHeaderChange 60s linear infinite;
+       -o-animation: subHeaderChange 60s linear infinite;
+          animation: subHeaderChange 60s linear infinite;
+  }
 }
 
 .initialize, .install {
@@ -28,10 +66,6 @@ body.installer {
     font-weight: 500;
     font-size: $font-size-h2;
     color: #4295D1;
-    -webkit-animation: headerChange 300s linear infinite;
-     -moz-animation: headerChange 300s linear infinite;
-       -o-animation: headerChange 300s linear infinite;
-          animation: headerChange 300s linear infinite;
   }
 
   h2 {
@@ -41,10 +75,6 @@ body.installer {
     transition: opacity .25s ease-in-out;
     margin: 10px 0px;
     color: $gray-light;
-    -webkit-animation: subHeaderChange 300s linear infinite;
-     -moz-animation: subHeaderChange 300s linear infinite;
-       -o-animation: subHeaderChange 300s linear infinite;
-          animation: subHeaderChange 300s linear infinite;
   }
   .detail {
     color: $gray;
