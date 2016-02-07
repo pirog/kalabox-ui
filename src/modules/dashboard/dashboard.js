@@ -75,20 +75,23 @@ angular.module('kalabox.dashboard', [
     link: function($scope, element) {
       element.on('click', function() {
         guiEngine.try(function() {
+          // Get reference to nw gui.
           var gui = require('nw.gui');
+          // Open folder in os' default file browser.
           gui.Shell.openExternal($scope.site.url);
         });
       });
     }
   };
 })
-.directive('siteCode', function(terminal, guiEngine) {
+.directive('siteCode', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
         guiEngine.try(function() {
-          terminal.open($scope.site.codeFolder);
+          var gui = require('nw.gui');
+          gui.Shell.openItem($scope.site.codeFolder);
         });
       });
     }
