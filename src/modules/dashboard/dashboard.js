@@ -258,7 +258,8 @@ angular.module('kalabox.dashboard', [
   };
   $scope.currentActionName = function() {
     if ($scope.site.currentAction) {
-      var actions = {stop: 'Stopping', start: 'Starting', 'delete': 'Deleting'};
+      var actions = {stop: 'Stopping', start: 'Starting', 'delete': 'Deleting',
+      pull: 'Pulling', push: 'Pushing', add: 'Installing'};
       return actions[$scope.site.currentAction];
     }
     return false;
