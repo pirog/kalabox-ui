@@ -115,6 +115,9 @@ angular.module('kalabox.dashboard', [
     jobs: []
   };
 
+  $scope.isModalOpen = false;
+  $scope.errorCount = 0;
+
   $rootScope.providers = [];
 
   // Modal creator.
@@ -198,13 +201,23 @@ angular.module('kalabox.dashboard', [
     $scope.ui.errors = guiEngine.errors.list();
   });
 
-  if ($scope.ui.errors) {
-    $scope.open(
-      'modules/dashboard/error-modal.html.tmpl',
-      'ErrorModal',
-      {errors: $scope.ui.errors, parentScope: $scope}
-    );
-  }
+  // Open error modal.
+  guiEngine.loop.add({interval: 0.3 * 1000}, function() {
+    // If we have new errors and modal isn't already open.
+    if ($scope.ui.errors.length > $scope.errorCount && !$scope.isModalOpen) {
+      // Open modal.
+      $scope.isModalOpen = true;
+      $scope.open(
+        'modules/dashboard/error-modal.html.tmpl',
+        'ErrorModal',
+        {errors: $scope.ui.errors, parentScope: $scope}
+      ).result.then(function() {
+        // After modal is closed, set the error count.
+        $scope.isModalOpen = false;
+        $scope.errorCount = $scope.ui.errors.length;
+      });
+    }
+  });
 
 })
 .controller(
@@ -213,7 +226,6 @@ angular.module('kalabox.dashboard', [
 
   $scope.errors = modalData.errors;
   $scope.ok = function() {
-    modalData.parentScope.ui.errors = [];
     $uibModalInstance.close();
   };
 })
