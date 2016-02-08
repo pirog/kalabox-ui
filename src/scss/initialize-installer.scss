@@ -1,4 +1,4 @@
-body.installer, body.initialize {
+body.installer, body.initialize, body.dashboard-shutdown {
   width: 700px;
   height: 520px;
   overflow: hidden;
@@ -48,7 +48,28 @@ body.initialize {
   }
 }
 
-.initialize, .install {
+body.dashboard-shutdown {
+  background: $body-bg;
+  -webkit-animation: bgChangeInverted 60s linear infinite;
+   -moz-animation: bgChangeInverted 60s linear infinite;
+     -o-animation: bgChangeInverted 60s linear infinite;
+        animation: bgChangeInverted 60s linear infinite;
+  h1 {
+    -webkit-animation: headerChangeInverted 60s linear infinite;
+     -moz-animation: headerChangeInverted 60s linear infinite;
+       -o-animation: headerChangeInverted 60s linear infinite;
+          animation: headerChangeInverted 60s linear infinite;
+  }
+  h2 {
+    -webkit-animation: subHeaderChangeInverted 60s linear infinite;
+     -moz-animation: subHeaderChangeInverted 60s linear infinite;
+       -o-animation: subHeaderChangeInverted 60s linear infinite;
+          animation: subHeaderChangeInverted 60s linear infinite;
+  }
+
+}
+
+.initialize, .install, .shutdown {
   text-align: center;
   margin: 80px 0px;
 
@@ -164,51 +185,44 @@ body.initialize {
   }
 }
 
-/* Standard syntax */
-@keyframes bgChange{
-  0% {background:$dark-bg;}
-  50% {background: white;}
-  100% {background:$dark-bg;}
+@mixin bgChange-keyframes($name, $startColor, $middleColor, $endColor) {
+  @keyframes #{$name} {
+    0% {background-color:$startColor;}
+    50% {background-color:$endColor;}
+    100% {background-color:$startColor;}
+  }
+
+  @-webkit-keyframes #{$name} {
+    0% {background-color:$startColor;}
+    25% {background-color:$middleColor;}
+    50% {background-color:$endColor;}
+    75% {background-color:$middleColor;}
+    100% {background-color:$startColor;}
+  }
 }
 
-/* Chrome, Safari, Opera */
-@-webkit-keyframes bgChange{
-  0% {background:$dark-bg;}
-  25% {background:skyblue;}
-  50% {background:white;}
-  75% {background:skyblue;}
-  100% {background:$dark-bg;}
+@mixin colorChange-keyframes($name, $startColor, $middleColor, $endColor) {
+  @keyframes #{$name} {
+    0% {color:$startColor;}
+    50% {color:$endColor;}
+    100% {color:$startColor;}
+  }
+
+  @-webkit-keyframes #{$name} {
+    0% {color:$startColor;}
+    25% {color:$middleColor;}
+    50% {color:$middleColor;}
+    75% {color:$middleColor;}
+    100% {color:$startColor;}
+  }
 }
 
-@keyframes headerChange{
-  0% {color:#9ECBEA;}
-  50% {color: #4295D1;}
-  100% {color:#9ECBEA;}
-}
-
-/* Chrome, Safari, Opera */
-@-webkit-keyframes headerChange{
-  0% {color:#9ECBEA;}
-  25% {color:#4295D1;}
-  50% {color:#4295D1;}
-  75% {color:#4295D1;}
-  100% {color:#9ECBEA;}
-}
-
-@keyframes subHeaderChange{
-  0% {color:$gray-lighter;}
-  50% {color:$gray-light;}
-  100% {color:$gray-lighter;}
-}
-
-/* Chrome, Safari, Opera */
-@-webkit-keyframes subHeaderChange{
-  0% {color:$gray-lighter;}
-  25% {color:$gray-light;}
-  50% {color:$gray-light;}
-  75% {color:$gray-light;}
-  100% {color:$gray-lighter;}
-}
+@include bgChange-keyframes(bgChange, $dark-bg, skyblue, white);
+@include bgChange-keyframes(bgChangeInverted, white, skyblue, $dark-bg);
+@include colorChange-keyframes(headerChange, #9ECBEA, #4295D1, #9ECBEA);
+@include colorChange-keyframes(subHeaderChange, $gray-lighter, $gray-light, $gray-lighter);
+@include colorChange-keyframes(headerChangeInverted, #4295D1, #9ECBEA, #4295D1);
+@include colorChange-keyframes(subHeaderChangeInverted, $gray-light, $gray-lighter, $gray-light);
 
 .theSun {
   width:100px;

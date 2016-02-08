@@ -14,7 +14,7 @@ angular.module('kalabox.sidebar', [
   })
   .state('dashboard.sidebar.provider-auth', {
     url: '/dashboard/sidebar/provider-auth/{provider:json}',
-    templateUrl: 'modules/dashboard/provider-auth.html.tmpl',
+    templateUrl: 'modules/sidebar/provider-auth.html.tmpl',
     controller: 'ProviderAuth'
   });
 })

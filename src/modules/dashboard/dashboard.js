@@ -14,7 +14,16 @@ angular.module('kalabox.dashboard', [
       '': {
         controller: 'DashboardCtrl',
         templateUrl: 'modules/dashboard/dashboard.html.tmpl'
-      },
+      }
+    }
+  })
+  .state('dashboard.shutdown', {
+    url: '/dashboard/shutdown/{winVar:json}',
+    views: {
+      '@': {
+        templateUrl: 'modules/dashboard/shutdown.html.tmpl',
+        controller: 'ShutdownCtrl'
+      }
     }
   });
 })
@@ -120,7 +129,7 @@ angular.module('kalabox.dashboard', [
 .controller(
   'DashboardCtrl',
   function($scope, $uibModal, $timeout, $interval, $q, kbox,
-    sites, providers, siteStates, _, guiEngine) {
+    sites, providers, siteStates, _, guiEngine, $state) {
 
   //Init ui model.
   $scope.ui = {
@@ -152,34 +161,8 @@ angular.module('kalabox.dashboard', [
     var win = require('nw.gui').Window.get();
     // Hook into the gui window closing event.
     win.on('close', function() {
-
-      var self = this;
-
-      // Open a modal window to inform the user that app is shutting down.
-      $q.try(function() {
-        var shutdownModal = $scope.open(
-          'modules/dashboard/shutdown.html.tmpl',
-          'ShutdownModal',
-          {win: self}
-        );
-        shutdownModal.result.then(function(result) {
-          console.log('Shutdown ran', result);
-        });
-      });
-
-      // Stop the polling service.
-      guiEngine.loop.stop()
-      // Stop the engine.
-      .then(function() {
-        return kbox.then(function(kbox) {
-          return kbox.engine.down();
-        });
-      })
-      // Close.
-      .then(function() {
-        self.close(true);
-      });
-
+      // Open a new state to inform the user that app is shutting down.
+      $state.go('dashboard.shutdown', {winVar: win}, {location: false});
     });
   });
 
@@ -266,14 +249,21 @@ angular.module('kalabox.dashboard', [
   };
 })
 .controller(
-  'ShutdownModal',
-  function($scope, $q, $uibModalInstance, kbox, _, modalData, guiEngine) {
+  'ShutdownCtrl',
+  function($scope, $q, kbox, _, guiEngine, $stateParams) {
+    var win = $stateParams.winVar;
+    console.log($stateParams.winVar);
 
-    guiEngine.try(function() {
-      $scope.ok = function() {
-        modalData.win.close(true);
-      };
+    // Stop the polling service.
+    guiEngine.stop()
+    // Close.
+    .then(function() {
+      console.log('Shutdown ran');
+      win.close(true);
     });
 
+    $scope.ok = function(win) {
+      win.close(true);
+    };
   }
 );
