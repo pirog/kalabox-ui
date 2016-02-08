@@ -1,4 +1,5 @@
-<nav ui-view="platforms" id="addSite" class="navmenu navmenu-default navmenu-fixed-right offcanvas">
+<nav id="addSite" class="navmenu navmenu-default navmenu-fixed-right navmenu-inverse offcanvas">
+  <div ui-view></div>
 </nav>
 
 <div class="container">
@@ -15,7 +16,7 @@
       </form>
     </div>
     <div class="col-xs-3">
-      <a href="" class="btn btn-primary" data-toggle="offcanvas" data-target="#addSite">Add Site</a>
+      <a href="" ui-sref='dashboard.sidebar' ui-sref-opts='{location: false}' class="btn btn-primary" data-toggle="offcanvas" data-target="#addSite" data-autohide="false">Add Site</a>
     </div>
   </div>
   <div class="sites row">

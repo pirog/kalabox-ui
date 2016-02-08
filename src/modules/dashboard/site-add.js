@@ -21,7 +21,8 @@ angular.module('kalabox.dashboard')
 })
 .controller(
   'SiteAddModal',
-  function($scope, $q, $modalInstance, kbox, _, modalData, guiEngine, sites) {
+  function($scope, $q, $uibModalInstance, kbox, _, modalData, guiEngine,
+    sites) {
 
     guiEngine.try(function() {
       // Set provider.
@@ -45,7 +46,7 @@ angular.module('kalabox.dashboard')
           });
 
           // Close the modal.
-          $modalInstance.close();
+          $uibModalInstance.close();
 
         });
       };

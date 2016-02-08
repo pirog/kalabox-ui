@@ -13,7 +13,9 @@ angular.module('kalabox.sites', [])
     this.url = opts.url;
     this.folder = opts.folder;
     this.codeFolder = opts.codeFolder;
-    this.image = path.join(opts.folder, 'screenshot.png');
+    this.image = opts.folder ?
+      path.join(opts.folder, 'screenshot.png') :
+      opts.image;
     this.providerName = 'pantheon';
     this.providerInfo = opts.providerInfo;
     this.framework = opts.providerInfo.framework;
@@ -178,6 +180,22 @@ angular.module('kalabox.sites', [])
     });
   };
 
+  Site.fromPlaceHolder = function(opts) {
+    var site = new Site({
+      name: opts.name,
+      url: null,
+      folder: null,
+      codeFolder: null,
+      image: 'images/kalabox/screenshot.png',
+      providerInfo: {
+        framework: 'drupal'
+      }
+    });
+    site.currentAction = 'start';
+    site.isPlaceHolder = true;
+    return site;
+  };
+
   /*
    * Static function for adding a site.
    */
@@ -214,16 +232,70 @@ angular.module('kalabox.sites', [])
   return Site;
 
 })
+.factory('placeHolders', function(_, $q) {
+
+  var singleton = {};
+
+  return {
+    add: function(opts) {
+      singleton[opts.name] = opts;
+    },
+    remove: function(name) {
+      return this.get(name)
+      .then(function(exists) {
+        if (exists) {
+          delete singleton[name];
+        }
+      });
+    },
+    get: function(name) {
+      var sites = _.reduce(singleton, function(acc, elt) {
+        acc.push(elt);
+        return acc;
+      }, []);
+      return $q.try(function() {
+        if (name) {
+          return _.find(sites, function(site) {
+            return site.name === name;
+          });
+        } else {
+          return sites;
+        }
+      });
+    }
+  };
+
+})
 /*
  * Object for getting a cached list of site instances.
  */
-.factory('sites', function(kbox, Site) {
+.factory('sites', function(kbox, Site, placeHolders, _) {
+  var refreshFlag = true;
   return {
-    add: Site.add,
+    // Returns true if list of sites should be refreshed.
+    needsRefresh: function() {
+      return refreshFlag;
+    },
+    // Resets the needs refresh flag.
+    resetNeedsRefresh: function() {
+      refreshFlag = false;
+    },
+    // Add a site.
+    add: function(opts) {
+      // Add a placeholder site so the user see it right away.
+      placeHolders.add({
+        name: opts.name
+      });
+      // Set refresh flag.
+      refreshFlag = true;
+      // Add site.
+      return Site.add(opts);
+    },
     get: function(name) {
       return kbox.then(function(kbox) {
+
         // Get list of apps.
-        return kbox.app.list()
+        var sites = kbox.app.list()
         // Only include apps with installed containers.
         .filter(function(/*app*/) {
           return true;
@@ -231,6 +303,37 @@ angular.module('kalabox.sites', [])
         })
         // Map to sites.
         .map(Site.fromApp);
+
+        // Get list of place holder sites.
+        var placeHolderSites = sites.then(function(sites) {
+          return placeHolders.get()
+          .map(Site.fromPlaceHolder)
+          .filter(function(placeHolder) {
+            return !_.find(sites, function(site) {
+              var filterOut = placeHolder.name === site.name;
+              if (filterOut) {
+                site.currentAction = placeHolder.currentAction;
+                placeHolders.remove(site.name);
+              }
+              return filterOut;
+            });
+          });
+        });
+
+        // Concat sites and place holder sites.
+        return kbox.Promise.join(
+          sites,
+          placeHolderSites,
+          function(sites, placeHolderSites) {
+            return _.flatten([sites, placeHolderSites]);
+          })
+        // Sort sites by site names.
+        .then(function(sites) {
+          return _.sortBy(sites, function(site) {
+            return site.name;
+          });
+        });
+
       })
       .then(function(sites) {
         return name ? sites[name] : sites;

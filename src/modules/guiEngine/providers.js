@@ -19,7 +19,7 @@ angular.module('kalabox.dashboard')
     this.sites = [];
     this.refreshing = false;
     this.displayName = this.username ?
-      this.name + '(' + this.username + ')' :
+      this.username :
       this.name;
 
   }

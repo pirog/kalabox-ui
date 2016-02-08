@@ -77,7 +77,8 @@ module.exports = {
       vendorDir + 'jasny-bootstrap/dist/js/jasny-bootstrap.min.js'
     ],
     css: [
-      'src/lib/vendor/font-awesome/css/font-awesome.min.css'
+      'src/lib/vendor/font-awesome/css/font-awesome.min.css',
+      'src/lib/vendor/loaders.css/loaders.min.css'
     ],
     assets: [
       'src/lib/vendor/font-awesome/fonts/fontawesome-webfont.woff'

@@ -22,13 +22,13 @@ angular.module('kalabox.dashboard')
 })
 .controller(
   'SitePushModal',
-  function($scope, $modalInstance, _, modalData, guiEngine) {
+  function($scope, $uibModalInstance, _, modalData, guiEngine) {
 
     guiEngine.try(function() {
       $scope.errorMessage = false;
       $scope.ok = function(message, database, files) {
         guiEngine.try(function() {
-          $modalInstance.close();
+          $uibModalInstance.close();
           var site = modalData.site;
           return site.push({
             message: message || 'No commit message was given',
@@ -38,7 +38,7 @@ angular.module('kalabox.dashboard')
         });
       };
       $scope.cancel = function() {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.close();
       };
     });
   }

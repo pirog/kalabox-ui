@@ -1,9 +1,10 @@
 /* Copyright 2013 Kalamuna LLC */
-//@import "_customVariables.scss";
 @import "../lib/vendor/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+@import "_customVariables.scss";
 @import "../lib/vendor/jasny-bootstrap/scss/jasny-bootstrap.scss";
 @import "initialize-installer.scss";
 @import "dashboard.scss";
+@import "sidebar.scss";
 @import "site.scss";
 @import "notifications.scss";
 @import "start.scss";

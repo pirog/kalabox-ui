@@ -4,7 +4,8 @@ angular.module('kalabox.dashboard', [
   'ui.router',
   'ui.bootstrap',
   'kalabox.nodewrappers',
-  'kalabox.guiEngine'
+  'kalabox.guiEngine',
+  'kalabox.sidebar'
 ])
 .config(function($stateProvider) {
   $stateProvider.state('dashboard', {
@@ -13,10 +14,15 @@ angular.module('kalabox.dashboard', [
       '': {
         controller: 'DashboardCtrl',
         templateUrl: 'modules/dashboard/dashboard.html.tmpl'
-      },
-      'platforms@dashboard': {
-        controller: 'DashboardCtrl',
-        templateUrl: 'modules/dashboard/platforms.html.tmpl'
+      }
+    }
+  })
+  .state('dashboard.shutdown', {
+    url: '/dashboard/shutdown/{winVar:json}',
+    views: {
+      '@': {
+        templateUrl: 'modules/dashboard/shutdown.html.tmpl',
+        controller: 'ShutdownCtrl'
       }
     }
   });
@@ -97,33 +103,10 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('providerClick', function(guiEngine) {
-  return {
-    scope: true,
-    link: function($scope, element) {
-      element.on('click', function() {
-        guiEngine.try(function() {
-          if ($scope.provider.authorized()) {
-            $scope.provider.refresh();
-          } else {
-            var authModal = $scope.open(
-              'modules/dashboard/auth-modal.html.tmpl',
-              'AuthModal',
-              {
-                provider: $scope.provider
-              }
-            );
-            return authModal.result;
-          }
-        });
-      });
-    }
-  };
-})
 .controller(
   'DashboardCtrl',
   function($scope, $uibModal, $timeout, $interval, $q, kbox,
-    sites, providers, siteStates, _, guiEngine, $rootScope) {
+    sites, providers, siteStates, _, guiEngine, $state, $rootScope) {
 
   //Init ui model.
   $scope.ui = {
@@ -156,28 +139,8 @@ angular.module('kalabox.dashboard', [
     var win = require('nw.gui').Window.get();
     // Hook into the gui window closing event.
     win.on('close', function() {
-
-      var self = this;
-
-      // Open a modal window to inform the user that app is shutting down.
-      $q.try(function() {
-        var shutdownModal = $scope.open(
-          'modules/dashboard/shutdown.html.tmpl',
-          'ShutdownModal',
-          {win: self}
-        );
-        shutdownModal.result.then(function(result) {
-          console.log('Shutdown ran', result);
-        });
-      });
-
-      // Stop the gui engine.
-      guiEngine.stop()
-      // Close.
-      .then(function() {
-        self.close(true);
-      });
-
+      // Open a new state to inform the user that app is shutting down.
+      $state.go('dashboard.shutdown', {winVar: win}, {location: false});
     });
   });
 
@@ -193,8 +156,23 @@ angular.module('kalabox.dashboard', [
   guiEngine.loop.add({interval: 1 * 60 * 1000}, function() {
     return sites.get()
     .then(function(sites) {
-      $scope.ui.sites = sites;
+      $scope.$applyAsync(function() {
+        $scope.ui.sites = sites;
+      });
     });
+  });
+
+  // Poll sites when they need to be refreshed.
+  guiEngine.loop.add({interval: 0.3 * 1000}, function() {
+    if (sites.needsRefresh()) {
+      sites.resetNeedsRefresh();
+      return sites.get()
+      .then(function(sites) {
+        $scope.$applyAsync(function() {
+          $scope.ui.sites = sites;
+        });
+      });
+    }
   });
 
   // Poll site states.
@@ -251,50 +229,29 @@ angular.module('kalabox.dashboard', [
   };
   $scope.currentActionName = function() {
     if ($scope.site.currentAction) {
-      var actions = {stop: 'Stopping', start: 'Starting', 'delete': 'Deleting'};
+      var actions = {stop: 'Stopping', start: 'Starting', 'delete': 'Deleting',
+      pull: 'Pulling', push: 'Pushing', add: 'Installing'};
       return actions[$scope.site.currentAction];
     }
     return false;
   };
 })
 .controller(
-  'AuthModal',
-  function($scope, $uibModalInstance, kbox, _, modalData, guiEngine,
-    providers, $rootScope) {
+  'ShutdownCtrl',
+  function($scope, $q, kbox, _, guiEngine, $stateParams) {
+    var win = $stateParams.winVar;
+    console.log($stateParams.winVar);
 
-    guiEngine.try(function() {
-      $scope.errorMessage = false;
-      // Auth on submission.
-      $scope.ok = function(email, password) {
-        return modalData.provider.authorize(email, password)
-        .then(function() {
-          $uibModalInstance.close({username: email});
-          return providers.get()
-          .then(function(providers) {
-            $rootScope.providers = providers;
-          });
-        })
-        .catch(function(err) {
-          $scope.errorMessage = 'Failed to validate: ' + err.message;
-          throw err;
-        });
-      };
-      $scope.cancel = function() {
-        $uibModalInstance.dismiss('cancel');
-      };
+    // Stop the polling service.
+    guiEngine.stop()
+    // Close.
+    .then(function() {
+      console.log('Shutdown ran');
+      win.close(true);
     });
 
-  }
-)
-.controller(
-  'ShutdownModal',
-  function($scope, $q, $uibModalInstance, kbox, _, modalData, guiEngine) {
-
-    guiEngine.try(function() {
-      $scope.ok = function() {
-        modalData.win.close(true);
-      };
-    });
-
+    $scope.ok = function(win) {
+      win.close(true);
+    };
   }
 );

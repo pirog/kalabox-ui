@@ -19,7 +19,7 @@ angular.module('kalabox', [
   // this'll be called on every state change in the app
   $scope.$on('$stateChangeSuccess', function(event, toState) {
     if (angular.isDefined(toState.name)) {
-      vm.bodyClasses = toState.name;
+      vm.bodyClasses = toState.name.replace(/\./g, '-');
       return;
     }
     vm.bodyClasses = 'default';
