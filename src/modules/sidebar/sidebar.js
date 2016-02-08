@@ -31,7 +31,8 @@ angular.module('kalabox.sidebar', [
 )
 .controller(
   'ProviderAuth',
-  function($scope, kbox, _, guiEngine, $state, $stateParams) {
+  function($scope, kbox, _, guiEngine, $state, $stateParams, providers,
+    $rootScope) {
     $scope.provider = $stateParams.provider;
     $scope.authorizing = false;
 
@@ -40,44 +41,27 @@ angular.module('kalabox.sidebar', [
       // Auth on submission.
       $scope.ok = function(email, password) {
         $scope.authorizing = true;
-        return kbox.then(function(kbox) {
-
-          var provider = $scope.provider.name;
-          var integration = kbox.integrations.get(provider);
-          var auth = integration.auth();
-
-          auth.on('ask', function(questions) {
-            _.each(questions, function(question) {
-              if (question.id === 'username') {
-                question.answer(email);
-              } else if (question.id === 'password') {
-                question.answer(password);
-              } else {
-                throw new Error(JSON.stringify(question, null, '  '));
-              }
-            });
+        // Authorize with provider.
+        return $scope.provider.authorize(email, password)
+        // Refresh providers.
+        .then(function() {
+          return providers.get()
+          .then(function(providers) {
+            $rootScope.providers = providers;
           });
-          return auth.run(email)
-          .then(function(result) {
-            if (result !== false) {
-              // Update provider on the scope.
-              $scope.provider.authorize(result.username);
-              $scope.provider.refresh();
-            } else {
-              throw new Error('Auth failed.');
-            }
-          })
-          .then(function() {
-            // Navigate back to main provider view.
-            $scope.authorizing = false;
-            $state.go('dashboard.sidebar', {}, {location: false});
-          })
-          .catch(function(err) {
-            $scope.authorizing = false;
-            $scope.errorMessage = 'Failed to validate: ' + err.message;
-            throw err;
-          });
+        })
+        // Navigate back to main provider view.
+        .then(function() {
+          $scope.authorizing = false;
+          $state.go('dashboard.sidebar', {}, {location: false});
+        })
+        // Handle errors.
+        .catch(function(err) {
+          $scope.authorizing = false;
+          $scope.errorMessage = 'Failed to validate: ' + err.message;
+          throw err;
         });
+
       };
     });
 
