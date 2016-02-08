@@ -69,11 +69,6 @@ var nwBuilder = function(platforms) {
         version: '0.12.3',
         platforms: [platform],
         buildDir: 'nw',
-        window: {
-          toolbar: false,
-          icon: './build/src/images/kalaboxv2-ico.png',
-          frame: false
-        },
         macIcns: './build/images/kalabox.icns'
         // @todo: Breaks mac build, see kalabox/kalabox#929
         //winIco: './build/images/kalabox.ico'
@@ -83,9 +78,9 @@ var nwBuilder = function(platforms) {
         './build/assets/**/*',
         './build/deps/iso/*',
         './build/deps/' + platform + '/*',
+        './build/deps/images/*',
         './build/images/**/*',
         './build/node_modules/**/*',
-        './build/scripts/*',
         './build/src/**/*'
       ]
     };
@@ -107,15 +102,7 @@ var npmBuildCmd = function() {
 
   // Normal CMDz
   cmd.push('cd ./<%= buildDir %>');
-
-  // If we aren't on windows we need the faux PTY stuff
-  if (process.platform === 'win32') {
-    cmd.push('npm install --production --ignore-script');
-  }
-  else {
-    cmd.push('chmod +x scripts/nw-child-pty-compile.sh');
-    cmd.push('npm install --production');
-  }
+  cmd.push('npm install --production --ignore-script');
 
   // Give up all the glory
   return cmd.join(' && ');

@@ -9,14 +9,14 @@
   <div class="row" ui-view>
     <h4>Add Account</h4>
     <ul class="nav navmenu-nav navmenu-inverse providers-next">
-      <li class="provider integration" ng-repeat="provider in ui.providers | filter : { username : '!' }" ng-controller="ProviderCtrl" ng-class="providerClasses(provider)">
+      <li class="provider integration" ng-repeat="provider in $root.providers | filter : { username : '!' }" ng-controller="ProviderCtrl" ng-class="providerClasses(provider)">
         <a ng-href="" ng-bind="provider.displayName" provider-click></a>
         <i ng-class="provider.name"></i>
       </li>
     </ul>
     <h4>Existing Accounts</h4>
     <ul class="nav navmenu-nav navmenu-inverse providers-existing">
-      <li class="provider" ng-repeat="provider in ui.providers | filter : { username : '!!' }" ng-class="providerClasses(provider)" ng-controller="ProviderCtrl" uib-dropdown auto-close="outsideClick">
+      <li class="provider" ng-repeat="provider in $root.providers | filter : { username : '!!' }" ng-class="providerClasses(provider)" ng-controller="ProviderCtrl" uib-dropdown auto-close="outsideClick">
         <a ng-href="" ng-bind="provider.displayName" class="dropdown-toggle" provider-click uib-dropdown-toggle></a>
         <i ng-class="provider.name"></i>
         <ul class="dropdown-menu navmenu-nav" role="menu" uib-dropdown-menu>

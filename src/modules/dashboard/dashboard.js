@@ -81,46 +81,23 @@ angular.module('kalabox.dashboard', [
     link: function($scope, element) {
       element.on('click', function() {
         guiEngine.try(function() {
+          // Get reference to nw gui.
           var gui = require('nw.gui');
+          // Open folder in os' default file browser.
           gui.Shell.openExternal($scope.site.url);
         });
       });
     }
   };
 })
-.directive('siteCode', function(terminal, guiEngine) {
+.directive('siteCode', function(guiEngine) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
         guiEngine.try(function() {
-          terminal.open($scope.site.codeFolder);
-        });
-      });
-    }
-  };
-})
-.directive('jobClear', function(guiEngine) {
-  return {
-    scope: true,
-    link: function($scope, element) {
-      element.on('click', function() {
-        guiEngine.try(function() {
-          return guiEngine.queue.clear($scope.job);
-        });
-      });
-    }
-  };
-})
-.directive('jobRetry', function(guiEngine) {
-  return {
-    scope: true,
-    link: function($scope, element) {
-      element.on('click', function() {
-        guiEngine.try(function() {
-          if ($scope.job.status === 'failed') {
-            return guiEngine.queue.retry($scope.job);
-          }
+          var gui = require('nw.gui');
+          gui.Shell.openItem($scope.site.codeFolder);
         });
       });
     }
@@ -129,15 +106,16 @@ angular.module('kalabox.dashboard', [
 .controller(
   'DashboardCtrl',
   function($scope, $uibModal, $timeout, $interval, $q, kbox,
-    sites, providers, siteStates, _, guiEngine, $state) {
+    sites, providers, siteStates, _, guiEngine, $state, $rootScope) {
 
   //Init ui model.
   $scope.ui = {
     sites: [],
     states: {},
-    jobs: [],
-    providers: []
+    jobs: []
   };
+
+  $rootScope.providers = [];
 
   // Modal creator.
   $scope.open = function(templateUrl, controllerName, data) {
@@ -170,7 +148,7 @@ angular.module('kalabox.dashboard', [
   guiEngine.try(function() {
     return providers.get()
     .then(function(providers) {
-      $scope.ui.providers = providers;
+      $rootScope.providers = providers;
     });
   });
 
@@ -178,8 +156,23 @@ angular.module('kalabox.dashboard', [
   guiEngine.loop.add({interval: 1 * 60 * 1000}, function() {
     return sites.get()
     .then(function(sites) {
-      $scope.ui.sites = sites;
+      $scope.$applyAsync(function() {
+        $scope.ui.sites = sites;
+      });
     });
+  });
+
+  // Poll sites when they need to be refreshed.
+  guiEngine.loop.add({interval: 0.3 * 1000}, function() {
+    if (sites.needsRefresh()) {
+      sites.resetNeedsRefresh();
+      return sites.get()
+      .then(function(sites) {
+        $scope.$applyAsync(function() {
+          $scope.ui.sites = sites;
+        });
+      });
+    }
   });
 
   // Poll site states.
@@ -198,11 +191,6 @@ angular.module('kalabox.dashboard', [
     .then(function(isUp) {
       $scope.ui.engineStatus = isUp;
     });
-  });
-
-  // Poll list of jobs.
-  guiEngine.loop.add({interval: 0.25 * 100}, function() {
-    $scope.ui.jobs = guiEngine.queue.jobs();
   });
 
   // Poll list of errors.
