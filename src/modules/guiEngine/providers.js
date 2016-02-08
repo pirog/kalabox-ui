@@ -34,8 +34,14 @@ angular.module('kalabox.dashboard')
   /*
    * Authorize provider with username.
    */
-  Provider.prototype.authorize = function(username) {
-    this.username = username;
+  Provider.prototype.authorize = function(username, password) {
+    var self = this;
+    var auth = self.integration.auth();
+    return auth.run(username, password)
+    .then(function() {
+      self.username = username;
+      return self.refresh();
+    });
   };
 
   /*

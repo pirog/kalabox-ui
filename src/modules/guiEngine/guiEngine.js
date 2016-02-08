@@ -15,7 +15,19 @@ angular.module('kalabox.guiEngine', [
     loop: recloopService,
     kbox: kbox,
     try: tryService,
-    queue: queueService
+    queue: queueService,
+    stop: function() {
+      return queueService.stop()
+      .then(function() {
+        return recloopService.stop();
+      })
+      // Stop the engine.
+      .then(function() {
+        return kbox.then(function(kbox) {
+          return kbox.engine.down();
+        });
+      });
+    }
   };
 })
 .factory('errorHandler', function() {

@@ -22,14 +22,6 @@ angular.module('kalabox.nodewrappers', [])
     .then(function() {
       $q.prototype.wrap = kbox.Promise.prototype.wrap;
     })
-    // Register pty dependency.
-    .then(function() {
-      return $q.try(function() {
-        var pty = require('child_pty');
-        kbox.core.deps.register('pty', pty);
-      })
-      .wrap('Error registering pty dependency.');
-    })
     .then(function() {
       return kbox;
     });
