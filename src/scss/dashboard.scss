@@ -11,7 +11,11 @@ img.logo { width: 50px; }
   font-weight: 800;
   font-size: 30px;
 }
-
+.overlay-active {
+  width: 700px;
+  height: 520px;
+  overflow: hidden;
+}
 #overlay {
   position: absolute;
   left: 0;
@@ -21,6 +25,9 @@ img.logo { width: 50px; }
   background: skyblue;
   z-index: 100;
   text-align: center;
+  width: 700px;
+  height: 520px;
+  overflow: hidden;
   h1, h2 {
     z-index: 110;
     display: inline-block;
