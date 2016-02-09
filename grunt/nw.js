@@ -102,10 +102,16 @@ var npmBuildCmd = function() {
 
   // Normal CMDz
   cmd.push('cd ./<%= buildDir %>');
-  cmd.push('npm install --production --ignore-script');
+  cmd.push('&&');
+  cmd.push('npm install');
+
+  // Allow non-production packages to be created
+  if (!grunt.option('dev')) {
+    cmd.push('--production');
+  }
 
   // Give up all the glory
-  return cmd.join(' && ');
+  return cmd.join(' ');
 
 };
 
