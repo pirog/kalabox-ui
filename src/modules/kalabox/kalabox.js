@@ -12,7 +12,7 @@ angular.module('kalabox', [
   'mwl.bluebird'
 ])
 .controller('AppController',
-  function($scope) {
+  function($scope, $window) {
   var vm = this;
   vm.bodyClasses = 'default';
 
@@ -23,6 +23,11 @@ angular.module('kalabox', [
       return;
     }
     vm.bodyClasses = 'default';
+  });
+  $window.addEventListener('keydown', function(event) {
+    if (event.keyIdentifier === 'F12') {
+      require('nw.gui').Window.get().showDevTools();
+    }
   });
 })
 // Override the default global error handler.
