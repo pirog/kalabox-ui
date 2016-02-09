@@ -64,14 +64,17 @@ angular.module('kalabox.sites', [])
    */
   Site.prototype.start = function() {
     var self = this;
-    return kbox.then(function(kbox) {
-      return kbox.app.get(self.name)
-      .tap(function(app) {
-        return kbox.setAppContext(app);
-      })
-      .then(function(app) {
-        self.currentAction = 'start';
-        return kbox.app.start(app);
+    // Run as a queued job.
+    return self.queue('Starting site: ' + self.name, function() {
+      return kbox.then(function(kbox) {
+        return kbox.app.get(self.name)
+        .tap(function(app) {
+          return kbox.setAppContext(app);
+        })
+        .then(function(app) {
+          //self.currentAction = 'start';
+          return kbox.app.start(app);
+        });
       });
     });
   };
@@ -81,14 +84,17 @@ angular.module('kalabox.sites', [])
    */
   Site.prototype.stop = function() {
     var self = this;
-    return kbox.then(function(kbox) {
-      return kbox.app.get(self.name)
-      .tap(function(app) {
-        return kbox.setAppContext(app);
-      })
-      .then(function(app) {
-        self.currentAction = 'stop';
-        return kbox.app.stop(app);
+    // Run as a queued job.
+    return self.queue('Stopping site: ' + self.name, function() {
+      return kbox.then(function(kbox) {
+        return kbox.app.get(self.name)
+        .tap(function(app) {
+          return kbox.setAppContext(app);
+        })
+        .then(function(app) {
+          //self.currentAction = 'stop';
+          return kbox.app.stop(app);
+        });
       });
     });
   };
@@ -99,7 +105,7 @@ angular.module('kalabox.sites', [])
   Site.prototype.pull = function(opts) {
     var self = this;
     // Run as a queued job.
-    return self.queue('Pull site: ' + self.name, function() {
+    return self.queue('Pulling site: ' + self.name, function() {
       // Get reference to job.
       var job = this;
       // Get kbox core library.
@@ -129,7 +135,7 @@ angular.module('kalabox.sites', [])
   Site.prototype.push = function(opts) {
     var self = this;
     // Run as a queued job.
-    return self.queue('Push site: ' + self.name, function() {
+    return self.queue('Pushing site: ' + self.name, function() {
       // Get reference to job.
       var job = this;
       // Get kbox core library.
@@ -157,14 +163,17 @@ angular.module('kalabox.sites', [])
    */
   Site.prototype.trash = function() {
     var self = this;
-    return kbox.then(function(kbox) {
-      return kbox.app.get(self.name)
-      .tap(function(app) {
-        return kbox.setAppContext(app);
-      })
-      .then(function(app) {
-        self.currentAction = 'delete';
-        return kbox.app.destroy(app);
+    // Run as a queued job.
+    return self.queue('Removing site: ' + self.name, function() {
+      return kbox.then(function(kbox) {
+        return kbox.app.get(self.name)
+        .tap(function(app) {
+          return kbox.setAppContext(app);
+        })
+        .then(function(app) {
+          self.currentAction = 'delete';
+          return kbox.app.destroy(app);
+        });
       });
     });
   };
@@ -201,7 +210,7 @@ angular.module('kalabox.sites', [])
    */
   Site.add = function(opts) {
     // Add job to queue.
-    return guiEngine.queue.add('Add site: ' + opts.site, function() {
+    return guiEngine.queue.add('Adding site: ' + opts.site, function() {
       return kbox.then(function(kbox) {
         // Make sure to delete app based dependencies.
         kbox.core.deps.remove('app');
