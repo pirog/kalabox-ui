@@ -256,19 +256,18 @@ angular.module('kalabox.dashboard', [
 .controller(
   'ShutdownCtrl',
   function($scope, $q, kbox, _, guiEngine, $stateParams) {
-    var win = $stateParams.winVar;
-    console.log($stateParams.winVar);
+    $scope.win = $stateParams.winVar;
 
     // Stop the polling service.
     guiEngine.stop()
     // Close.
     .then(function() {
       console.log('Shutdown ran');
-      win.close(true);
+      $scope.win.close(true);
     });
 
-    $scope.ok = function(win) {
-      win.close(true);
+    $scope.ok = function() {
+      $scope.win.close(true);
     };
   }
 );
