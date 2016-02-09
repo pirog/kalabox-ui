@@ -16,27 +16,26 @@
     "max_height": 520,
     "min_width": 700,
     "min_height": 520,
-    "position": "center",
-    "resizeable": "false",
+    "resizeable": false,
     "icon": "./src/images/kalaboxv2-ico.png"
   },
   "platformOverrides": {
     "osx": {
       "window": {
         "toolbar": false,
-        "frame": false
+        "frame": true
       }
     },
     "win": {
       "window": {
         "toolbar": false,
-        "frame": false
+        "frame": true
       }
     },
     "linux": {
       "window": {
         "toolbar": false,
-        "frame": false
+        "frame": true
       }
     }
   },
