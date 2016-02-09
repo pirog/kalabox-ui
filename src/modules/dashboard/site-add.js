@@ -50,6 +50,9 @@ angular.module('kalabox.dashboard')
 
         });
       };
+      $scope.cancel = function() {
+        $uibModalInstance.close();
+      };
     });
 
   }
