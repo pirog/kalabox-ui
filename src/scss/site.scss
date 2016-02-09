@@ -111,6 +111,7 @@
     height: 200px;
     overflow: hidden;
     opacity: .7;
+    cursor: pointer;
   }
   .site-info {
     h3 {
@@ -121,6 +122,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       text-align: center;
+      cursor: pointer;
     }
   .site-actions {
     margin: 10px;

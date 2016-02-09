@@ -7,7 +7,7 @@
     <div class="form-group">
       <label for="pullDatabase">Database</label>
       <select class="form-control" id="pullDatabase" placeholder="Database" ng-model="database" required>
-        <option label="validator" hidden></option>
+        <option label="-- Pull Database? --" hidden></option>
         <option ng-repeat="env in environments" value="{{env}}">{{env}}</option>
         <option value="true">YES</option>
         <option value="false">NO</option>
@@ -16,7 +16,7 @@
     <div class="form-group">
       <label for="pullFiles">Files</label>
       <select class="form-control" id="pullFiles" placeholder="Files" ng-model="files" required>
-        <option label="validator" hidden></option>
+        <option label="-- Pull Files? --" hidden></option>
         <option ng-repeat="env in environments" value="{{env}}">{{env}}</option>
         <option value="true">YES</option>
         <option value="false">NO</option>
