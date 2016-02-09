@@ -1,7 +1,19 @@
+<div ng-class="{'overlay-active': ui.currentJob}">
 <nav id="addSite" class="navmenu navmenu-default navmenu-fixed-right navmenu-inverse offcanvas">
   <div ui-view></div>
 </nav>
 
+<div id="overlay" ng-if="ui.currentJob" ng-class="ui.currentJob.action">
+  <h1 ng-bind="ui.currentJob.title"></h1>
+  <h2 class="random-message" ng-bind="ui.currentJob.message"></h2>
+  <div class="clouds">
+    <i id="cloud-light" class="cloud"></i>
+    <i id="cloud-white" class="cloud"></i>
+    <i id="cloud-gray" class="cloud"></i>
+    <i id="cloud-dark" class="cloud"></i>
+    <i id="cloud-front" class="cloud"></i>
+  </div>
+</div>
 <div class="container">
   <div class="row header">
     <div ng-if="ui.devMode" class="col-xs-12 dev-mode">
@@ -49,22 +61,9 @@
               </div>
             </div>
           </div>
-          <div ng-if="site.currentAction == 'start' || site.currentAction == 'stop' || site.currentAction == 'delete'" class="clouds">
-            <h2 class="loading" ng-bind="currentActionName()"></h2>
-            <i id="cloud-light" class="cloud"></i>
-            <i id="cloud-white" class="cloud"></i>
-            <i id="cloud-gray" class="cloud"></i>
-            <i id="cloud-dark" class="cloud"></i>
-            <i id="cloud-front" class="cloud"></i>
-          </div>
-          <div ng-if="site.currentAction == 'pull' || 'push'" class="push-pull" ng-class="site.currentAction">
-            <svg class="cloud-static" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 125" enable-background="new 0 0 100 100" xml:space="preserve"><path class="cloud-static-fill" fill-rule="evenodd" clip-rule="evenodd" d="M0.459,59.184c-0.693-15.077,14.074-24.961,25.259-20.155  c-0.892-11.649,7.097-18.909,18.089-20.643c9.496-1.499,17.488,3.687,21.674,12.396c9.281-11.316,30.533,0.967,21.792,15.494  c15.661,0.095,20.175,30.293-6.603,30.986H19.329c-10.422,0-18.87-9.272-18.87-17.559"/></svg>
-            <i ng-if="site.currentAction == 'pull'" class="fa fa-3 fa-arrow-down arrow"></i>
-            <i ng-if="site.currentAction == 'push'" class="fa fa-3 fa-arrow-up arrow"></i>
-            <h2 class="loading" ng-bind="currentActionName()"></h2>
-          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 </div>

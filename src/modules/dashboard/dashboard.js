@@ -39,17 +39,12 @@ angular.module('kalabox.dashboard', [
           // Query running state of site.
           return $scope.site.isRunning()
           .then(function(isRunning) {
-            var name = $scope.site.name;
             if (isRunning) {
               // Stop site.
-              guiEngine.queue.add('Stop Site: ' + name, function() {
-                return $scope.site.stop();
-              });
+              return $scope.site.stop();
             } else {
               // Start site.
-              guiEngine.queue.add('Start Site: ' + name, function() {
-                return $scope.site.start();
-              });
+              return $scope.site.start();
             }
           });
         });
@@ -65,10 +60,7 @@ angular.module('kalabox.dashboard', [
         guiEngine.try(function() {
           var areYouSure = true;
           if (areYouSure) {
-            var desc = 'Remove Site: ' + $scope.site.name;
-            guiEngine.queue.add(desc, function() {
-              return $scope.site.trash();
-            });
+            return $scope.site.trash();
           }
         });
       });
@@ -222,6 +214,11 @@ angular.module('kalabox.dashboard', [
         $scope.errorCount = $scope.ui.errors.length;
       });
     }
+  });
+
+  // Check if a job queue job is running.
+  guiEngine.loop.add({interval: 0.3 * 1000}, function() {
+    $scope.ui.currentJob = guiEngine.queue.currentJob();
   });
 
 })
