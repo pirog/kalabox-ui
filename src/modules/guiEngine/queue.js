@@ -25,8 +25,14 @@ angular.module('kalabox.guiEngine')
           message: null,
           fn: fn
         };
+        // Update function to update current job's message.
+        var update = function(message) {
+          if (_current) {
+            _current.message = message;
+          }
+        };
         // Run function.
-        return $q.try(fn);
+        return $q.try(fn, update);
       }
     })
     // Set current job back to null.

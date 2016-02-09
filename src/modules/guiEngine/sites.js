@@ -20,7 +20,6 @@ angular.module('kalabox.sites', [])
     this.providerInfo = opts.providerInfo;
     this.framework = opts.providerInfo.framework;
     this.busy = false;
-    this.currentAction = false;
   }
 
   /*
@@ -29,12 +28,12 @@ angular.module('kalabox.sites', [])
   Site.prototype.queue = function(desc, fn) {
     var self = this;
     // Add job to queue.
-    return guiEngine.queue.add(desc, function() {
+    return guiEngine.queue.add(desc, function(update) {
       // Signal that site is busy.
       self.busy = true;
       // Call fn function.
       return $q.try(function() {
-        return fn.call(self);
+        return fn.call(self, update);
       })
       // Signal site is no longer busy.
       .finally(function() {
@@ -72,7 +71,6 @@ angular.module('kalabox.sites', [])
           return kbox.setAppContext(app);
         })
         .then(function(app) {
-          //self.currentAction = 'start';
           return kbox.app.start(app);
         });
       });
@@ -92,7 +90,6 @@ angular.module('kalabox.sites', [])
           return kbox.setAppContext(app);
         })
         .then(function(app) {
-          //self.currentAction = 'stop';
           return kbox.app.stop(app);
         });
       });
@@ -105,9 +102,7 @@ angular.module('kalabox.sites', [])
   Site.prototype.pull = function(opts) {
     var self = this;
     // Run as a queued job.
-    return self.queue('Pulling site: ' + self.name, function() {
-      // Get reference to job.
-      var job = this;
+    return self.queue('Pulling site: ' + self.name, function(update) {
       // Get kbox core library.
       return kbox.then(function(kbox) {
         // Initialize app context.
@@ -117,11 +112,10 @@ angular.module('kalabox.sites', [])
         })
         // Do a pull on the site.
         .then(function() {
-          self.currentAction = 'pull';
           var pull = kbox.integrations.get(self.providerName).pull();
           // Update job's status message with info from pull.
           pull.on('update', function(msg) {
-            job.statusMsg = msg;
+            update(msg.status);
           });
           return pull.run(opts);
         });
@@ -135,9 +129,7 @@ angular.module('kalabox.sites', [])
   Site.prototype.push = function(opts) {
     var self = this;
     // Run as a queued job.
-    return self.queue('Pushing site: ' + self.name, function() {
-      // Get reference to job.
-      var job = this;
+    return self.queue('Pushing site: ' + self.name, function(update) {
       // Get kbox core library.
       return kbox.then(function(kbox) {
         // Initialize app context.
@@ -150,7 +142,7 @@ angular.module('kalabox.sites', [])
           var push = kbox.integrations.get(self.providerName).push();
           // Update job's status message with info from push.
           push.on('update', function(msg) {
-            job.statusMsg = msg;
+            update(msg.status);
           });
           return push.run(opts);
         });
@@ -171,7 +163,6 @@ angular.module('kalabox.sites', [])
           return kbox.setAppContext(app);
         })
         .then(function(app) {
-          self.currentAction = 'delete';
           return kbox.app.destroy(app);
         });
       });
@@ -200,7 +191,6 @@ angular.module('kalabox.sites', [])
         framework: 'drupal'
       }
     });
-    site.currentAction = 'start';
     site.isPlaceHolder = true;
     return site;
   };
@@ -321,7 +311,6 @@ angular.module('kalabox.sites', [])
             return !_.find(sites, function(site) {
               var filterOut = placeHolder.name === site.name;
               if (filterOut) {
-                site.currentAction = placeHolder.currentAction;
                 placeHolders.remove(site.name);
               }
               return filterOut;
