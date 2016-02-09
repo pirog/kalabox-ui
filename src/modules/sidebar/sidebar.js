@@ -67,19 +67,21 @@ angular.module('kalabox.sidebar', [
 
   }
 )
-.directive('providerClick', function(guiEngine, $state) {
+.directive('providerClick', function(guiEngine, $state, _) {
   return {
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        guiEngine.try(function() {
-          if ($scope.provider.authorized()) {
-            $scope.provider.refresh();
-          } else {
-            $state.go('dashboard.sidebar.provider-auth',
-              {provider: $scope.provider}, {location: false});
-          }
-        });
+        if (_.isEmpty($scope.provider.sites)) {
+          guiEngine.try(function() {
+            if ($scope.provider.authorized()) {
+              $scope.provider.refresh();
+            } else {
+              $state.go('dashboard.sidebar.provider-auth',
+                {provider: $scope.provider}, {location: false});
+            }
+          });
+        }
       });
     }
   };
