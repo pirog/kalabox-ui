@@ -9,6 +9,9 @@ angular.module('kalabox.guiEngine')
   // Flag to cancel pending jobs, for shutdown.
   var _stopFlag = false;
 
+  // Current job that is running, if null then no jobs are running.
+  var _current = null;
+
   /*
    * Add a job to the queue.
    */
@@ -16,8 +19,19 @@ angular.module('kalabox.guiEngine')
     // Add to end of promise chain.
     _hd = _hd.then(function() {
       if (!_stopFlag) {
+        // Set current job.
+        _current = {
+          title: desc,
+          message: null,
+          fn: fn
+        };
+        // Run function.
         return $q.try(fn);
       }
+    })
+    // Set current job back to null.
+    .finally(function() {
+      _current = null;
     })
     // Make sure errors get reported to the error service.
     .catch(function(err) {
@@ -40,6 +54,12 @@ angular.module('kalabox.guiEngine')
     add: add,
     jobs: function() {
       return [];
+    },
+    isRunning: function() {
+      return !!_current;
+    },
+    currentJob: function() {
+      return _current;
     },
     stop: stop
   };
