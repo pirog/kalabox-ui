@@ -4,8 +4,7 @@ angular.module('kalabox.sites', [])
 /*
  * Class for encapsulating a site instance.
  */
-.factory('Site', function(kbox, siteStates, _, providers, guiEngine, $q, path,
-  $window) {
+.factory('Site', function(kbox, siteStates, _, providers, guiEngine, $q, path) {
 
   // Constructor.
   function Site(opts) {
@@ -218,12 +217,6 @@ angular.module('kalabox.sites', [])
         var app = kbox.create.get(opts.provider.name);
         // Create app.
         return kbox.create.createApp(app, opts);
-      })
-      .then(function() {
-        $window.alert('App done being added.');
-      })
-      .catch(function(err) {
-        $window.alert(err.message);
       });
     });
   };
