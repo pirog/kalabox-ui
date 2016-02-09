@@ -120,6 +120,11 @@ angular.module('kalabox.dashboard', [
 
   $rootScope.providers = [];
 
+  // Grab developer mode so we can display inch high red letters on the UI.
+  kbox.then(function(kbox) {
+    $scope.ui.devMode = kbox.core.deps.get('globalConfig').devMode;
+  });
+
   // Modal creator.
   $scope.open = function(templateUrl, controllerName, data) {
     var uibModalInstance = $uibModal.open({
