@@ -95,7 +95,7 @@ var nwBuilder = function(platforms) {
 /*
  * Helper function to generate npm build commands for a given platform
  */
-var npmBuildCmd = function() {
+var npmBuildCmd = function(grunt) {
 
   // Start a command collector
   var cmd = [];
@@ -159,9 +159,7 @@ module.exports = {
     /*
      * Npm install our prod deps before we nwjs task
      */
-    build: {
-      command: npmBuildCmd()
-    }
+    build: npmBuildCmd
 
   },
 
