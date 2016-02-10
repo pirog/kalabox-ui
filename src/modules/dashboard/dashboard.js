@@ -152,6 +152,14 @@ angular.module('kalabox.dashboard', [
     });
   });
 
+  // Update site properties once a second.
+  guiEngine.loop.add({interval: 1 * 1000}, function() {
+    var sites = $scope.ui.sites;
+    _.each(sites, function(site) {
+      site.update();
+    });
+  });
+
   // Poll sites.
   guiEngine.loop.add({interval: 1 * 60 * 1000}, function() {
     return sites.get()
