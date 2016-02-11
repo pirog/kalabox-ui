@@ -17,18 +17,35 @@ angular.module('kalabox.sites', [])
 
   // Constructor.
   function Site(opts) {
+    this.opts = opts;
     this.name = opts.name;
     this.url = opts.url;
     this.folder = opts.folder;
     this.codeFolder = opts.codeFolder;
-    this.image = opts.folder ?
-      path.join(opts.folder, 'screenshot.png') :
-      opts.image;
     this.providerName = 'pantheon';
     this.providerInfo = opts.providerInfo;
     this.framework = opts.providerInfo.framework;
     this.busy = false;
+    this.update();
   }
+
+  /*
+   * Update site properties.
+   */
+  Site.prototype.update = function() {
+    // Update screenshot url.
+    this.updateScreenshotUrl();
+  };
+
+  /*
+   * Update screenshot image url.
+   */
+  Site.prototype.updateScreenshotUrl = function() {
+    var timestamp = new Date().getTime();
+    this.image = this.opts.folder ?
+      path.join(this.opts.folder, 'screenshot.png') + '?' + timestamp :
+      this.opts.image;
+  };
 
   /*
    * Call fn function within a gui engine queue.
