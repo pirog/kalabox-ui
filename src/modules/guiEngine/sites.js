@@ -26,24 +26,15 @@ angular.module('kalabox.sites', [])
     this.providerInfo = opts.providerInfo;
     this.framework = opts.providerInfo.framework;
     this.busy = false;
-    this.update();
+    this.image = this.imageFilepath();
   }
 
   /*
-   * Update site properties.
+   * Get fileath of image.
    */
-  Site.prototype.update = function() {
-    // Update screenshot url.
-    this.updateScreenshotUrl();
-  };
-
-  /*
-   * Update screenshot image url.
-   */
-  Site.prototype.updateScreenshotUrl = function() {
-    var timestamp = new Date().getTime();
-    this.image = this.opts.folder ?
-      path.join(this.opts.folder, 'screenshot.png') + '?' + timestamp :
+  Site.prototype.imageFilepath = function() {
+    return this.opts.folder ?
+      path.join(this.opts.folder, 'screenshot.png') :
       this.opts.image;
   };
 
@@ -123,6 +114,11 @@ angular.module('kalabox.sites', [])
       })
       // Ignore errors.
       .catch(function() {});
+    })
+    // Update image filepath with a timestamp so it reloads.
+    .then(function() {
+      var timestamp = new Date().getTime();
+      self.image = self.imageFilepath() + '?' + timestamp;
     });
   };
 
