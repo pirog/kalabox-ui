@@ -196,7 +196,7 @@ module.exports = function(grunt) {
     // Run Some NW shell things
     shell: {
       nw: nw.shell.nw,
-      build: nw.shell.build,
+      build: {command: nw.shell.build(grunt)},
       exportImages: deps.shell.exportImages
     },
     delta: frontend.delta,
