@@ -4,7 +4,16 @@ angular.module('kalabox.sites', [])
 /*
  * Class for encapsulating a site instance.
  */
-.factory('Site', function(kbox, siteStates, _, providers, guiEngine, $q, path) {
+.factory('Site', function(
+  kbox,
+  siteStates,
+  _,
+  providers,
+  guiEngine,
+  $q,
+  path,
+  fs
+) {
 
   // Constructor.
   function Site(opts) {
@@ -58,6 +67,49 @@ angular.module('kalabox.sites', [])
   };
 
   /*
+   * Take a screenshot of the site.
+   */
+  Site.prototype.takeScreenshot = function() {
+    var self = this;
+    // Where the screenshot should end up.
+    var filepath = self.image;
+    // where the screenshot should be created before being moved to filepath.
+    var parsed = path.parse(filepath);
+    parsed.base = '.' + parsed.name + '.downloading' + parsed.ext;
+    var filepathTemp = path.format(parsed);
+    // Options for screenshot.
+    var opts = {
+      windowSize: {
+        width: 1024,
+        height: 768
+      },
+      renderDelay: 1 * 1000,
+      timeout: 20 * 1000
+    };
+    // Take screenshot.
+    return Promise.fromNode(function(cb) {
+      var webshot = require('webshot');
+      webshot(self.url, filepathTemp, opts, cb);
+    })
+    // Make sure we have a reasonable timeout.
+    .timeout(30 * 1000)
+    // Rename temp file.
+    .then(function() {
+      return Promise.fromNode(function(cb) {
+        return fs.rename(filepathTemp, filepath, cb);
+      });
+    })
+    // Make sure we delete the temp file if it still exists.
+    .finally(function() {
+      return Promise.fromNode(function(cb) {
+        fs.unlink(filepathTemp, cb);
+      })
+      // Ignore errors.
+      .catch(function() {});
+    });
+  };
+
+  /*
    * Start site.
    */
   Site.prototype.start = function() {
@@ -71,6 +123,20 @@ angular.module('kalabox.sites', [])
         })
         .then(function(app) {
           return kbox.app.start(app);
+        })
+        .then(function() {
+          /*
+           * This is detached from the promise chain on purpose since it
+           * shouldn't be holding up a response to the user that their
+           * site has been started.
+           */
+          // Give the site 5 seconds for it to get itself started.
+          $q.delay(5 * 1000)
+          // Take a screenshot.
+          .then(function() {
+            return self.takeScreenshot();
+          })
+          .catch(function() {});
         });
       });
     });
