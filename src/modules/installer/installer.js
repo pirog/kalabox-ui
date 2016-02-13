@@ -48,9 +48,15 @@ angular.module('kalabox.installer', [
       // Start a new promise.
       return new Promise(function(resolve, reject) {
 
+        kbox.status.on('update', function(data) {
+          $scope.ui.title = data.message;
+          $scope.$apply();
+        });
+
         // Event called before a step runs.
         kbox.install.events.on('pre-step', function(ctx) {
-          $scope.ui.title = ctx.step.description;
+          // Update status message with step's description.
+          kbox.status.update(ctx.step.description);
           $scope.ui.detail =
             ctx.step.name + ' ' +
             ctx.state.stepIndex + ' of ' +

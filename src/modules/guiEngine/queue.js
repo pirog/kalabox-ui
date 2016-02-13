@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalabox.guiEngine')
-.factory('queueService', function($q, errorService) {
+.factory('queueService', function($q, errorService, kbox) {
 
   // Head of promise chain.
   var _hd = Promise.resolve();
@@ -11,6 +11,15 @@ angular.module('kalabox.guiEngine')
 
   // Current job that is running, if null then no jobs are running.
   var _current = null;
+
+  // Handle kbox status message updates.
+  kbox.then(function(kbox) {
+    kbox.status.on('update', function(data) {
+      if (_current) {
+        _current.message = data.message;
+      }
+    });
+  });
 
   /*
    * Add a job to the queue.
