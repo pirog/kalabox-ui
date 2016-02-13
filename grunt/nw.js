@@ -95,17 +95,23 @@ var nwBuilder = function(platforms) {
 /*
  * Helper function to generate npm build commands for a given platform
  */
-var npmBuildCmd = function() {
+var npmBuildCmd = function(grunt) {
 
   // Start a command collector
   var cmd = [];
 
   // Normal CMDz
   cmd.push('cd ./<%= buildDir %>');
-  cmd.push('npm install --production --ignore-script');
+  cmd.push('&&');
+  cmd.push('npm install');
+
+  // Allow non-production packages to be created
+  if (!grunt.option('dev')) {
+    cmd.push('--production');
+  }
 
   // Give up all the glory
-  return cmd.join(' && ');
+  return cmd.join(' ');
 
 };
 
@@ -153,9 +159,7 @@ module.exports = {
     /*
      * Npm install our prod deps before we nwjs task
      */
-    build: {
-      command: npmBuildCmd()
-    }
+    build: npmBuildCmd
 
   },
 
