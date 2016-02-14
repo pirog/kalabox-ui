@@ -92,7 +92,7 @@ angular.module('kalabox.sites', [])
         height: 768
       },
       renderDelay: 1 * 1000,
-      timeout: 20 * 1000
+      timeout: 60 * 1000
     };
     // Take screenshot.
     return Promise.fromNode(function(cb) {
@@ -100,7 +100,7 @@ angular.module('kalabox.sites', [])
       webshot(self.url, filepathTemp, opts, cb);
     })
     // Make sure we have a reasonable timeout.
-    .timeout(30 * 1000)
+    .timeout(90 * 1000)
     // Rename temp file.
     .then(function() {
       return Promise.fromNode(function(cb) {
@@ -148,8 +148,7 @@ angular.module('kalabox.sites', [])
           // Take a screenshot.
           .then(function() {
             return self.takeScreenshot();
-          })
-          .catch(function() {});
+          });
         });
       });
     });
