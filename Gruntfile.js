@@ -51,13 +51,9 @@ module.exports = function(grunt) {
    */
   var parseBuildOptions = function(task) {
 
-    // Start with generic pre tasks
-    if (grunt.option('deps') || grunt.option('iso')) {
-      task.push('clean:deps');
-    }
-
     // Add in download deps if needed
     if (grunt.option('deps')) {
+      task.push('clean:deps');
       task.push('curl-dir:osx64Deps');
       task.push('curl-dir:win64Deps');
       task.push('curl-dir:linux64Deps');
@@ -65,11 +61,13 @@ module.exports = function(grunt) {
 
     // Add in download iso if needed
     if (grunt.option('iso')) {
+      task.push('clean:iso');
       task.push('curl-dir:iso');
     }
 
     // Add in exported images if needed
     if (grunt.option('images')) {
+      task.push('clean:images');
       task.push('shell:exportImages');
     }
 
@@ -129,7 +127,10 @@ module.exports = function(grunt) {
     // Cleans out various dirs
     clean: {
       build: frontend.clean.build,
+      allDeps: deps.clean.all,
       deps: deps.clean.deps,
+      images: deps.clean.images,
+      iso: deps.clean.iso,
       nw: nw.clean.nw
     },
 

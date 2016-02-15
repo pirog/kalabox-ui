@@ -41,7 +41,8 @@ var getDockerImages = function() {
   // the pantheon image version is the same as the core image version
   var imgVersion = kbox.core.config.getEnvConfig().imgVersion;
 
-  // @todo: get these directly from kalabox
+  // Images we want to prepackage
+  // @todo: figure out a better way to handle this
   return [
     ['kalabox/proxy', imgVersion].join(':'),
     ['kalabox/dns', imgVersion].join(':'),
@@ -155,9 +156,14 @@ module.exports = {
    * Clean out the build dirs
    */
   clean: {
+    all: ['./deps'],
     deps: [
-      './deps',
-    ]
+      './deps/osx64',
+      './deps/win64',
+      './deps/linux64'
+    ],
+    iso: ['./deps/iso'],
+    images: ['./deps/images']
   },
 
   /**
