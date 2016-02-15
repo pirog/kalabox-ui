@@ -150,14 +150,12 @@ module.exports = {
      * Downlaod the iso image for our kalabox VM
      * @todo: get this from Kalabox as well
      */
-    // jscs:disable
     iso: {
       src: [
-        'https://github.com/kalabox/kalabox-iso/releases/download/v0.11.0/boot2docker.iso'
+        engine.machine.kalabox.isourl
       ],
       dest: './deps/iso'
     }
-    // jscs:enable
   },
 
   /**
