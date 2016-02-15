@@ -27,9 +27,14 @@ var engineConf = path.join(enginePath, 'provider', 'docker', 'config.yml');
 var syncthingPath = path.join(kboxPath, 'plugins', 'kalabox-syncthing');
 var syncthingConf = path.join(syncthingPath, 'lib', 'config.yml');
 
+// Get core conf path
+var corePath = path.join(kboxPath, 'plugins', 'kalabox-core');
+var coreConf = path.join(corePath, 'lib', 'config.yml');
+
 // get actual conf
 var engine = yaml.toJson(engineConf);
 var syncthing = yaml.toJson(syncthingConf);
+var core = yaml.toJson(coreConf);
 
 /*
  * Helper function to get the images we want to export
@@ -41,17 +46,18 @@ var getDockerImages = function() {
   // the pantheon image version is the same as the core image version
   var imgVersion = kbox.core.config.getEnvConfig().imgVersion;
 
-  // @todo: get these directly from kalabox
+  // Images we want to prepackage
+  // @todo: figure out a better way to handle this
   return [
-    ['kalabox/proxy', imgVersion].join(':'),
-    ['kalabox/dns', imgVersion].join(':'),
-    ['kalabox/syncthing', imgVersion].join(':'),
+    //['kalabox/proxy', imgVersion].join(':'),
+    //['kalabox/dns', imgVersion].join(':'),
+    //['kalabox/syncthing', imgVersion].join(':'),
     ['kalabox/cli', imgVersion].join(':'),
-    ['kalabox/pantheon-solr', imgVersion].join(':'),
-    ['kalabox/pantheon-redis', imgVersion].join(':'),
+    //['kalabox/pantheon-solr', imgVersion].join(':'),
+    //['kalabox/pantheon-redis', imgVersion].join(':'),
     ['kalabox/terminus', imgVersion].join(':'),
     ['kalabox/pantheon-mariadb', imgVersion].join(':'),
-    ['kalabox/pantheon-edge', imgVersion].join(':'),
+    //['kalabox/pantheon-edge', imgVersion].join(':'),
     ['kalabox/pantheon-appserver', imgVersion].join(':'),
     'busybox'
   ];
@@ -112,7 +118,8 @@ module.exports = {
         engine.machine.pkg.darwin,
         engine.compose.pkg.darwin,
         //syncthing.pkg.darwin,
-        syncthing.configfile
+        syncthing.configfile,
+        core.kalabox.pkg.darwin
       ],
       dest: './deps/osx64'
     },
@@ -123,7 +130,8 @@ module.exports = {
         engine.compose.pkg.win32,
         engine.msysgit.pkg.win32,
         //syncthing.pkg.win32,
-        syncthing.configfile
+        syncthing.configfile,
+        core.kalabox.pkg.win32
       ],
       dest: './deps/win64'
     },
@@ -132,7 +140,8 @@ module.exports = {
         engine.machine.pkg.linux,
         engine.compose.pkg.linux,
         //syncthing.pkg.linux,
-        syncthing.configfile
+        syncthing.configfile,
+        core.kalabox.pkg.linux
       ],
       dest: './deps/linux64'
     },
@@ -141,23 +150,26 @@ module.exports = {
      * Downlaod the iso image for our kalabox VM
      * @todo: get this from Kalabox as well
      */
-    // jscs:disable
     iso: {
       src: [
-        'https://github.com/kalabox/kalabox-iso/releases/download/v0.11.0/boot2docker.iso'
+        engine.machine.kalabox.isourl
       ],
       dest: './deps/iso'
     }
-    // jscs:enable
   },
 
   /**
    * Clean out the build dirs
    */
   clean: {
+    all: ['./deps'],
     deps: [
-      './deps',
-    ]
+      './deps/osx64',
+      './deps/win64',
+      './deps/linux64'
+    ],
+    iso: ['./deps/iso'],
+    images: ['./deps/images']
   },
 
   /**
