@@ -49,15 +49,15 @@ var getDockerImages = function() {
   // Images we want to prepackage
   // @todo: figure out a better way to handle this
   return [
-    ['kalabox/proxy', imgVersion].join(':'),
-    ['kalabox/dns', imgVersion].join(':'),
-    ['kalabox/syncthing', imgVersion].join(':'),
+    //['kalabox/proxy', imgVersion].join(':'),
+    //['kalabox/dns', imgVersion].join(':'),
+    //['kalabox/syncthing', imgVersion].join(':'),
     ['kalabox/cli', imgVersion].join(':'),
-    ['kalabox/pantheon-solr', imgVersion].join(':'),
-    ['kalabox/pantheon-redis', imgVersion].join(':'),
+    //['kalabox/pantheon-solr', imgVersion].join(':'),
+    //['kalabox/pantheon-redis', imgVersion].join(':'),
     ['kalabox/terminus', imgVersion].join(':'),
     ['kalabox/pantheon-mariadb', imgVersion].join(':'),
-    ['kalabox/pantheon-edge', imgVersion].join(':'),
+    //['kalabox/pantheon-edge', imgVersion].join(':'),
     ['kalabox/pantheon-appserver', imgVersion].join(':'),
     'busybox'
   ];
