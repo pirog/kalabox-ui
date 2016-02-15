@@ -52,21 +52,6 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
-.directive('siteTrash', function(guiEngine) {
-  return {
-    scope: true,
-    link: function($scope, element) {
-      element.on('click', function() {
-        guiEngine.try(function() {
-          var areYouSure = true;
-          if (areYouSure) {
-            return $scope.site.trash();
-          }
-        });
-      });
-    }
-  };
-})
 .directive('siteBrowser', function(guiEngine) {
   return {
     scope: true,

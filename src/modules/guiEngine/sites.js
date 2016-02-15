@@ -152,7 +152,7 @@ angular.module('kalabox.sites', [])
   /*
    * Remove site.
    */
-  Site.prototype.trash = function() {
+  Site.prototype.remove = function() {
     var self = this;
     // Run as a queued job.
     return self.queue('Removing site: ' + self.name, function() {
