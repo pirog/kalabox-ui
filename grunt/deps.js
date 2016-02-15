@@ -27,9 +27,14 @@ var engineConf = path.join(enginePath, 'provider', 'docker', 'config.yml');
 var syncthingPath = path.join(kboxPath, 'plugins', 'kalabox-syncthing');
 var syncthingConf = path.join(syncthingPath, 'lib', 'config.yml');
 
+// Get core conf path
+var corePath = path.join(kboxPath, 'plugins', 'kalabox-core');
+var coreConf = path.join(corePath, 'lib', 'config.yml');
+
 // get actual conf
 var engine = yaml.toJson(engineConf);
 var syncthing = yaml.toJson(syncthingConf);
+var core = yaml.toJson(coreConf);
 
 /*
  * Helper function to get the images we want to export
@@ -113,7 +118,8 @@ module.exports = {
         engine.machine.pkg.darwin,
         engine.compose.pkg.darwin,
         //syncthing.pkg.darwin,
-        syncthing.configfile
+        syncthing.configfile,
+        core.kalabox.pkg.darwin
       ],
       dest: './deps/osx64'
     },
@@ -124,7 +130,8 @@ module.exports = {
         engine.compose.pkg.win32,
         engine.msysgit.pkg.win32,
         //syncthing.pkg.win32,
-        syncthing.configfile
+        syncthing.configfile,
+        core.kalabox.pkg.win32
       ],
       dest: './deps/win64'
     },
@@ -133,7 +140,8 @@ module.exports = {
         engine.machine.pkg.linux,
         engine.compose.pkg.linux,
         //syncthing.pkg.linux,
-        syncthing.configfile
+        syncthing.configfile,
+        core.kalabox.pkg.linux
       ],
       dest: './deps/linux64'
     },
