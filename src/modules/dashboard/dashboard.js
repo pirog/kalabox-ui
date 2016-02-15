@@ -117,6 +117,18 @@ angular.module('kalabox.dashboard', [
     $scope.ui.devMode = kbox.core.deps.get('globalConfig').devMode;
   });
 
+  // When a site is destroyed filter the sites in the scope to remove it.
+  // This needs to happen because the polling takes time to catch up.
+  kbox.then(function(kbox) {
+    // Listen to the post app destroy event.
+    kbox.core.events.on('post-app-destroy', function(app) {
+      // Filter sites to remove site that was just destroyed.
+      $scope.ui.sites = _.filter($scope.ui.sites, function(site) {
+        return site.name !== app.name;
+      });
+    });
+  });
+
   // Modal creator.
   $scope.open = function(templateUrl, controllerName, data) {
     var uibModalInstance = $uibModal.open({
