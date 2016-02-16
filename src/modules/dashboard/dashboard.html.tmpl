@@ -35,8 +35,17 @@
     </div>
   </div>
   <div class="sites row">
+    <div class="site-wrapper col-xs-4">
+      <div class="site add">
+        <a href="" ui-sref='dashboard.sidebar' ui-sref-opts='{location: false}' data-toggle="offcanvas" data-target="#addSite" data-autohide="false">
+          <div class="plus">+</div>
+          <h3>Add new site</h3>
+          <p>Insert your Pantheon credentials, pull a site, and enjoy!</p>
+        </a>
+      </div>
+    </div>
     <div ng-repeat="site in ui.sites | filter:siteSearch" ng-controller="SiteCtrl">
-      <div class="site-wrapper col-xs-6">
+      <div class="site-wrapper col-xs-4">
         <div class="site" ng-class="siteClasses()">
           <div class="row image">
             <a ng-href="" site-browser><img class="col-xs-12 img-responsive" alt="Snapshot of your site"  ng-src="{{site.image}}"/></a>
