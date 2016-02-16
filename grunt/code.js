@@ -52,7 +52,8 @@ module.exports = {
         'placeholder',
         'start-*',
         'uib-*',
-        'auto-close'
+        'auto-close',
+        'show-errors'
       ],
       relaxerror: [
         'Empty heading.',

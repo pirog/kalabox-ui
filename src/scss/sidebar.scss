@@ -115,7 +115,12 @@
   }
 }
 
-
+.authForm {
+  .alert {
+    margin: 15px;
+    text-align: left;
+  }
+}
 
 i.pantheon {
   @include provider-pic('pantheon');

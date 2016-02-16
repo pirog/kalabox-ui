@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body">
   <div class="alert alert-error" ng-bind="errorMessage" ng-if="errorMessage"></div>
-  <form>
+  <form name="sitePull">
     <div class="form-group">
       <label for="pullDatabase">Database</label>
       <select class="form-control" id="pullDatabase" placeholder="Database" ng-model="database" required>
@@ -25,6 +25,6 @@
   </form>
 </div>
 <div class="modal-footer">
-  <button class="btn btn-primary" type="button" ng-click="ok(database, createBackup, files)">Submit</button>
+  <button class="btn btn-primary" type="button" ng-disabled="sitePull.$invalid" ng-click="ok(database, createBackup, files)">Submit</button>
   <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
 </div>

@@ -31,7 +31,6 @@ angular.module('kalabox.dashboard')
       $scope.site = modalData.site;
       // Modal function.
       $scope.ok = function(appConfig) {
-
         // Run inside a gui task.
         guiEngine.try(function() {
           var provider = modalData.provider;
@@ -42,7 +41,7 @@ angular.module('kalabox.dashboard')
             email: provider.username,
             site: site.name,
             env: appConfig.env,
-            name: appConfig.name
+            name: appConfig.name.toLowerCase()
           });
 
           // Close the modal.
