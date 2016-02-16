@@ -40,6 +40,10 @@
   transition: width .2s ease;
   text-transform: uppercase;
   overflow: hidden;
+  span {
+    transition: display .2s ease;
+    display: none;
+  }
   &:hover {
     width: $width-expanded;
     span {
@@ -147,10 +151,6 @@
     }
     a.site-power, div.site-actions-dropdown {
       @include roll-over-button(40px, 80px);
-    }
-    a.site-power span, div.site-actions-dropdown span {
-      transition: display .2s ease;
-      display: none;
     }
     a.site-power:hover {
       background-color: $btn-primary-bg;
