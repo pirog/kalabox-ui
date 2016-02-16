@@ -97,7 +97,7 @@
 
 }
 .site {
-  height: 295px;
+  height: 200px;
   border-radius: 3px;
   box-shadow: 0 0px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   position: relative;
@@ -108,15 +108,18 @@
     font-size: 11px;
   }
   .image {
-    height: 200px;
+    height: 110px;
     overflow: hidden;
     opacity: .7;
     cursor: pointer;
+    img {
+      margin-top: -15px;
+    }
   }
   .site-info {
     h3 {
       opacity: .7;
-      margin: 20px 0 10px;
+      margin: 15px 0 15px;
       font-size: 18px;
       white-space: nowrap;
       overflow: hidden;
@@ -179,5 +182,29 @@
     }
 
   }
+  }
+}
+
+.site.add {
+  text-align: center;
+  border: 2px dashed #bbb;
+  box-shadow: none;
+  a {
+    div {
+      font-size: 6em;
+      margin-top: -40px;
+    }
+    &:hover {
+      text-decoration: none;
+    }
+    display: block;
+    position: relative;
+    padding: 20px;
+    p {
+      color: $text-color;
+    }
+  }
+  h3 {
+    margin-top: -10px;
   }
 }
