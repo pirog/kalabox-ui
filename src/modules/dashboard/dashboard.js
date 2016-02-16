@@ -269,7 +269,7 @@ angular.module('kalabox.dashboard', [
   return {
     restrict: 'A',
     require:  '^form',
-    link: function (scope, el, attrs, formCtrl) {
+    link: function(scope, el, attrs, formCtrl) {
       // find the text box element, which has the 'name' attribute
       var inputEl   = el[0].querySelector('[name]');
       // convert the native text box element to an angular element
@@ -287,9 +287,9 @@ angular.module('kalabox.dashboard', [
 })
 .directive('ngEnter', function() {
   return function(scope, element, attrs) {
-    element.bind("keydown keypress", function(event) {
-      if(event.which === 13) {
-        scope.$apply(function(){
+    element.bind('keydown keypress', function(event) {
+      if (event.which === 13) {
+        scope.$apply(function() {
           scope.$eval(attrs.ngEnter, {'event': event});
         });
 

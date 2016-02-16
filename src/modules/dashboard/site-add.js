@@ -24,15 +24,6 @@ angular.module('kalabox.dashboard')
   function($scope, $q, $uibModalInstance, kbox, _, modalData, guiEngine,
     sites) {
 
-    $scope.$watch('siteAdd', function(theForm) {
-      if(theForm) {
-          console.log($scope, $scope.siteAdd);
-      }
-      else {
-          console.log('form not in scope');
-      }
-    });
-
     guiEngine.try(function() {
       // Set provider.
       $scope.provider = modalData.provider;
