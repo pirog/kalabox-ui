@@ -34,6 +34,23 @@
 @include arrow-keyframes(site-pull, 60px);
 @include arrow-keyframes(site-push, -60px);
 
+@mixin roll-over-button($width, $width-expanded) {
+  text-align: left;
+  width: $width;
+  transition: width .2s ease;
+  text-transform: uppercase;
+  overflow: hidden;
+  span {
+    transition: display .2s ease;
+    display: none;
+  }
+  &:hover {
+    width: $width-expanded;
+    span {
+      display: inline;
+    }
+  }
+}
 
 // Site styling.
 .site-wrapper {
@@ -133,21 +150,7 @@
       font-size: 1.5em;
     }
     a.site-power, div.site-actions-dropdown {
-      text-align: left;
-      width: 40px;
-      transition: width .2s ease;
-      text-transform: uppercase;
-      overflow: hidden;
-    }
-    a.site-power:hover, div.site-actions-dropdown:hover {
-      width: 80px;
-      span {
-        display: inline;
-      }
-    }
-    a.site-power span, div.site-actions-dropdown span {
-      transition: display .2s ease;
-      display: none;
+      @include roll-over-button(40px, 80px);
     }
     a.site-power:hover {
       background-color: $btn-primary-bg;
@@ -183,6 +186,11 @@
 
   }
   }
+}
+
+.site-add {
+  @include roll-over-button(40px, 100px);
+  text-align: right;
 }
 
 .site.add {
