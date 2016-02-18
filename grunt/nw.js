@@ -139,9 +139,9 @@ module.exports = {
     },
     docs: {
       files: [
-        { src: 'README.md', dest: 'nw/Kalabox/osx64/README.md' },
-        { src: 'README.md', dest: 'nw/Kalabox/linux64/README.md' },
-        { src: 'README.md', dest: 'nw/Kalabox/win64/README.md' },
+        {src: 'README.md', dest: 'nw/Kalabox/osx64/README.md'},
+        {src: 'README.md', dest: 'nw/Kalabox/linux64/README.md'},
+        {src: 'README.md', dest: 'nw/Kalabox/win64/README.md'},
         {
           src: 'node_modules/kalabox/scripts/uninstall-darwin.sh',
           dest: 'nw/Kalabox/osx64/uninstall.sh'
