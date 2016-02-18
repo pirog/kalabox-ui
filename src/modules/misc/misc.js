@@ -29,8 +29,7 @@ angular.module('kalabox.misc', [
     'Slicing, dicing, and making french fries',
     'Improving your child\'s SAT score',
     'Teaching the virtue of patience',
-    'Nurturing your web projects',
-    'The waiting is the hardest part'
+    'Nurturing your web projects'
   ];
   var rotateMessage = function() {
     setTimeout(function() {
