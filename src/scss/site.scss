@@ -57,9 +57,10 @@
   margin: 10px 0px;
 }
 .site.site-up {
-  img, h3 {
-    opacity: 1;
-    transition: opacity 4s ease;
+  .image img, h3 {
+    transition: filter 4s ease;
+    -webkit-filter: grayscale(0%);
+    filter: grayscale(0%);
   }
 }
 .site.start, .site.stop, .site.pull, .site.push, .site.delete {
@@ -129,6 +130,10 @@
     overflow: hidden;
     opacity: .7;
     cursor: pointer;
+    img {
+      -webkit-filter: grayscale(100%);
+      filter: grayscale(100%);
+    }
   }
   .site-info {
     h3 {
