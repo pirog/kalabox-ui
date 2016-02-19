@@ -44,7 +44,7 @@ var getDockerImages = function() {
   // Get the image tag and home directory
   // @todo: we need a way to get this for pantheon images, right now we assume
   // the pantheon image version is the same as the core image version
-  var imgVersion = kbox.core.config.getEnvConfig().imgVersion;
+  //var imgVersion = kbox.core.config.getEnvConfig().imgVersion;
 
   // Images we want to prepackage
   // @todo: figure out a better way to handle this
@@ -52,13 +52,13 @@ var getDockerImages = function() {
     //['kalabox/proxy', imgVersion].join(':'),
     //['kalabox/dns', imgVersion].join(':'),
     //['kalabox/syncthing', imgVersion].join(':'),
-    ['kalabox/cli', imgVersion].join(':'),
+    ['kalabox/cli', 'v0.11.3'].join(':'),
     //['kalabox/pantheon-solr', imgVersion].join(':'),
     //['kalabox/pantheon-redis', imgVersion].join(':'),
-    ['kalabox/terminus', imgVersion].join(':'),
-    ['kalabox/pantheon-mariadb', imgVersion].join(':'),
+    ['kalabox/terminus', 'v0.11.3'].join(':'),
+    ['kalabox/pantheon-mariadb', 'v0.11.3'].join(':'),
     //['kalabox/pantheon-edge', imgVersion].join(':'),
-    ['kalabox/pantheon-appserver', imgVersion].join(':'),
+    ['kalabox/pantheon-appserver', 'v0.11.3'].join(':'),
     'busybox'
   ];
 
