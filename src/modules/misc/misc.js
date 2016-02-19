@@ -7,7 +7,6 @@ angular.module('kalabox.misc', [
 .controller('RandomMessageCtrl',
   function($scope) {
   var randomMessages = [
-    'I see Windows, I see Mac, I see Kalabox running on any stack',
     'Reticulating splines',
     'Realizing the power of now',
     'Tripping the light fantastic',
@@ -19,8 +18,7 @@ angular.module('kalabox.misc', [
     'Putting the last \"P\" on PHP',
     'Making the world safe for democracy',
     'Failing to be afraid of fear itself',
-    'Neither snow nor rain nor heat nor gloom of night shall stop us',
-    'Trimming the llama',
+    'Feeding the llama',
     'Burning the man',
     'Clearing dust out of the box',
     'Plumbing the series of tubes',
@@ -29,8 +27,7 @@ angular.module('kalabox.misc', [
     'Slicing, dicing, and making french fries',
     'Improving your child\'s SAT score',
     'Teaching the virtue of patience',
-    'Nurturing your web projects',
-    'The waiting is the hardest part'
+    'Nurturing your web projects'
   ];
   var rotateMessage = function() {
     setTimeout(function() {
