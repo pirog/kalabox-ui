@@ -57,12 +57,14 @@ angular.module('kalabox.dashboard', [
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        guiEngine.try(function() {
-          // Get reference to nw gui.
-          var gui = require('nw.gui');
-          // Open folder in os' default file browser.
-          gui.Shell.openExternal($scope.site.url);
-        });
+        if ($scope.ui.states[$scope.site.name]) {
+          guiEngine.try(function() {
+            // Get reference to nw gui.
+            var gui = require('nw.gui');
+            // Open folder in os' default file browser.
+            gui.Shell.openExternal($scope.site.url);
+          });
+        }
       });
     }
   };
