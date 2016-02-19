@@ -157,7 +157,8 @@ module.exports = function(grunt) {
       buildVendorCss: frontend.copy.buildVendorCss,
       compileAssets: frontend.copy.compileAssets,
       deps: deps.copy.deps,
-      icns: nw.copy.icns
+      icns: nw.copy.icns,
+      docs: nw.copy.docs
     },
     // Concatenates multiple source files into a single file.
     concat: {
@@ -254,6 +255,7 @@ module.exports = function(grunt) {
   pkgTask.push('shell:build');
   pkgTask.push('nwjs');
   pkgTask.push('copy:icns');
+  pkgTask.push('copy:docs');
   pkgTask.push('compress');
   // Finanly, register the packaging task
   grunt.registerTask('pkg', pkgTask);
