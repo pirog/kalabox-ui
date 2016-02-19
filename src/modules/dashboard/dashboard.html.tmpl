@@ -54,7 +54,7 @@
             <div class="site-info col-xs-12">
               <h3 ng-bind="site.name" site-browser></h3>
               <div class="site-actions">
-                <a ng-href="" site-toggle class="btn btn-default site-power" ng-class="{'site-up': ui.states[site.name]}"><i class="fa fa-power-off fa-2"></i><span> Start</span></a>
+                <a ng-href="" site-toggle class="btn btn-default site-power" ng-class="{'site-up': ui.states[site.name]}"><i class="fa fa-power-off fa-2"></i><span ng-if="!ui.states[site.name]"> Start</span><span ng-if="ui.states[site.name]"> Stop</span></a>
                 <div class="btn-group dropdown" uib-dropdown auto-close="outsideClick">
                   <div class="btn btn-default site-actions-dropdown" uib-dropdown-toggle>
                     <i class="fa fa-cog fa-2"></i>
