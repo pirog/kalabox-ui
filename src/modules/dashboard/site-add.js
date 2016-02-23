@@ -8,12 +8,18 @@ angular.module('kalabox.dashboard')
     link: function($scope, element) {
       element.on('click', function() {
         guiEngine.try(function() {
-          var siteAddModal = $scope.open(
-            'modules/dashboard/site-add-modal.html.tmpl',
-            'SiteAddModal',
-            {provider: $scope.provider, site: $scope.site}
-          );
-          return siteAddModal.result;
+          // Get list of site environments.
+          return $scope.site.getEnvironments()
+          .then(function(envs) {
+            // Set scope sites environments.
+            $scope.site.environments = envs;
+            var siteAddModal = $scope.open(
+              'modules/dashboard/site-add-modal.html.tmpl',
+              'SiteAddModal',
+              {provider: $scope.provider, site: $scope.site}
+            );
+            return siteAddModal.result;
+          });
         });
       });
     }

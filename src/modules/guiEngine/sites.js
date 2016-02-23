@@ -18,6 +18,7 @@ angular.module('kalabox.sites', [])
     this.framework = opts.providerInfo.framework;
     this.busy = false;
     this.update();
+    this.environments = [];
   }
 
   /*
@@ -72,6 +73,39 @@ angular.module('kalabox.sites', [])
   Site.prototype.getProvider = function() {
     var self = this;
     return providers.get(self.providerName);
+  };
+
+  /*
+   * Get list of site environments.
+   */
+  Site.prototype.getEnvironments = function() {
+    var self = this;
+    // Get provider.
+    return self.getProvider()
+    // Get list of provider's sites.
+    .then(function(provider) {
+      return provider.sites;
+    })
+    // Find provider site that matches this site.
+    .then(function(sites) {
+      return _.find(sites, function(site) {
+        return site.name === self.name;
+      });
+    })
+    // Throw error if site doesn't exist.
+    .tap(function(site) {
+      if (!site) {
+        throw new Error('Site not found: ' + self.name);
+      }
+    })
+    // Get list of environments for site.
+    .then(function(site) {
+      return site.getEnvironments();
+    })
+    // Cache environments.
+    .tap(function(envs) {
+      self.environments = envs;
+    });
   };
 
   /*

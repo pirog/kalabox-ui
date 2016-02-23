@@ -62,8 +62,8 @@ angular.module('kalabox.dashboard')
       .map(function(site) {
         self.sites.push({
           name: site.name,
-          environments: site.environments,
-          provider: self
+          provider: self,
+          getEnvironments: site.getEnvironments
         });
       });
     })
