@@ -18,7 +18,7 @@ If you're on Mac or Windows and want Kalabox to show up with your other applicat
 
 ## Using Kalabox
 
-Right now Kalabox only integrates with Pantheon. We'll be releasing the ability to have "stock" Drupal sites and integrations with other hosting providers soon, but until then, get a[free Pantheon account](https://pantheon.io/register) and create a new Drupal project if you don't already use Pantheon.
+Right now Kalabox only integrates with Pantheon. We'll be releasing the ability to have "stock" Drupal sites and integrations with other hosting providers soon, but until then, get a [free Pantheon account](https://pantheon.io/register) and create a new Drupal project if you don't already use Pantheon.
 
 ### Pulling a site from Pantheon
 
