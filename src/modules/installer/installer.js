@@ -30,8 +30,8 @@ angular.module('kalabox.installer', [
   };
 })
 .controller('InstallerCtrl',
-['$scope', '$q', '$location', 'kbox', '$window', '$timeout',
-  function($scope, $q, $location, kbox, $window, $timeout) {
+['$scope', '$q', '$location', 'kbox', '$window', '$timeout', 'statusUpdates',
+  function($scope, $q, $location, kbox, $window, $timeout, statusUpdates) {
 
     // Init ui model.
     $scope.ui = {
@@ -46,17 +46,19 @@ angular.module('kalabox.installer', [
       return Promise.try(function() {
 
         // Update title when we get a kbox update event.
-        kbox.status.on('update', function(data) {
-          $timeout(function() {
-            $scope.ui.title = data.message;
-          }, 0);
+        statusUpdates.then(function(statusUpdates) {
+          statusUpdates.on('update', function(message) {
+            $timeout(function() {
+              $scope.ui.title = message;
+            }, 0);
+          });
         });
 
         // Event called before a step runs.
         kbox.install.events.on('pre-step', function(ctx) {
           $timeout(function() {
             // Update status message with step's description.
-            kbox.status.update(ctx.step.description);
+            kbox.core.log.status(ctx.step.description);
             $scope.ui.detail =
               ctx.step.name + ' ' +
               ctx.state.stepIndex + ' of ' +

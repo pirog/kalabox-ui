@@ -26,6 +26,18 @@ angular.module('kalabox.nodewrappers', [])
       return kbox;
     });
   })
+  .factory('statusUpdates', function(kbox) {
+    return kbox.then(function(kbox) {
+      // Create an instance of a throttled event emitter.
+      var te = new kbox.util.ThrottledEvents();
+      // Forward log status messages to throttled event emitter.
+      kbox.core.log.on('status', function(message) {
+        te.emit('update', message);
+      });
+      // Return throttled event emitter.
+      return te;
+    });
+  })
   .factory('globalConfig', function(kbox) {
     return kbox.then(function(kbox) {
       return kbox.core.deps.get('globalConfig');
