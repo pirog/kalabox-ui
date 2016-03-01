@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('kalabox.guiEngine')
-.factory('queueService', function($q, errorService, kbox) {
+.factory('queueService', function($q, errorService, kbox, statusUpdates) {
 
   // Head of promise chain.
   var _hd = Promise.resolve();
@@ -13,10 +13,10 @@ angular.module('kalabox.guiEngine')
   var _current = null;
 
   // Handle kbox status message updates.
-  kbox.then(function(kbox) {
-    kbox.status.on('update', function(data) {
+  statusUpdates.then(function(statusUpdates) {
+    statusUpdates.on('update', function(message) {
       if (_current) {
-        _current.message = data.message;
+        _current.message = message;
       }
     });
   });

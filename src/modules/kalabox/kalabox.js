@@ -30,6 +30,13 @@ angular.module('kalabox', [
     }
   });
 })
+.run(function(kbox) {
+  kbox.then(function(kbox) {
+    kbox.core.log.on('warn', function(/*message*/) {
+      // @todo: handle warnings here.
+    });
+  });
+})
 // Override the default global error handler.
 .factory('$exceptionHandler', function() {
   return function(exception) {
