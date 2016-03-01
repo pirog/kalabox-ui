@@ -32,7 +32,7 @@ angular.module('kalabox', [
 })
 .run(function(kbox) {
   kbox.then(function(kbox) {
-    kbox.core.log.on('warn', function(message) {
+    kbox.core.log.on('warn', function(/*message*/) {
       // @todo: handle warnings here.
     });
   });
