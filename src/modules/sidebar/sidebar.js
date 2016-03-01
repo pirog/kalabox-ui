@@ -9,8 +9,12 @@ angular.module('kalabox.sidebar', [
 ])
 .config(function($stateProvider) {
   $stateProvider.state('dashboard.sidebar', {
-    url: '/dashboard/sidebar',
-    templateUrl: 'modules/sidebar/sidebar.html.tmpl'
+    views: {
+      'integrations': {
+        url: '/dashboard/sidebar',
+        templateUrl: 'modules/sidebar/sidebar.html.tmpl'
+      }
+    }
   })
   .state('dashboard.sidebar.provider-auth', {
     url: '/dashboard/sidebar/provider-auth/{provider:json}',
