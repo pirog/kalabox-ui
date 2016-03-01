@@ -1,6 +1,6 @@
 <div ng-class="{'overlay-active': ui.currentJob}">
 <nav id="addSite" class="navmenu navmenu-default navmenu-fixed-right navmenu-inverse offcanvas">
-  <div ui-view></div>
+  <div ui-view="integrations"></div>
 </nav>
 
 <div id="overlay" ng-if="ui.currentJob" ng-class="ui.currentJob.action">
@@ -31,7 +31,7 @@
       </form>
     </div>
     <div class="col-xs-7 site-actions">
-      <a href="" ui-sref='dashboard.sidebar' ui-sref-opts='{location: false}' class="btn btn-default site-add pull-right" data-toggle="offcanvas" data-target="#addSite" data-autohide="false"><i class="fa fa-plus fa-2"></i><span> Add Site</span></a>
+      <a href="" ui-sref='dashboard.sidebar' ui-sref-opts='{location: false}' class="btn btn-default site-add pull-right" data-toggle="offcanvas" data-target="#addSite"><i class="fa fa-plus fa-2"></i><span> Add Site</span></a>
     </div>
   </div>
   <div class="sites row">
