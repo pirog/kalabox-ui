@@ -96,7 +96,11 @@ body.dashboard-shutdown {
     color: $gray-light;
   }
   .detail {
+    z-index: 10010;
+    bottom: -210px;
+    position: relative;
     color: $gray;
+    text-align: center;
   }
 }
 
@@ -209,7 +213,7 @@ body.dashboard-shutdown {
   @-webkit-keyframes #{$name} {
     0% {color:$startColor;}
     25% {color:$middleColor;}
-    50% {color:$middleColor;}
+    50% {color:$endColor;}
     75% {color:$middleColor;}
     100% {color:$startColor;}
   }
@@ -217,8 +221,8 @@ body.dashboard-shutdown {
 
 @include bgChange-keyframes(bgChange, $dark-bg, #C9EBFA, white);
 @include bgChange-keyframes(bgChangeInverted, white, #C9EBFA, $dark-bg);
-@include colorChange-keyframes(headerChange, #9ECBEA, #4295D1, #9ECBEA);
-@include colorChange-keyframes(subHeaderChange, $gray-lighter, $gray-light, $gray-lighter);
+@include colorChange-keyframes(headerChange, #9ECBEA, #3B85BA, #4295D1);
+@include colorChange-keyframes(subHeaderChange, $gray-lighter, $gray, $gray);
 @include colorChange-keyframes(headerChangeInverted, #4295D1, #9ECBEA, #4295D1);
 @include colorChange-keyframes(subHeaderChangeInverted, $gray-light, $gray-lighter, $gray-light);
 
