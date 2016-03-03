@@ -43,12 +43,12 @@ angular.module('kalabox.notificationQueue', [
 .directive('notificationCenter', function() {
   console.log('in the directive');
   return {
-    controller: function($scope, notificationQueue, _) {
+    controller: function($scope, notificationQueue) {
       $scope.queue = notificationQueue;
       $scope.markAllRead = function() {
         $scope.apply(function() {
           notificationQueue.markAllRead();
-        })
+        });
       };
     },
     scope: true,
