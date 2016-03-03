@@ -8,6 +8,7 @@ angular.module('kalabox', [
   'kalabox.installer',
   'kalabox.sites',
   'kalabox.misc',
+  'kalabox.notificationQueue',
   'ui.bootstrap',
   'mwl.bluebird'
 ])
@@ -30,10 +31,10 @@ angular.module('kalabox', [
     }
   });
 })
-.run(function(kbox) {
+.run(function(kbox, notificationQueue) {
   kbox.then(function(kbox) {
-    kbox.core.log.on('warn', function(/*message*/) {
-      // @todo: handle warnings here.
+    kbox.core.log.on('warn', function(message) {
+      notificationQueue.add(message);
     });
   });
 })

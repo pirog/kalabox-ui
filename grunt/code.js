@@ -53,7 +53,8 @@ module.exports = {
         'start-*',
         'uib-*',
         'auto-close',
-        'show-errors'
+        'show-errors',
+        'notification-center'
       ],
       relaxerror: [
         'Empty heading.',
