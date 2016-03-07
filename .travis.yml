@@ -41,15 +41,26 @@ env:
   global:
   - CXX=g++-4.8
 deploy:
-  provider: s3
-  access_key_id: AKIAJB7JYZIZLCZWPTYA
-  secret_access_key:
-    secure: Hu3wtqpUdWdAN7JbU5229XNup23lHk8Iqe2wWlxavcfXz63NmGtSbz5fFOt/rLLy5AUgSCpJNd/2O+kCGvsywS4AeunfmiybQahr6TCtViymNB/Qbv/iK4VLMXPNKLypzkEyaBLoEyqWgOMnAuH4ytXNNolGVDiatJDHQtLaiwo=
-  bucket: gui.kalabox.io
-  local-dir: dev_build
-  acl: public_read
-  region: us-west-2
-  skip_cleanup: true
-  on:
-    repo: kalabox/kalabox-ui
-    branch: v0.12
+  - provider: releases
+    api_key:
+      secure: WN0vN7NmxNkU5dKyfoTT+RnulYaJc0Cta2TuDTztaZo4fGDzbm+3oEbu0wb4+JOZR5mRpP21DKH7wNcwAVJ/IrI/AGQicuGkfx70aUCwtsfVyX/Oj6bDrhJMhZqI9Gwf6UV3/Ec0cnhwu5HoABHCxb/6mMBkzRwt6ztjaRYMat8=
+    file:
+      - prod_build/kalabox-ui-linux64-$TRAVIS_TAG.tar.gz
+      - prod_build/kalabox-ui-osx64-$TRAVIS_TAG.tar.gz
+      - prod_build/kalabox-ui-win64-$TRAVIS_TAG.zip
+    on:
+    skip_cleanup: true
+      repo: kalabox/kalabox-ui
+      tags: true
+  - provider: s3
+    access_key_id: AKIAJB7JYZIZLCZWPTYA
+    secret_access_key:
+      secure: Hu3wtqpUdWdAN7JbU5229XNup23lHk8Iqe2wWlxavcfXz63NmGtSbz5fFOt/rLLy5AUgSCpJNd/2O+kCGvsywS4AeunfmiybQahr6TCtViymNB/Qbv/iK4VLMXPNKLypzkEyaBLoEyqWgOMnAuH4ytXNNolGVDiatJDHQtLaiwo=
+    bucket: gui.kalabox.io
+    local-dir: dev_build
+    acl: public_read
+    region: us-west-2
+    skip_cleanup: true
+    on:
+      repo: kalabox/kalabox-ui
+      branch: v0.12
