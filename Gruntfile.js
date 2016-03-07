@@ -9,7 +9,6 @@ module.exports = function(grunt) {
    * Load in our build configuration filez
    */
   var code = require('./grunt/code.js');
-  var deps = require('./grunt/deps.js');
   var files = require('./grunt/files.js');
   var frontend = require('./grunt/frontend.js');
   var nw = require('./grunt/nw.js');
@@ -33,47 +32,6 @@ module.exports = function(grunt) {
       'copy:buildVendorCss',
       'index:build'
     ];
-  };
-
-  /*
-   * Helper funct to add tasks to build and package based on options
-   * @todo: we dont want to download every time we build so some sort of
-   * cache would be good?
-   *
-   * NOTE: Grunt does not currently support multi-boolean options so you will
-   * need to epxlicitly set the value of the options to true|false
-   *
-   * Options:
-   *  deps = [true|false]: Will download the platform specific install deps
-   *  iso = [true|false]: Will download the VM iso image
-   *  images = [true|false]: Will export images into a compressed tar
-   *
-   */
-  var parseBuildOptions = function(task) {
-
-    // Add in download deps if needed
-    if (grunt.option('deps')) {
-      task.push('clean:deps');
-      task.push('curl-dir:osx64Deps');
-      task.push('curl-dir:win64Deps');
-      task.push('curl-dir:linux64Deps');
-    }
-
-    // Add in download iso if needed
-    if (grunt.option('iso')) {
-      task.push('clean:iso');
-      task.push('curl-dir:iso');
-    }
-
-    // Add in exported images if needed
-    if (grunt.option('images')) {
-      task.push('clean:images');
-      task.push('shell:exportImages');
-    }
-
-    // Return the task back
-    return task;
-
   };
 
   /**
@@ -127,19 +85,7 @@ module.exports = function(grunt) {
     // Cleans out various dirs
     clean: {
       build: frontend.clean.build,
-      allDeps: deps.clean.all,
-      deps: deps.clean.deps,
-      images: deps.clean.images,
-      iso: deps.clean.iso,
       nw: nw.clean.nw
-    },
-
-    // Also download other dependencies we might need
-    'curl-dir': {
-      osx64Deps: deps.downloads.osx64Deps,
-      win64Deps: deps.downloads.win64Deps,
-      linux64Deps: deps.downloads.linux64Deps,
-      iso: deps.downloads.iso
     },
 
     // Installs bower deps
@@ -147,6 +93,7 @@ module.exports = function(grunt) {
       install: frontend.bower.install,
       ci: frontend.bower.console
     },
+
     // Copies relevant things from a to b
     copy: {
       buildAppScripts: frontend.copy.buildAppScripts,
@@ -156,7 +103,6 @@ module.exports = function(grunt) {
       buildVendorJs: frontend.copy.buildVendorJs,
       buildVendorCss: frontend.copy.buildVendorCss,
       compileAssets: frontend.copy.compileAssets,
-      deps: deps.copy.deps,
       icns: nw.copy.icns,
       docs: nw.copy.docs
     },
@@ -192,14 +138,13 @@ module.exports = function(grunt) {
     // Angular html validate
     htmlangular: code.htmlangular,
     // Compress built NW assets
-    compress: nw.compress,
+    compress: nw.compress(grunt),
     // Build the NW binaries
-    nwjs: nw.nwjs,
+    nwjs: nw.nwjs(grunt),
     // Run Some NW shell things
     shell: {
       nw: nw.shell.nw,
       build: {command: nw.shell.build(grunt)},
-      exportImages: deps.shell.exportImages
     },
     delta: frontend.delta,
   };
@@ -216,6 +161,21 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['build']);
   grunt.registerTask('sassBuild', ['sass:build']);
 
+  // Bump our minor version
+  grunt.registerTask('bigrelease', [
+    'bump:minor'
+  ]);
+
+  // Bump our patch version
+  grunt.registerTask('release', [
+    'bump:patch'
+  ]);
+
+  // Do a prerelease version
+  grunt.registerTask('prerelease', [
+    'bump:prerelease'
+  ]);
+
   /**
    * The `code` task runs basic code linting and styling things
    */
@@ -230,10 +190,6 @@ module.exports = function(grunt) {
    */
   // Start by grabbing our common build options
   var buildTask = commonBuildTasks();
-  // Now parse our build opts
-  buildTask = parseBuildOptions(buildTask);
-  // Copy any deps over
-  buildTask.push('copy:deps');
   // Add the NW run task
   buildTask.push('shell:nw');
   // Finally, register the build
@@ -245,10 +201,6 @@ module.exports = function(grunt) {
    */
   // Start with our common build tasks
   var pkgTask = commonBuildTasks();
-  // Now parse our build opts
-  pkgTask = parseBuildOptions(pkgTask);
-  // Copy any deps over
-  pkgTask.push('copy:deps');
   // Clean out our NW dirs before we build
   pkgTask.push('clean:nw');
   // Add NW build to finish it off
