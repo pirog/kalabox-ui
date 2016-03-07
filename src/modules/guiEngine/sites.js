@@ -8,6 +8,7 @@ angular.module('kalabox.sites', [])
 
   // Constructor.
   function Site(opts) {
+    console.log(opts);
     this.opts = opts;
     this.name = opts.name;
     this.url = opts.url;
@@ -266,6 +267,7 @@ angular.module('kalabox.sites', [])
         opts.dir = opts.dir || config.appsRoot;
         // Get app.
         var app = kbox.create.get(opts.provider.name);
+        console.log('app', app, 'opts', opts);
         // Create app.
         return kbox.create.createApp(app, opts);
       });

@@ -103,11 +103,13 @@ angular.module('kalabox.dashboard', [
   // Grab developer mode so we can display inch high red letters on the UI.
   kbox.then(function(kbox) {
     $scope.ui.devMode = kbox.core.deps.get('globalConfig').devMode;
+    $rootScope.apps = kbox.create.getAll();
   });
 
   // When a site is destroyed filter the sites in the scope to remove it.
   // This needs to happen because the polling takes time to catch up.
   kbox.then(function(kbox) {
+    $scope.kbox = kbox;
     // Listen to the post app destroy event.
     kbox.core.events.on('post-app-destroy', function(app) {
       // Filter sites to remove site that was just destroyed.

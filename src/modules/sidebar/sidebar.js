@@ -20,6 +20,11 @@ angular.module('kalabox.sidebar', [
     url: '/dashboard/sidebar/provider-auth/{provider:json}',
     templateUrl: 'modules/sidebar/provider-auth.html.tmpl',
     controller: 'ProviderAuth'
+  })
+  .state('dashboard.sidebar.app-create', {
+    url: '/dashboard/sidebar/app-create/{app:json}',
+    templateUrl: 'modules/sidebar/app-create.html.tmpl',
+    controller: 'AppCreate'
   });
 })
 .controller(
@@ -86,6 +91,41 @@ angular.module('kalabox.sidebar', [
             }
           });
         }
+      });
+    }
+  };
+})
+.controller(
+  'AppCreate',
+  function($scope, kbox, _, guiEngine, $state, $stateParams, Site) {
+    $scope.app = $stateParams.app;
+
+    guiEngine.try(function() {
+      $scope.errorMessage = false;
+      // Auth on submission.
+      $scope.ok = function(appName) {
+        guiEngine.try(function() {
+          // Add site.
+          Site.add({
+            provider: {name: $scope.app.name},
+            site: appName,
+            name: appName.toLowerCase()
+          });
+          // Navigate back to main provider view.
+          $state.go('dashboard.sidebar', {}, {location: false});
+        });
+      };
+    });
+  }
+)
+.directive('appClick', function(guiEngine, $state) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        console.log('in click');
+        $state.go('dashboard.sidebar.app-create',
+          {app: $scope.app}, {location: false});
       });
     }
   };
