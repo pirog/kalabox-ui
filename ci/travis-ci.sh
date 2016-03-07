@@ -88,24 +88,28 @@ before-deploy() {
   fi
 
   # Do the build again for our dev releases
-  grunt pkg --dev=true>/dev/null
+  grunt pkg --dev>/dev/null
 
   # Rename our build and produce a latest build
   mkdir -p dev_build
+  ls -lsa dist
 
   # Get relevant things to rename our build
   BUILD_HASH=$(git rev-parse --short HEAD)
   BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
 
   # Add commit hash to our dev builds
+  cp dist/kalabox-ui-linux64-v$BUILD_VERSION-dev.tar.gz dev_build/kalabox-ui-linux64-v$BUILD_VERSION-$BUILD_HASH-dev.tar.gz
   cp dist/kalabox-ui-osx64-v$BUILD_VERSION-dev.tar.gz dev_build/kalabox-ui-osx64-v$BUILD_VERSION-$BUILD_HASH-dev.tar.gz
   cp dist/kalabox-ui-win64-v$BUILD_VERSION-dev.zip dev_build/kalabox-ui-win64-v$BUILD_VERSION-$BUILD_HASH-dev.zip
-  cp dist/kalabox-ui-linux64-v$BUILD_VERSION-dev.tar.gz dev_build/kalabox-ui-linux64-v$BUILD_VERSION-$BUILD_HASH-dev.tar.gz
 
   # Build latests as well
+  cp dist/kalabox-ui-linux64-v$BUILD_VERSION-dev.tar.gz dev_build/kalabox-ui-linux64-latest-dev.tar.gz
   cp dist/kalabox-ui-osx64-v$BUILD_VERSION-dev.tar.gz dev_build/kalabox-ui-osx64-latest-dev.tar.gz
   cp dist/kalabox-ui-win64-v$BUILD_VERSION-dev.zip dev_build/kalabox-ui-win64-latest-dev.zip
-  cp dist/kalabox-ui-linux64-v$BUILD_VERSION-dev.tar.gz dev_build/kalabox-ui-linux64-latest-dev.tar.gz
+
+  # Check out our situation
+  ls -lsa dev_build
 
 }
 
