@@ -11,27 +11,50 @@ var nw = require('nw');
 // Current app version
 var version = require('./../package.json').version;
 
-// Platforms to expect for the compression
-var platforms = ['win64', 'osx64', 'linux64'];
+/*
+ * Helper function to get platform
+ */
+var getPlatforms = function(grunt) {
+
+  // All allowed platforms
+  var allowed = ['win64', 'osx64', 'linux64'];
+
+  // Build all platforms
+  if (!grunt.option('platform')) {
+    return allowed;
+  }
+
+  // Or allow platform user passed in
+  else {
+    return [grunt.option('platform')];
+  }
+
+};
 
 /*
  * Helper function to generate our compress object
  */
-var nwCompress = function(platforms) {
+var nwCompress = function(grunt) {
 
   // Start up an empty
   var compress = {};
 
   // Iterate through our platforms and add to the compress array
-  _.forEach(platforms, function(platform) {
+  _.forEach(getPlatforms(grunt), function(platform) {
 
     // Our zippy ext is different depending on the platform
     var zippyExt = (_.includes(platform, 'win')) ? '.zip' : '.tar.gz';
+    var dev = (grunt.option('dev')) ? '-dev' : '';
+    var archive = [
+      'dist/kalabox',
+      platform,
+      version + dev + zippyExt
+    ];
 
-    // Build our copress object
+    // Build our compress object
     compress[platform] = {
       options: {
-        archive: 'dist/kalabox-' + platform + '-' + version + zippyExt
+        archive: archive.join('-')
       },
       files: [
         {
@@ -55,13 +78,13 @@ var nwCompress = function(platforms) {
  * NOTE: we need to do this because our deps are different for each
  * platform
  */
-var nwBuilder = function(platforms) {
+var nwBuilder = function(grunt) {
 
   // Start up an empty
   var builder = {};
 
   // Iterate through our platforms and add to the build array
-  _.forEach(platforms, function(platform) {
+  _.forEach(getPlatforms(grunt), function(platform) {
 
     // Command options to build the nw app.
     builder[platform] = {
@@ -129,12 +152,12 @@ module.exports = {
   /*
    * Compress our built NW packages
    */
-  compress: nwCompress(platforms),
+  compress: nwCompress,
 
   /*
    * Build our NW packages
    */
-  nwjs: nwBuilder(platforms),
+  nwjs: nwBuilder,
 
   copy: {
     icns: {

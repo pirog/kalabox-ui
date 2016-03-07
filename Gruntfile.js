@@ -138,9 +138,9 @@ module.exports = function(grunt) {
     // Angular html validate
     htmlangular: code.htmlangular,
     // Compress built NW assets
-    compress: nw.compress,
+    compress: nw.compress(grunt),
     // Build the NW binaries
-    nwjs: nw.nwjs,
+    nwjs: nw.nwjs(grunt),
     // Run Some NW shell things
     shell: {
       nw: nw.shell.nw,
@@ -190,10 +190,10 @@ module.exports = function(grunt) {
   pkgTask.push('clean:nw');
   // Add NW build to finish it off
   pkgTask.push('shell:build');
-  //pkgTask.push('nwjs');
-  //pkgTask.push('copy:icns');
-  //pkgTask.push('copy:docs');
-  //pkgTask.push('compress');
+  pkgTask.push('nwjs');
+  pkgTask.push('copy:icns');
+  pkgTask.push('copy:docs');
+  pkgTask.push('compress');
   // Finanly, register the packaging task
   grunt.registerTask('pkg', pkgTask);
 
