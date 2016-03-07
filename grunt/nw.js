@@ -59,7 +59,7 @@ var nwCompress = function(grunt) {
       files: [
         {
           expand: true,
-          cwd: 'nw/kalabox/' + platform + '/',
+          cwd: 'nw/Kalabox/' + platform + '/',
           src: ['**'],
           dest: 'Kalabox/'
         }
