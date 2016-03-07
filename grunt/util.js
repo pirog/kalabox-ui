@@ -15,17 +15,20 @@ module.exports = {
         'package.json',
         'bower.json'
       ],
+      updateConfigs: [],
       commit: true,
       commitMessage: 'Release v%VERSION%',
-      commitFiles: [
-        'package.json',
-        'client/bower.json'
-      ],
+      commitFiles: ['package.json'],
       createTag: true,
       tagName: 'v%VERSION%',
       tagMessage: 'Version %VERSION%',
-      push: false,
-      pushTo: 'origin'
+      push: true,
+      pushTo: 'origin',
+      gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+      globalReplace: false,
+      prereleaseName: 'alpha',
+      metadata: '',
+      regExp: false
     }
   }
 

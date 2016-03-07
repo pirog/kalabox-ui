@@ -46,9 +46,9 @@ var nwCompress = function(grunt) {
     var zippyExt = (_.includes(platform, 'win')) ? '.zip' : '.tar.gz';
     var dev = (grunt.option('dev')) ? '-dev' : '';
     var archive = [
-      'dist/kalabox',
+      'dist/kalabox-ui',
       platform,
-      version + dev + zippyExt
+      'v' + version + dev + zippyExt
     ];
 
     // Build our compress object

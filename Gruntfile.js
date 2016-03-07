@@ -161,6 +161,21 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['build']);
   grunt.registerTask('sassBuild', ['sass:build']);
 
+  // Bump our minor version
+  grunt.registerTask('bigrelease', [
+    'bump:minor'
+  ]);
+
+  // Bump our patch version
+  grunt.registerTask('release', [
+    'bump:patch'
+  ]);
+
+  // Do a prerelease version
+  grunt.registerTask('prerelease', [
+    'bump:prerelease'
+  ]);
+
   /**
    * The `code` task runs basic code linting and styling things
    */

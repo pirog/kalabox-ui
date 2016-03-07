@@ -12,31 +12,37 @@ EXIT_VALUE=0
 # Do some stuff before npm install
 #
 before-install() {
-  #sudo apt-get install curl
-  #export DISPLAY=:99.0
-  #sh -e /etc/init.d/xvfb start +extension RANDR
-  #sleep 5
-  # Add our key
-  if ([ $TRAVIS_BRANCH == "master" ] || [ ! -z $TRAVIS_TAG ]) &&
-    [ $TRAVIS_PULL_REQUEST == "false" ] &&
-    [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
-      openssl aes-256-cbc -K $encrypted_1855b2cf27b1_key -iv $encrypted_1855b2cf27b1_iv -in ci/travis.id_rsa.enc -out $HOME/.ssh/travis.id_rsa -d
-  fi
+
+  # Gather intel
+  echo "TRAVIS_TAG: ${TRAVIS_TAG}"
+  echo "TRAVIS_BRANCH: ${TRAVIS_BRANCH}"
+  echo "TRAVIS_PULL_REQUEST: ${TRAVIS_PULL_REQUEST}"
+  echo "TRAVIS_REPO_SLUG: ${TRAVIS_REPO_SLUG}"
+  echo "TRAVIS_BUILD_DIR: ${TRAVIS_BUILD_DIR}"
+  echo "TRAVIS_OS_NAME: ${TRAVIS_OS_NAME}"
+  echo "PATH: ${PATH}"
+
+  # Install grunt cli and bower
+  npm install -g grunt-cli bower
+  gem install sass
+
+  # Sanity checks
+  node --version
+  npm --version
+  grunt --version
+  bower --version
+  ruby --version
+  sass --version
 
 }
 
-#$ node -pe 'JSON.parse(process.argv[1]).foo' "$(cat foobar.json)"
 
 # before-script
 #
-# Setup Drupal to run the tests.
+# Before tests run
 #
 before-script() {
-  #sudo apt-get install jq
-  #sudo apt-get install python-pip
-  #sudo pip install --upgrade httpie
-  npm install -g grunt-cli bower
-  bower install
+  echo
 }
 
 # script
@@ -44,12 +50,12 @@ before-script() {
 # Run the tests.
 #
 script() {
-  DISPLAY=:99.0 grunt test
+  run_command grunt test
 }
 
 # after-script
 #
-# Clean up after the tests.
+# Run after tests
 #
 after-script() {
   echo
@@ -57,70 +63,58 @@ after-script() {
 
 # after-success
 #
-# Clean up after the tests.
+# GREAT SUCCESS!
 #
 after-success() {
-  #cd $TRAVIS_BUILD_DIR
-  #DISPLAY=:99.0 grunt build
-  #cd $TRAVIS_BUILD_DIR
   echo
 }
 
 # before-deploy
 #
-# Clean up after the tests.
+# Run before deploy
 #
 before-deploy() {
-  if ([ $TRAVIS_BRANCH == "master" ] || [ ! -z $TRAVIS_TAG ])
-    [ $TRAVIS_PULL_REQUEST == "false" ] &&
+
+  # THis is a production release!
+  if [ $TRAVIS_PULL_REQUEST == "false" ] &&
+    [ ! -z "$TRAVIS_TAG" ] &&
     [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
 
-    COMMIT_MESSAGE=$(git log --format=%B -n 1)
-    BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
-    # BUMP patch but only on master and not a tag
-    if [ -z $TRAVIS_TAG ] && [ $TRAVIS_BRANCH == "master" ] && [ "${COMMIT_MESSAGE}" != "Release v${BUILD_VERSION}" ] ; then
-      grunt bump-patch
-    fi
+    # Do a production build
+    grunt pkg>/dev/null
+    mkdir -p prod_build
+    mv dist/kalabox-ui* prod_build/
 
-    BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
-
-    # Move the built stuff over
-    mv built/kalabox-win64-dev.zip built/kalabox2-win64-v$BUILD_VERSION.zip
-    mv built/kalabox-osx64-dev.tar.gz built/kalabox2-osx64-v$BUILD_VERSION.tar.gz
-    mv built/kalabox-linux64-dev.tar.gz built/kalabox2-linux64-v$BUILD_VERSION.tar.gz
-  else
-    exit $EXIT_VALUE
   fi
+
+  # Do the build again for our dev releases
+  grunt pkg --dev=true>/dev/null
+
+  # Rename our build and produce a latest build
+  mkdir -p dev_build
+
+  # Get relevant things to rename our build
+  BUILD_HASH=$(git rev-parse --short HEAD)
+  BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
+
+  # Add commit hash to our dev builds
+  cp dist/kalabox-ui-osx64-v$BUILD_VERSION-dev.tar.gz dev_build/kalabox-ui-osx64-v$BUILD_VERSION-$BUILD_HASH-dev.tar.gz
+  cp dist/kalabox-ui-win64-v$BUILD_VERSION-dev.zip dev_build/kalabox-ui-win64-v$BUILD_VERSION-$BUILD_HASH-dev.zip
+  cp dist/kalabox-ui-linux64-v$BUILD_VERSION-dev.tar.gz dev_build/kalabox-ui-linux64-v$BUILD_VERSION-$BUILD_HASH-dev.tar.gz
+
+  # Build latests as well
+  cp dist/kalabox-ui-osx64-v$BUILD_VERSION-dev.tar.gz dev_build/kalabox-ui-osx64-latest-dev.tar.gz
+  cp dist/kalabox-ui-win64-v$BUILD_VERSION-dev.zip dev_build/kalabox-ui-win64-latest-dev.zip
+  cp dist/kalabox-ui-linux64-v$BUILD_VERSION-dev.tar.gz dev_build/kalabox-ui-linux64-latest-dev.tar.gz
+
 }
 
 # after-deploy
 #
-# Clean up after the tests.
+# Run After deploy
 #
 after-deploy() {
-  if [ $TRAVIS_BRANCH == "master" ] &&
-    [ $TRAVIS_PULL_REQUEST == "false" ] &&
-    [ $TRAVIS_REPO_SLUG == "kalabox/kalabox-ui" ]; then
-    $HOME/index-gen.sh > /dev/null
-    BUILD_VERSION=$(node -pe 'JSON.parse(process.argv[1]).version' "$(cat $TRAVIS_BUILD_DIR/package.json)")
-    # Set up the SSH key
-    chmod 600 $HOME/.ssh/travis.id_rsa
-    eval "$(ssh-agent)"
-    ssh-add $HOME/.ssh/travis.id_rsa
-    # Set a user for things
-    git config --global user.name "Kala C. Bot"
-    git config --global user.email "kalacommitbot@kalamuna.com"
-    # Set up our repos
-    # We need to re-add this in because our clone was originally read-only
-    git remote rm origin
-    git remote add origin git@github.com:kalabox/kalabox-ui.git
-    git checkout $TRAVIS_BRANCH
-    git add -A
-    if [ -z $TRAVIS_TAG ]; then
-      git commit -m "KALABOT RUNNING A LEVEL THREE DIAGNOSTIC VERSION ${BUILD_VERSION} [ci skip]" --author="Kala C. Bot <kalacommitbot@kalamuna.com>" --no-verify
-    fi
-    git push origin $TRAVIS_BRANCH
-  fi
+  echo
 }
 
 ##
@@ -130,6 +124,7 @@ after-deploy() {
 # Sets the exit level to error.
 set_error() {
   EXIT_VALUE=1
+  echo "$@"
 }
 
 # Runs a command and sets an error if it fails.
