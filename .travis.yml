@@ -48,8 +48,8 @@ deploy:
       - prod_build/kalabox-ui-linux64-$TRAVIS_TAG.tar.gz
       - prod_build/kalabox-ui-osx64-$TRAVIS_TAG.tar.gz
       - prod_build/kalabox-ui-win64-$TRAVIS_TAG.zip
-    on:
     skip_cleanup: true
+    on:
       repo: kalabox/kalabox-ui
       tags: true
   - provider: s3
