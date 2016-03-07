@@ -66,7 +66,7 @@ var nwBuilder = function(platforms) {
     // Command options to build the nw app.
     builder[platform] = {
       options: {
-        version: '0.12.3',
+        version: version,
         platforms: [platform],
         buildDir: 'nw',
         macIcns: './build/images/kalabox.icns'
@@ -103,11 +103,19 @@ var npmBuildCmd = function(grunt) {
   // Normal CMDz
   cmd.push('cd ./<%= buildDir %>');
   cmd.push('&&');
-  cmd.push('npm install');
+  cmd.push('npm install --production');
 
   // Allow non-production packages to be created
   if (!grunt.option('dev')) {
-    cmd.push('--production');
+    cmd.push('&&');
+    if (process.platform === 'win32') {
+      cmd.push('copy');
+    }
+    else {
+      cmd.push('cp');
+    }
+    cmd.push('node_modules/kalabox/package.json');
+    cmd.push('node_modules/kalabox/version.lock');
   }
 
   // Give up all the glory
@@ -141,19 +149,7 @@ module.exports = {
       files: [
         {src: 'README.md', dest: 'nw/Kalabox/osx64/README.md'},
         {src: 'README.md', dest: 'nw/Kalabox/linux64/README.md'},
-        {src: 'README.md', dest: 'nw/Kalabox/win64/README.md'},
-        {
-          src: 'node_modules/kalabox/scripts/uninstall-darwin.sh',
-          dest: 'nw/Kalabox/osx64/uninstall.sh'
-        },
-        {
-          src: 'node_modules/kalabox/scripts/uninstall-linux.sh',
-          dest: 'nw/Kalabox/linux64/uninstall.sh'
-        },
-        {
-          src: 'node_modules/kalabox/scripts/uninstall-win32.bat',
-          dest: 'nw/Kalabox/win64/uninstall.bat'
-        }
+        {src: 'README.md', dest: 'nw/Kalabox/win64/README.md'}
       ]
     }
   },
