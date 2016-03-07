@@ -90,3 +90,70 @@ img.logo { width: 50px; }
     background-color: #fff;
     border-radius: 8px;
 }
+
+.site-add {
+  @include roll-over-button(40px, 100px);
+  margin-left: 10px;
+  text-align: right;
+}
+
+#notification-dropdown {
+  text-align: right;
+  overflow: hidden;
+  width: 40px;
+  margin-left: 10px;
+}
+
+.notifier.unread {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: $brand-info;
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: inline-block;
+}
+
+.notification-center {
+  ul.dropdown-menu {
+    width: 250px;
+    padding: 0px;
+    li {
+      padding: 20px 10px;
+      border-bottom: 1px solid $gray-lightest;
+      p, i, a {
+        vertical-align: top;
+      }
+      p {
+        display: inline-block;
+        width: 190px;
+        margin-bottom: 0px;
+      }
+      i.fa-exclamation-triangle {
+        color: $brand-warning;
+        width: 20px;
+        margin-top: 2px;
+      }
+      a {
+        display: inline-block;
+        padding: 0px;
+        width: 10px;
+        margin-top: 2px;
+      }
+      a:hover {
+        background-color: $gray-lightest;
+        font-weight: bold;
+        cursor: pointer;
+      }
+    }
+    li:last-child {
+      border-bottom: none;
+    }
+    li.new {
+    }
+    li:hover {
+      background-color: $gray-lightest;
+    }
+  }
+}

@@ -190,11 +190,6 @@
   }
 }
 
-.site-add {
-  @include roll-over-button(40px, 100px);
-  text-align: right;
-}
-
 .site.add {
   text-align: center;
   border: 2px dashed #bbb;

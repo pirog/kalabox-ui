@@ -5,6 +5,7 @@ angular.module('kalabox.dashboard', [
   'ui.bootstrap',
   'kalabox.nodewrappers',
   'kalabox.guiEngine',
+  'kalabox.notificationQueue',
   'kalabox.sidebar'
 ])
 .config(function($stateProvider) {
