@@ -81,7 +81,8 @@ module.exports = {
       'src/lib/vendor/loaders.css/loaders.min.css'
     ],
     assets: [
-      'src/lib/vendor/font-awesome/fonts/fontawesome-webfont.woff'
+      'src/lib/vendor/font-awesome/fonts/fontawesome-webfont.woff',
+      'src/lib/vendor/font-awesome/fonts/fontawesome-webfont.ttf'
     ]
   },
 };
