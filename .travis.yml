@@ -28,6 +28,7 @@ after_deploy:
 cache:
   directories:
   - node_modules
+  - cache
 notifications:
   irc:
   - chat.freenode.net#kalabox
