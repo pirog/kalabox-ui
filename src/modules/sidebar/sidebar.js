@@ -32,8 +32,8 @@ angular.module('kalabox.sidebar', [
   'SidebarCtrl',
   function($scope, _) {
     $scope.pantheonAuthed = function(providers) {
-      return _.some(providers, function(provider){
-        !_.isEmpty(provider.username);
+      return _.some(providers, function(provider) {
+        return !_.isEmpty(provider.username);
       });
     };
   }
@@ -110,7 +110,7 @@ angular.module('kalabox.sidebar', [
   'AppCtrl',
   function($scope) {
     $scope.appDisplayName = function(app) {
-      switch(app.name) {
+      switch (app.name) {
         case 'drupal7':
           return 'Drupal 7';
         case 'drupal8':
@@ -135,7 +135,8 @@ angular.module('kalabox.sidebar', [
           Site.add({
             provider: {name: $scope.app.name},
             site: appName,
-            name: appName.toLowerCase()
+            name: appName.toLowerCase(),
+            image: 'images/kalabox/screenshot.png'
           });
           // Navigate back to main provider view.
           $state.go('dashboard.sidebar', {}, {location: false});
