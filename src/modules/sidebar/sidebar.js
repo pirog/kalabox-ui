@@ -110,7 +110,6 @@ angular.module('kalabox.sidebar', [
   'AppCtrl',
   function($scope) {
     $scope.appDisplayName = function(app) {
-      console.log(app);
       switch(app.name) {
         case 'drupal7':
           return 'Drupal 7';
@@ -132,7 +131,6 @@ angular.module('kalabox.sidebar', [
       // Auth on submission.
       $scope.ok = function(appName) {
         guiEngine.try(function() {
-          console.log(appName, $scope.app);
           // Add site.
           Site.add({
             provider: {name: $scope.app.name},
@@ -151,7 +149,6 @@ angular.module('kalabox.sidebar', [
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        console.log('in click');
         $state.go('dashboard.sidebar.app-create',
           {app: $scope.app}, {location: false});
       });

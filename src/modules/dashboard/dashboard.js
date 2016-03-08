@@ -104,7 +104,6 @@ angular.module('kalabox.dashboard', [
   kbox.then(function(kbox) {
     $scope.ui.devMode = kbox.core.deps.get('globalConfig').devMode;
     $rootScope.apps = _.values(kbox.create.getAll());
-    console.log($rootScope.apps);
   });
 
   // When a site is destroyed filter the sites in the scope to remove it.
