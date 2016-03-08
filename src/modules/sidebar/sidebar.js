@@ -12,7 +12,8 @@ angular.module('kalabox.sidebar', [
     views: {
       'integrations': {
         url: '/dashboard/sidebar',
-        templateUrl: 'modules/sidebar/sidebar.html.tmpl'
+        templateUrl: 'modules/sidebar/sidebar.html.tmpl',
+        controller: 'SidebarCtrl'
       }
     }
   })
@@ -27,6 +28,16 @@ angular.module('kalabox.sidebar', [
     controller: 'AppCreate'
   });
 })
+.controller(
+  'SidebarCtrl',
+  function($scope, _) {
+    $scope.pantheonAuthed = function(providers) {
+      return _.some(providers, function(provider){
+        !_.isEmpty(provider.username);
+      });
+    };
+  }
+)
 .controller(
   'ProviderCtrl',
   function($scope) {
@@ -96,6 +107,22 @@ angular.module('kalabox.sidebar', [
   };
 })
 .controller(
+  'AppCtrl',
+  function($scope) {
+    $scope.appDisplayName = function(app) {
+      console.log(app);
+      switch(app.name) {
+        case 'drupal7':
+          return 'Drupal 7';
+        case 'drupal8':
+          return 'Drupal 8';
+        case 'wordpress':
+          return 'Wordpress';
+      }
+    };
+  }
+)
+.controller(
   'AppCreate',
   function($scope, kbox, _, guiEngine, $state, $stateParams, Site) {
     $scope.app = $stateParams.app;
@@ -105,6 +132,7 @@ angular.module('kalabox.sidebar', [
       // Auth on submission.
       $scope.ok = function(appName) {
         guiEngine.try(function() {
+          console.log(appName, $scope.app);
           // Add site.
           Site.add({
             provider: {name: $scope.app.name},

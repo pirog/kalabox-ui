@@ -103,7 +103,8 @@ angular.module('kalabox.dashboard', [
   // Grab developer mode so we can display inch high red letters on the UI.
   kbox.then(function(kbox) {
     $scope.ui.devMode = kbox.core.deps.get('globalConfig').devMode;
-    $rootScope.apps = kbox.create.getAll();
+    $rootScope.apps = _.values(kbox.create.getAll());
+    console.log($rootScope.apps);
   });
 
   // When a site is destroyed filter the sites in the scope to remove it.
