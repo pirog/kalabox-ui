@@ -95,6 +95,12 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
+.directive('site', function() {
+  return {
+    restrict: 'E',
+    templateUrl: 'modules/dashboard/site.html.tmpl'
+  };
+})
 .controller(
   'DashboardCtrl',
   function($scope, $uibModal, $timeout, $interval, $q, kbox,
