@@ -10,6 +10,10 @@ angular.module('kalabox.initialize', [
     url: '/initialize',
     templateUrl: 'modules/initialize/initialize.html.tmpl',
     controller: 'InitializeCtrl'
+  })
+  .state('installer-error', {
+    url: '/installer-error',
+    templateUrl: 'modules/initialize/installer-error.html.tmpl',
   });
   $urlRouterProvider.otherwise('/initialize');
 })
@@ -35,8 +39,8 @@ angular.module('kalabox.initialize', [
           });
         });
       } else {
-        // Navigate to start.
-        $state.go('start');
+        // Install hasn't run.
+        $state.go('installer-error');
       }
     });
 
