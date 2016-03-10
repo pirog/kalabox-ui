@@ -1,0 +1,11 @@
+<div class="modal-header">
+  <h3 class="modal-title" ng-bind="'Connection Info for ' + site.name"></h3>
+</div>
+<div class="modal-body">
+  <div ng-repeat="service in services">
+    <h2 ng-bind="service.name"></h2>
+  </div>
+</div>
+<div class="modal-footer">
+  <button class="btn btn-primary" type="button" ng-click="ok()">Got it, Thanks!</button>
+</div>

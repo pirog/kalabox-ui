@@ -97,7 +97,7 @@ angular.module('kalabox.dashboard', [
 })
 .directive('site', function() {
   return {
-    restrict: 'E',
+    restrict: 'EA',
     templateUrl: 'modules/dashboard/site.html.tmpl'
   };
 })

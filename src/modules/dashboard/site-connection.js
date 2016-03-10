@@ -2,7 +2,7 @@
 
 angular.module('kalabox.dashboard')
 
-.directive('siteConnection', function(guiEngine) {
+.directive('siteConnection', function(guiEngine, Site) {
   return {
     scope: true,
     link: function($scope, element) {
@@ -11,6 +11,7 @@ angular.module('kalabox.dashboard')
         guiEngine.try(function() {
           // Get the services.
           // @todo: we should do this through site.js; this method won't work.
+
           var siteConnectModal = $scope.open(
             'modules/dashboard/site-connection-modal.html.tmpl',
             'SitePullModal',
@@ -19,6 +20,7 @@ angular.module('kalabox.dashboard')
               environments: []
             }
           );
+          return siteConnectModal.result;
         });
       });
     }
@@ -31,7 +33,7 @@ angular.module('kalabox.dashboard')
 
     guiEngine.try(function() {
       _.forEach(modalData.services, function(service) {
-        $scope[service.name] = service;
+        $scope.services[service.name] = service;
       });
       $scope.ok = function() {
         $uibModalInstance.close();
