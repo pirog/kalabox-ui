@@ -167,31 +167,6 @@ module.exports = {
           dest: 'nw/Kalabox/osx64/Kalabox.app/Contents/Resources/nw.icns'
         }
       ]
-    },
-    docs: {
-      files: [
-        {src: 'README.md', dest: 'nw/Kalabox/osx64/README.md'},
-        {src: 'README.md', dest: 'nw/Kalabox/linux64/README.md'},
-        {src: 'README.md', dest: 'nw/Kalabox/win64/README.md'},
-        {src: 'TERMS.md', dest: 'nw/Kalabox/osx64/TERMS.md'},
-        {src: 'TERMS.md', dest: 'nw/Kalabox/linux64/TERMS.md'},
-        {src: 'TERMS.md', dest: 'nw/Kalabox/win64/TERMS.md'},
-        {src: 'LICENSE.txt', dest: 'nw/Kalabox/osx64/LICENSE.txt'},
-        {src: 'LICENSE.txt', dest: 'nw/Kalabox/linux64/LICENSE.txt'},
-        {src: 'LICENSE.txt', dest: 'nw/Kalabox/win64/LICENSE.txt'},
-        {
-          src: 'node_modules/kalabox/scripts/uninstall-darwin.sh',
-          dest: 'nw/Kalabox/osx64/uninstall.sh'
-        },
-        {
-          src: 'node_modules/kalabox/scripts/uninstall-linux.sh',
-          dest: 'nw/Kalabox/linux64/uninstall.sh'
-        },
-        {
-          src: 'node_modules/kalabox/scripts/uninstall-win32.bat',
-          dest: 'nw/Kalabox/win64/uninstall.bat'
-        }
-      ]
     }
   },
 
