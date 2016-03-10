@@ -5,7 +5,6 @@ angular.module('kalabox', [
   'kalabox.nodewrappers',
   'kalabox.dashboard',
   'kalabox.initialize',
-  'kalabox.installer',
   'kalabox.sites',
   'kalabox.misc',
   'kalabox.notificationQueue',
