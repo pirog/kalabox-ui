@@ -137,8 +137,8 @@ var npmBuildCmd = function(grunt) {
     else {
       cmd.push('cp');
     }
-    cmd.push('node_modules/kalabox/package.json');
-    cmd.push('node_modules/kalabox/version.lock');
+    cmd.push('"node_modules/kalabox/package.json"');
+    cmd.push('"node_modules/kalabox/version.lock"');
   }
 
   // Give up all the glory
