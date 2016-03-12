@@ -395,7 +395,7 @@ angular.module('kalabox.sites', [])
         .map(function(app) {
           return kbox.engine.list(app.name)
           .reduce(function(result, container) {
-            return result || kbox.engine.isRunning(container.name);
+            return result || kbox.engine.isRunning(container.id);
           }, false)
           .then(function(result) {
             map[app.name] = result;
