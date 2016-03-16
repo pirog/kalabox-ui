@@ -225,7 +225,7 @@ angular.module('kalabox.sites', [])
       name: app.name,
       url: app.url,
       folder: app.root,
-      codeFolder: app.config.syncthing.codeRoot,
+      codeFolder: app.config.sharing.codeRoot,
       providerInfo: app.config.pluginconfig[app.config.type]
     });
   };
