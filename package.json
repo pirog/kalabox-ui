@@ -44,10 +44,14 @@
     "test": "grunt test"
   },
   "dependencies": {
+    "decompress": "^3.0.0",
     "kalabox": "https://github.com/kalabox/kalabox/tarball/v0.12",
     "lodash": "^3.10.1",
-    "lpad-align": "^1.0.0",
-    "moment": "^2.10.6"
+    "meow": "^3.7.0",
+    "micromatch": "^2.3.7",
+    "minimatch": "^3.0.0",
+    "moment": "^2.10.6",
+    "multipipe": "^0.3.0"
   },
   "devDependencies": {
     "compression": "~1.0.9",
@@ -71,6 +75,7 @@
     "matchdep": "~0.3.0",
     "nw": "^0.12.3",
     "nw-builder": "^2.0.2",
+    "regenerator": "^0.8.42",
     "tar.gz": "~0.1.1",
     "unzip": "~0.1.9"
   }
