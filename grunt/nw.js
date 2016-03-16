@@ -89,7 +89,8 @@ var nwBuilder = function(grunt) {
     // Command options to build the nw app.
     builder[platform] = {
       options: {
-        version: version,
+        // DO NOT CHANGE THE VERSION BELOW!!!
+        version: '0.12.3',
         platforms: [platform],
         buildDir: 'nw',
         macIcns: './build/images/kalabox.icns'
