@@ -41,7 +41,6 @@ angular.module('kalabox.notificationQueue', [
   return notificationQueue;
 })
 .directive('notificationCenter', function() {
-  console.log('in the directive');
   return {
     controller: function($scope, notificationQueue) {
       $scope.queue = notificationQueue;
