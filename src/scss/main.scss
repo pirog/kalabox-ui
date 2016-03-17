@@ -27,3 +27,7 @@ body {
 .error textarea {
   height: 100px;
 }
+
+browser {
+  @extend a;
+}

@@ -308,4 +308,15 @@ angular.module('kalabox.dashboard', [
       }
     });
   };
+})
+.directive('browser', function() {
+  return {
+    scope: true,
+    link: function($scope, element, attrs) {
+      element.on('click', function() {
+        var gui = require('nw.gui');
+        gui.Shell.openExternal(attrs.link);
+      });
+    }
+  };
 });
