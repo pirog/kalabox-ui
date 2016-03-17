@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "decompress": "^3.0.0",
-    "kalabox": "https://github.com/kalabox/kalabox/tarball/v0.12",
+    "kalabox-cli": "https://github.com/kalabox/kalabox-cli/tarball/v0.12",
     "lodash": "^3.10.1",
     "lpad-align": "^1.0.0",
     "meow": "^3.3.0",
