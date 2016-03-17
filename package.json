@@ -47,11 +47,12 @@
     "decompress": "^3.0.0",
     "kalabox": "https://github.com/kalabox/kalabox/tarball/v0.12",
     "lodash": "^3.10.1",
-    "meow": "^3.7.0",
+    "lpad-align": "^1.0.0",
+    "meow": "^3.3.0",
     "micromatch": "^2.3.7",
-    "minimatch": "^3.0.0",
+    "minimatch": "2 || 3",
     "moment": "^2.10.6",
-    "multipipe": "^0.3.0"
+    "multipipe": "^0.1.2"
   },
   "devDependencies": {
     "compression": "~1.0.9",
