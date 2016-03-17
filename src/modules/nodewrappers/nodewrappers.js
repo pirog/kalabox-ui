@@ -15,7 +15,7 @@ angular.module('kalabox.nodewrappers', [])
   }])
   .factory('kbox', function($q) {
     // Lazy load a fully initialized kbox core library.
-    var kbox = require('kalabox');
+    var kbox = require('kalabox-cli');
     return kbox.Promise.try(function() {
       return kbox.init('gui');
     })
