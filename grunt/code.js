@@ -58,7 +58,8 @@ module.exports = {
       ],
       relaxerror: [
         'Empty heading.',
-        'Element “img” is missing required attribute “src”'
+        'Element “img” is missing required attribute “src”',
+        'Element “browser” not allowed as child of element “li” in this context'
       ]
     },
     files: {

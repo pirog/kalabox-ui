@@ -93,7 +93,8 @@ var nwBuilder = function(grunt) {
         version: '0.12.3',
         platforms: [platform],
         buildDir: 'nw',
-        macIcns: './build/images/kalabox.icns'
+        macIcns: './build/images/kalabox.icns',
+        zip: false
         // @todo: Breaks mac build, see kalabox/kalabox#929
         //winIco: './build/images/kalabox.ico'
       },
@@ -138,8 +139,8 @@ var npmBuildCmd = function(grunt) {
     else {
       cmd.push('cp');
     }
-    cmd.push('"node_modules/kalabox/package.json"');
-    cmd.push('"node_modules/kalabox/version.lock"');
+    cmd.push('"node_modules/kalabox-cli/package.json"');
+    cmd.push('"node_modules/kalabox-cli/version.lock"');
   }
 
   // Give up all the glory
