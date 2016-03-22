@@ -104,7 +104,10 @@ angular.module('kalabox.dashboard', [
   $scope.ui = {
     sites: [],
     states: {},
-    jobs: []
+    jobs: [],
+    meta: {
+      platform: process.platform
+    }
   };
 
   $scope.isModalOpen = false;
