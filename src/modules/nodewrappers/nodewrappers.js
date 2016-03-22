@@ -78,6 +78,9 @@ angular.module('kalabox.nodewrappers', [])
          */
         // Spawn a gnome-terminal session in the correct working directory.
         spawn('gnome-terminal', ['--working-directory', dir]);
+      } else if (process.platform === 'win32') {
+        // Open cmd.exe, change working directory, then use as a terminal.
+        spawn('cmd.exe', ['/k', '"cd ' + dir + '&& c:"']);
       } else {
         throw new Error('Opening code in terminal not supported on this OS.');
       }
