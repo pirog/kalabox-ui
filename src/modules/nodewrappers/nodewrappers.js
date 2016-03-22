@@ -72,6 +72,12 @@ angular.module('kalabox.nodewrappers', [])
           '-e', 'tell application "' + terminal + '" to activate',
           '-e', 'end tell'
         ]);
+      } else if (process.platform === 'linux') {
+        /*
+         * @todo: We should fall back to xterm if gnome-terminal isn't available.
+         */
+        // Spawn a gnome-terminal session in the correct working directory.
+        spawn('gnome-terminal', ['--working-directory', dir]);
       } else {
         throw new Error('Opening code in terminal not supported on this OS.');
       }
