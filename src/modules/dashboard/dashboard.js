@@ -83,6 +83,18 @@ angular.module('kalabox.dashboard', [
     }
   };
 })
+.directive('siteTerminal', function(guiEngine, terminal) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        guiEngine.try(function() {
+          terminal.open($scope.site.codeFolder);
+        });
+      });
+    }
+  };
+})
 .controller(
   'DashboardCtrl',
   function($scope, $uibModal, $timeout, $interval, $q, kbox,
@@ -92,7 +104,10 @@ angular.module('kalabox.dashboard', [
   $scope.ui = {
     sites: [],
     states: {},
-    jobs: []
+    jobs: [],
+    meta: {
+      platform: process.platform
+    }
   };
 
   $scope.isModalOpen = false;
