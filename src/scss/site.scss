@@ -171,12 +171,19 @@
         color: $brand-success;
       }
     }
-    .dropdown-menu li a{
-      color: $gray-light;
+    .dropdown-menu li {
+      a {
+        padding: 3px 15px;
+        color: $gray-light;
+      }
+      .fa-2 {
+        text-align: center;
+        width: 20px;
+      }
     }
     li span {
       position: absolute;
-      left: 55px;
+      left: 48px;
     }
     .dropdown-menu li:hover span {
       color: $text-color;

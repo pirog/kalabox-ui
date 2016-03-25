@@ -55,7 +55,9 @@ module.exports = {
         'auto-close',
         'show-errors',
         'notification-center',
-        'app-click'
+        'app-click',
+        'site',
+        'select-on-click'
       ],
       relaxerror: [
         'Empty heading.',
