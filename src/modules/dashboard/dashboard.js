@@ -175,45 +175,42 @@ angular.module('kalabox.dashboard', [
     });
   });
 
-  // Poll sites.
-  guiEngine.loop.add({interval: 1 * 60 * 1000}, function() {
-    return sites.get()
-    .then(function(sites) {
-      $scope.$applyAsync(function() {
+  // Helper function for reloading list of sites.
+  function reloadSites() {
+    function reload() {
+      sites.get()
+      .then(function(sites) {
         $scope.ui.sites = sites;
       });
-    });
-  });
-
-  // Poll sites when they need to be refreshed.
-  guiEngine.loop.add({interval: 0.3 * 1000}, function() {
-    if (sites.needsRefresh()) {
-      sites.resetNeedsRefresh();
-      return sites.get()
-      .then(function(sites) {
-        $scope.$applyAsync(function() {
-          $scope.ui.sites = sites;
-        });
-      });
     }
+    /*
+     * Reload sites mutliple times, because sometimes updates to list of sites
+     * aren't ready immediately.
+     */
+    // Reload sites immediately.
+    reload();
+    // Reload sites again after 5 seconds.
+    setTimeout(reload, 1000 * 5);
+    // Reload sites again after 15 seconds.
+    setTimeout(reload, 1000 * 15);
+  }
+
+  // Reload sites when dashboard loads.
+  reloadSites();
+
+  // Update site states whenever an update event occurs.
+  siteStates.on('update', function(apps) {
+    $scope.ui.states = apps;
   });
 
-  // Poll site states.
-  guiEngine.loop.add({interval: 10 * 1000}, function() {
-    return siteStates.get()
-    .then(function(states) {
-      $scope.ui.states = states;
-    });
+  // Reload sites when a new site is created.
+  siteStates.on('create', function() {
+    reloadSites();
   });
 
-  // Poll engine status.
-  guiEngine.loop.add({interval: 0.25 * 60 * 1000}, function() {
-    return kbox.then(function(kbox) {
-      return kbox.engine.isUp();
-    })
-    .then(function(isUp) {
-      $scope.ui.engineStatus = isUp;
-    });
+  // Reload sites when a site is destroyed.
+  siteStates.on('destroy', function() {
+    reloadSites();
   });
 
   // Poll list of errors.

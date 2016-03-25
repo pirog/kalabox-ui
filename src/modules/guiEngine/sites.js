@@ -64,7 +64,7 @@ angular.module('kalabox.sites', [])
    */
   Site.prototype.isRunning = function() {
     var self = this;
-    return siteStates.get(self.name);
+    return $q.resolve(siteStates.apps[self.name]);
   };
 
   /*
@@ -338,7 +338,7 @@ angular.module('kalabox.sites', [])
       return kbox.then(function(kbox) {
 
         // Get list of apps.
-        var sites = kbox.app.list()
+        var sites = kbox.app.list({useCache: false})
         // Only include apps with installed containers.
         .filter(function(/*app*/) {
           return true;
@@ -386,29 +386,86 @@ angular.module('kalabox.sites', [])
 /*
  * Object for getting a cached list of site instance states.
  */
-.factory('siteStates', function($q, kbox) {
-  return {
-    get: function(name) {
-      var map = {};
-      return kbox.then(function(kbox) {
-        return kbox.app.list()
-        .map(function(app) {
-          return kbox.engine.list(app.name)
-          .reduce(function(result, container) {
-            return result || kbox.engine.isRunning(container.id);
-          }, false)
-          .then(function(result) {
-            map[app.name] = result;
-          });
+.factory('siteStates', function(kbox, _) {
+
+  var events = require('events');
+  var util = require('util');
+
+  // Constructor.
+  function SiteStates() {
+    this.apps = {};
+    events.EventEmitter.call(this);
+    this.init();
+  }
+  // Inherit from event emitter.
+  util.inherits(SiteStates, events.EventEmitter);
+
+  // Initialize.
+  SiteStates.prototype.init = function() {
+
+    var self = this;
+
+    return kbox.then(function(kbox) {
+      return kbox.engine.events()
+      .then(function(result) {
+
+        // Set encoding so events give a string rather than a Buffer.
+        result.setEncoding('utf8');
+
+        // Handle data events from the result stream.
+        result.on('data', function(data) {
+
+          // Parse data string into a json object.
+          data = JSON.parse(data);
+          // Get event type.
+          var kind = _.get(data, 'Type');
+          // Get event action.
+          var action = _.get(data, 'Action');
+
+          // Only event type of container is interesting for what we need.
+          if (kind === 'container') {
+            // Get name of the container.
+            var name = _.get(data, 'Actor.Attributes.name');
+            // Split the container name into it's parts.
+            var parts = name.split('_');
+            // Get name of app from container name's first part.
+            var app = parts[0];
+            // Get container type from container name's second part.
+            var container = parts[1];
+
+            // Only events with a container type of appserver are interesting.
+            if (container === 'appserver') {
+              if (action === 'create') {
+                // App created, so add to list of app states.
+                self.apps[app] = false;
+                self.emit('create', app);
+                self.emit('update', self.apps);
+              } else if (action === 'destroy') {
+                // App destroyed, so delete from list of app states.
+                delete self.apps[app];
+                self.emit('destroy', app);
+                self.emit('update', self.apps);
+              } else if (action === 'start') {
+                // App started, set state to true.
+                self.apps[app] = true;
+                self.emit('start', app);
+                self.emit('update', self.apps);
+              } else if (action === 'die' || action === 'stop') {
+                // App stopped, set state to false.
+                self.apps[app] = false;
+                self.emit('stop', app);
+                self.emit('update', self.apps);
+              }
+            }
+
+          }
+
         });
-      })
-      .then(function() {
-        if (name) {
-          return map[name] !== undefined ? map[name] : false;
-        } else {
-          return map;
-        }
       });
-    }
+    });
   };
+
+  // Return singleton instance.
+  return new SiteStates();
+
 });
