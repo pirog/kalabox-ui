@@ -135,8 +135,7 @@ angular.module('kalabox.sidebar', [
           Site.add({
             provider: {name: $scope.app.name},
             site: appName,
-            name: appName.toLowerCase(),
-            image: 'images/kalabox/screenshot.png'
+            name: appName.toLowerCase()
           });
           // Navigate back to main provider view.
           $state.go('dashboard.sidebar', {}, {location: false});
