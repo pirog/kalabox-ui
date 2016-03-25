@@ -134,3 +134,12 @@ i.drupal8 {
 i.wordpress {
   @include provider-pic('wordpress.png');
 }
+
+.connection-info {
+  h2 {
+    font-size: 1.5em;
+  }
+  input {
+    width: 40%;
+  }
+}
