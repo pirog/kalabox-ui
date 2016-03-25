@@ -54,9 +54,9 @@ module.exports = {
     buildVendorAssets: {
       files: [
         {
-          src: ['<%= vendorFiles.assets %>'],
-          dest: '<%= buildDir %>/',
-          cwd: '.',
+          src: ['**'],
+          dest: '<%= buildDir %>/fonts/',
+          cwd: 'src/lib/vendor/font-awesome/fonts',
           expand: true
         }
     ]

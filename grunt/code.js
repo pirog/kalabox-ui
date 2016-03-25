@@ -54,7 +54,8 @@ module.exports = {
         'uib-*',
         'auto-close',
         'show-errors',
-        'notification-center'
+        'notification-center',
+        'app-click'
       ],
       relaxerror: [
         'Empty heading.',

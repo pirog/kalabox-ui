@@ -12,7 +12,8 @@ angular.module('kalabox.sidebar', [
     views: {
       'integrations': {
         url: '/dashboard/sidebar',
-        templateUrl: 'modules/sidebar/sidebar.html.tmpl'
+        templateUrl: 'modules/sidebar/sidebar.html.tmpl',
+        controller: 'SidebarCtrl'
       }
     }
   })
@@ -20,8 +21,23 @@ angular.module('kalabox.sidebar', [
     url: '/dashboard/sidebar/provider-auth/{provider:json}',
     templateUrl: 'modules/sidebar/provider-auth.html.tmpl',
     controller: 'ProviderAuth'
+  })
+  .state('dashboard.sidebar.app-create', {
+    url: '/dashboard/sidebar/app-create/{app:json}',
+    templateUrl: 'modules/sidebar/app-create.html.tmpl',
+    controller: 'AppCreate'
   });
 })
+.controller(
+  'SidebarCtrl',
+  function($scope, _) {
+    $scope.pantheonAuthed = function(providers) {
+      return _.some(providers, function(provider) {
+        return !_.isEmpty(provider.username);
+      });
+    };
+  }
+)
 .controller(
   'ProviderCtrl',
   function($scope) {
@@ -86,6 +102,55 @@ angular.module('kalabox.sidebar', [
             }
           });
         }
+      });
+    }
+  };
+})
+.controller(
+  'AppCtrl',
+  function($scope) {
+    $scope.appDisplayName = function(app) {
+      switch (app.name) {
+        case 'drupal7':
+          return 'Drupal 7';
+        case 'drupal8':
+          return 'Drupal 8';
+        case 'wordpress':
+          return 'Wordpress';
+      }
+    };
+  }
+)
+.controller(
+  'AppCreate',
+  function($scope, kbox, _, guiEngine, $state, $stateParams, Site) {
+    $scope.app = $stateParams.app;
+
+    guiEngine.try(function() {
+      $scope.errorMessage = false;
+      // Auth on submission.
+      $scope.ok = function(appName) {
+        guiEngine.try(function() {
+          // Add site.
+          Site.add({
+            provider: {name: $scope.app.name},
+            site: appName,
+            name: appName.toLowerCase()
+          });
+          // Navigate back to main provider view.
+          $state.go('dashboard.sidebar', {}, {location: false});
+        });
+      };
+    });
+  }
+)
+.directive('appClick', function(guiEngine, $state) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        $state.go('dashboard.sidebar.app-create',
+          {app: $scope.app}, {location: false});
       });
     }
   };

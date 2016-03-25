@@ -263,6 +263,7 @@ angular.module('kalabox.sites', [])
         opts.v = opts.v || false;
         opts.versbose = opts.versbose || false;
         opts.needsFramework = opts.needsFramework || false;
+        opts._type = opts.provider.name;
         opts.dir = opts.dir || config.appsRoot;
         // Get app.
         var app = kbox.create.get(opts.provider.name);

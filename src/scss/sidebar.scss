@@ -1,5 +1,5 @@
 @mixin provider-pic($provider-name) {
-  background: url(../images/providers/#{$provider-name}.svg) no-repeat;
+  background: url(../images/providers/#{$provider-name}) no-repeat;
   background-size: 20px;
   background-position: center;
   color: $gray-lightest;
@@ -123,5 +123,14 @@
 }
 
 i.pantheon {
-  @include provider-pic('pantheon');
+  @include provider-pic('pantheon.svg');
+}
+i.drupal7 {
+  @include provider-pic('drupal7.png');
+}
+i.drupal8 {
+  @include provider-pic('drupal8.png');
+}
+i.wordpress {
+  @include provider-pic('wordpress.png');
 }
