@@ -9,19 +9,19 @@
       <input type="text" class="form-control" id="sitePushMessage" placeholder="Message" ng-model="message" required>
     </div>
     <div class="form-group">
-      <label for="pushDatabase">Push database?</label>
+      <label for="pushDatabase">Push database to</label>
       <select class="form-control" id="pushDatabase" placeholder="Database" ng-model="database" required>
-        <option label="-- Push Database? --" hidden></option>
-        <option value="true">YES</option>
-        <option value="false">NO</option>
+        <option label="-- Push Database to? --" hidden></option>
+        <option value="none">I'm good! (Don't push my database)</option>
+        <option value="dev">Development Environment</option>
       </select>
     </div>
     <div class="form-group">
-      <label for="pushFiles">Push files?</label>
+      <label for="pushFiles">Push files to</label>
       <select class="form-control" id="pushFiles" placeholder="Files" ng-model="files" required>
-        <option label="-- Push Files? --" hidden></option>
-        <option value="true">YES</option>
-        <option value="false">NO</option>
+        <option label="-- Push files to? --" hidden></option>
+        <option value="none">I'm good! (Don't push my files)</option>
+        <option value="dev">Development Environment</option>
       </select>
     </div>
   </form>

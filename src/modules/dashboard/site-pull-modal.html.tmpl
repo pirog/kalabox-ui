@@ -5,21 +5,17 @@
   <div class="alert alert-error" ng-bind="errorMessage" ng-if="errorMessage"></div>
   <form name="sitePull">
     <div class="form-group">
-      <label for="pullDatabase">Database</label>
       <select class="form-control" id="pullDatabase" placeholder="Database" ng-model="database" required>
-        <option label="-- Pull Database? --" hidden></option>
-        <option ng-repeat="env in environments" value="{{env}}">{{env}}</option>
-        <option value="true">YES</option>
-        <option value="false">NO</option>
+        <option label="-- Pull Database from? --" hidden></option>
+        <option value="none">I'm good! (Don't pull the database)</option>
+        <option value="dev">Development Environment</option>
       </select>
     </div>
     <div class="form-group">
-      <label for="pullFiles">Files</label>
       <select class="form-control" id="pullFiles" placeholder="Files" ng-model="files" required>
-        <option label="-- Pull Files? --" hidden></option>
-        <option ng-repeat="env in environments" value="{{env}}">{{env}}</option>
-        <option value="true">YES</option>
-        <option value="false">NO</option>
+        <option label="-- Pull files from? --" hidden></option>
+        <option value="none">I'm good! (Don't pull files)</option>
+        <option value="dev">Development Environment</option>
       </select>
     </div>
   </form>
