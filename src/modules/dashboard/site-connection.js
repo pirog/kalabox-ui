@@ -11,7 +11,7 @@ angular.module('kalabox.dashboard')
         guiEngine.try(function() {
           // Get the services.
           // @todo: replace with a call to kbox.app.getService when available.
-          var pluginName = _.isEmpty($scope.site.providerInfo.username) ?
+          var pluginName = _.isEmpty($scope.site.providerInfo.email) ?
           'kalabox-plugin-php' : 'kalabox-plugin-pantheon';
           var servicesPath = $scope.site.opts.folder + '/plugins/' +
           pluginName + '/lib/services.js';
