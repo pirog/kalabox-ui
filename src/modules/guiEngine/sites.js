@@ -10,6 +10,7 @@ angular.module('kalabox.sites', [])
   function Site(opts) {
     this.opts = opts;
     this.name = opts.name;
+    this.machineName = opts.name.replace(/-/g, '');
     this.url = opts.url;
     this.folder = opts.folder;
     this.codeFolder = opts.codeFolder;
@@ -64,7 +65,7 @@ angular.module('kalabox.sites', [])
    */
   Site.prototype.isRunning = function() {
     var self = this;
-    return $q.resolve(siteStates.apps[self.name]);
+    return $q.resolve(siteStates.apps[self.machineName]);
   };
 
   /*

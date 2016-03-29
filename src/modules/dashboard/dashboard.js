@@ -58,7 +58,7 @@ angular.module('kalabox.dashboard', [
     scope: true,
     link: function($scope, element) {
       element.on('click', function() {
-        if ($scope.ui.states[$scope.site.name]) {
+        if ($scope.ui.states[$scope.site.machineName]) {
           guiEngine.try(function() {
             // Get reference to nw gui.
             var gui = require('nw.gui');
@@ -135,7 +135,7 @@ angular.module('kalabox.dashboard', [
     kbox.core.events.on('post-app-destroy', function(app) {
       // Filter sites to remove site that was just destroyed.
       $scope.ui.sites = _.filter($scope.ui.sites, function(site) {
-        return site.name !== app.name;
+        return site.machineName !== app.name;
       });
     });
   });
@@ -266,7 +266,7 @@ angular.module('kalabox.dashboard', [
   $scope.siteClasses = function() {
     var currentAction = $scope.site.currentAction ? $scope.site.currentAction :
     '';
-    var siteUp = $scope.ui.states[$scope.site.name] ? 'site-up' : '';
+    var siteUp = $scope.ui.states[$scope.site.machineName] ? 'site-up' : '';
     return currentAction + ' ' + siteUp;
   };
   $scope.currentActionName = function() {
