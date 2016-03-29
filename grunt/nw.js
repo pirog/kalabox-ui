@@ -106,7 +106,8 @@ var nwBuilder = function(grunt) {
         './build/deps/images/*',
         './build/images/**/*',
         './build/node_modules/**/*',
-        './build/src/**/*'
+        './build/src/**/*',
+        './build/fonts/*'
       ]
     };
 
