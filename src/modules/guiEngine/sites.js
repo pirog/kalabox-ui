@@ -408,6 +408,26 @@ angular.module('kalabox.sites', [])
     var self = this;
 
     return kbox.then(function(kbox) {
+
+      // Map container id to container name.
+      var mapId = _.memoize(function(id) {
+        // Inspect container.
+        return kbox.engine.inspect({containerID: id})
+        // Return container name.
+        .then(function(data) {
+          return data.Name ? _.trim(data.Name, '/') : null;
+        })
+        // Ignore errors and return undefined.
+        .catch(function(err) {
+          console.log(err.message);
+          console.log(err.stack);
+        });
+      });
+
+      // Promise chain for serializing events.
+      var p = kbox.Promise.resolve();
+
+      // Get event stream.
       return kbox.engine.events()
       .then(function(result) {
 
@@ -417,52 +437,76 @@ angular.module('kalabox.sites', [])
         // Handle data events from the result stream.
         result.on('data', function(data) {
 
-          // Parse data string into a json object.
-          data = JSON.parse(data);
-          // Get event type.
-          var kind = _.get(data, 'Type');
-          // Get event action.
-          var action = _.get(data, 'Action');
+          // Serialize events by adding to tail of promise chain.
+          p = p.then(function() {
+            // Run inside of a promise.
+            return kbox.Promise.try(function() {
 
-          // Only event type of container is interesting for what we need.
-          if (kind === 'container') {
-            // Get name of the container.
-            var name = _.get(data, 'Actor.Attributes.name');
-            // Split the container name into it's parts.
-            var parts = name.split('_');
-            // Get name of app from container name's first part.
-            var app = parts[0];
-            // Get container type from container name's second part.
-            var container = parts[1];
+              // Parse data string into a json object.
+              data = JSON.parse(data);
 
-            // Only events with a container type of appserver are interesting.
-            if (parts.length === 3 && container === 'appserver') {
-              if (action === 'create') {
-                // App created, so add to list of app states.
-                self.apps[app] = false;
-                self.emit('create', app);
-                self.emit('update', self.apps);
-              } else if (action === 'destroy') {
-                // App destroyed, so delete from list of app states.
-                delete self.apps[app];
-                self.emit('destroy', app);
-                self.emit('update', self.apps);
-              } else if (action === 'start') {
-                // App started, set state to true.
-                self.apps[app] = true;
-                self.emit('start', app);
-                self.emit('update', self.apps);
-              } else if (action === 'die' || action === 'stop') {
-                // App stopped, set state to false.
-                self.apps[app] = false;
-                self.emit('stop', app);
-                self.emit('update', self.apps);
+              // Get action.
+              var action = _.get(data, 'status');
+              // Get container id.
+              var id = _.get(data, 'id');
+
+              if (action && id) {
+
+                // Get name of the container.
+                return mapId(id)
+                .then(function(name) {
+
+                  // Split the container name into it's parts.
+                  var parts = name ? name.split('_') : [];
+                  // Get name of app from container name's first part.
+                  var app = parts[0];
+                  // Get container type from container name's second part.
+                  var container = parts[1];
+
+                  // Only events with a container of appserver are interesting.
+                  if (parts.length === 3 && container === 'appserver') {
+                    if (action === 'create') {
+                      // App created, so add to list of app states.
+                      self.apps[app] = false;
+                      self.emit('create', app);
+                      self.emit('update', self.apps);
+                    } else if (action === 'destroy') {
+                      // App destroyed, so delete from list of app states.
+                      delete self.apps[app];
+                      self.emit('destroy', app);
+                      self.emit('update', self.apps);
+                    } else if (action === 'start') {
+                      // App started, set state to true.
+                      self.apps[app] = true;
+                      self.emit('start', app);
+                      self.emit('update', self.apps);
+                    } else if (action === 'die' || action === 'stop') {
+                      // App stopped, set state to false.
+                      self.apps[app] = false;
+                      self.emit('stop', app);
+                      self.emit('update', self.apps);
+                    }
+                  }
+
+                });
+
               }
-            }
 
-          }
+            })
+            // Ignore errors.
+            .catch(function(err) {
+              console.log(err.message);
+              console.log(err.stack);
+            });
+          });
 
         });
+      })
+      // Ignore errors.
+      .catch(function(err) {
+        console.log(err.message);
+        console.log(err.stack);
+        throw err;
       });
     });
   };
