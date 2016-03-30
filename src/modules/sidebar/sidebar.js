@@ -111,6 +111,8 @@ angular.module('kalabox.sidebar', [
   function($scope) {
     $scope.appDisplayName = function(app) {
       switch (app.name) {
+        case 'backdrop':
+          return 'Backdrop CMS';
         case 'drupal7':
           return 'Drupal 7';
         case 'drupal8':

@@ -134,6 +134,9 @@ i.drupal8 {
 i.wordpress {
   @include provider-pic('wordpress.png');
 }
+i.backdrop {
+  @include provider-pic('backdrop.png');
+}
 
 .connection-info {
   h2 {
