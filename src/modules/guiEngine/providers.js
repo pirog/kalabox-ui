@@ -76,7 +76,11 @@ angular.module('kalabox.dashboard')
       self.refreshing = false;
     })
     // Wrap errors.
-    .wrap('Error refreshing sites: %s', self.username);
+    .catch(function(err) {
+      console.log('Error refreshing sites: %s', self.username);
+      self.username = null;
+      return err;
+    });
   };
 
   /*

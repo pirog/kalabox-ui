@@ -36,6 +36,8 @@ angular.module('kalabox.sidebar', [
         return !_.isEmpty(provider.username);
       });
     };
+    $scope.sidebar = {};
+    $scope.sidebar.errorMessage = false;
   }
 )
 .controller(
@@ -73,6 +75,7 @@ angular.module('kalabox.sidebar', [
         // Navigate back to main provider view.
         .then(function() {
           $scope.authorizing = false;
+          $scope.sidebar.errorMessage = false;
           $state.go('dashboard.sidebar', {}, {location: false});
         })
         // Handle errors.
@@ -95,7 +98,12 @@ angular.module('kalabox.sidebar', [
         if (_.isEmpty($scope.provider.sites)) {
           guiEngine.try(function() {
             if ($scope.provider.authorized()) {
-              $scope.provider.refresh();
+              $scope.provider.refresh().then(function(result) {
+                if (result.message) {
+                  $scope.sidebar.errorMessage = 'Authentication failed. ' +
+                  'Please re-authenticate your Pantheon account.';
+                }
+              });
             } else {
               $state.go('dashboard.sidebar.provider-auth',
                 {provider: $scope.provider}, {location: false});
