@@ -35,7 +35,7 @@ angular.module('kalabox.guiEngine', [
     console.log(err.message);
   };
 })
-.factory('errorService', function() {
+.factory('errorService', function(kbox) {
 
   var errors = [];
 
@@ -59,6 +59,14 @@ angular.module('kalabox.guiEngine', [
     console.log('ERROR: ' + err.message);
     console.log(stack);
     errors.push(err);
+
+    // Report error to metrics.
+    kbox.then(function(kbox) {
+      return kbox.metrics.reportError(err);
+    })
+    // Ignore errors from reporting errors.
+    .catch(function() {});
+
   }
 
   function list() {
