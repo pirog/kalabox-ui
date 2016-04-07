@@ -26,6 +26,11 @@ angular.module('kalabox.sidebar', [
     url: '/dashboard/sidebar/app-create/{app:json}',
     templateUrl: 'modules/sidebar/app-create.html.tmpl',
     controller: 'AppCreate'
+  })
+  .state('dashboard.sidebar.app-create-pantheon', {
+    url: '/dashboard/sidebar/app-create-pantheon/{site:json}/{provider:json}',
+    templateUrl: 'modules/sidebar/app-create-pantheon.html.tmpl',
+    controller: 'AppCreatePantheon'
   });
 })
 .controller(
@@ -164,4 +169,57 @@ angular.module('kalabox.sidebar', [
       });
     }
   };
-});
+})
+.directive('pantheonAppClick', function(guiEngine, $state) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        guiEngine.try(function() {
+          // Get list of site environments.
+          return $scope.site.getEnvironments()
+          .then(function(envs) {
+            console.log($scope);
+            var provider = $scope.provider;
+            delete provider.sites;
+            $scope.site.environments = envs;
+            $state.go('dashboard.sidebar.app-create-pantheon',
+              {site: $scope.site, provider: provider}, {location: false});
+          });
+        });
+      });
+    }
+  };
+})
+.controller(
+  'AppCreatePantheon',
+  function($scope, kbox, _, guiEngine, $state, $stateParams, sites) {
+    console.log($scope, $state, $stateParams, sites);
+    $scope.site = $stateParams.site;
+    $scope.provider = $stateParams.provider;
+    guiEngine.try(function() {
+
+      // Modal function.
+      $scope.ok = function(appConfig) {
+        // Run inside a gui task.
+        guiEngine.try(function() {
+          var provider = $stateParams.provider;
+          var site = $stateParams.site;
+          // Add site.
+          sites.add({
+            provider: provider,
+            email: provider.username,
+            site: site.name,
+            env: appConfig.env,
+            name: appConfig.name.toLowerCase()
+          });
+
+          // Close the modal.
+          $state.go('dashboard.sidebar', {}, {location: false});
+
+        });
+      };
+    });
+
+  }
+);
