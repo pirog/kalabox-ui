@@ -179,7 +179,6 @@ angular.module('kalabox.sidebar', [
           // Get list of site environments.
           return $scope.site.getEnvironments()
           .then(function(envs) {
-            console.log($scope);
             var provider = $scope.provider;
             delete provider.sites;
             $scope.site.environments = envs;
@@ -194,7 +193,6 @@ angular.module('kalabox.sidebar', [
 .controller(
   'AppCreatePantheon',
   function($scope, kbox, _, guiEngine, $state, $stateParams, sites) {
-    console.log($scope, $state, $stateParams, sites);
     $scope.site = $stateParams.site;
     $scope.provider = $stateParams.provider;
     guiEngine.try(function() {
