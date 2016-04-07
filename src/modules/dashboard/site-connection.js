@@ -2,7 +2,7 @@
 
 angular.module('kalabox.dashboard')
 
-.directive('siteConnection', function(guiEngine, Site, kbox, _) {
+.directive('siteConnection', function(guiEngine, Site, kbox) {
   return {
     scope: true,
     link: function($scope, element) {
@@ -10,17 +10,10 @@ angular.module('kalabox.dashboard')
         // Run inside of a gui task.
         guiEngine.try(function() {
           // Get the services.
-          // @todo: replace with a call to kbox.app.getService when available.
-          var pluginName = _.isEmpty($scope.site.providerInfo.email) ?
-          'kalabox-plugin-php' : 'kalabox-plugin-pantheon';
-          var servicesPath = $scope.site.opts.folder + '/plugins/' +
-          pluginName + '/lib/services.js';
-          var servicesProvider = require(servicesPath);
-
           kbox.then(function(kbox) {
             return kbox.app.get($scope.site.name)
             .then(function(app) {
-              return servicesProvider(kbox, app).getServicesInfo();
+              return kbox.app.services(app);
             })
             .then(function(services) {
               var siteConnectModal = $scope.open(
