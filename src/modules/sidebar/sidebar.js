@@ -180,7 +180,6 @@ angular.module('kalabox.sidebar', [
           return $scope.site.getEnvironments()
           .then(function(envs) {
             var provider = $scope.provider;
-            delete provider.sites;
             $scope.site.environments = envs;
             $state.go('dashboard.sidebar.app-create-pantheon',
               {site: $scope.site, provider: provider}, {location: false});
