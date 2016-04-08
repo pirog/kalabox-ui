@@ -43,6 +43,9 @@ angular.module('kalabox.sidebar', [
     };
     $scope.sidebar = {};
     $scope.sidebar.errorMessage = false;
+    $scope.closeSidebar = function() {
+      angular.element('#addSite').offcanvas('hide');
+    };
   }
 )
 .controller(
@@ -152,8 +155,8 @@ angular.module('kalabox.sidebar', [
             site: appName,
             name: appName.toLowerCase()
           });
-          // Navigate back to main provider view.
-          $state.go('dashboard.sidebar', {}, {location: false});
+          // Close sidebar.
+          $scope.closeSidebar();
         });
       };
     });
@@ -217,8 +220,8 @@ angular.module('kalabox.sidebar', [
             nodb: !appConfig.pullDatabase
           });
 
-          // Close the modal.
-          $state.go('dashboard.sidebar', {}, {location: false});
+          // Close sidebar.
+          $scope.closeSidebar();
 
         });
       };
