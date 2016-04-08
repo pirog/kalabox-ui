@@ -244,11 +244,6 @@ angular.module('kalabox.dashboard', [
     }
   });
 
-  // Check if a job queue job is running.
-  guiEngine.loop.add({interval: 0.3 * 1000}, function() {
-    $scope.ui.currentJob = guiEngine.queue.currentJob();
-  });
-
 })
 .controller(
   'ErrorModal',

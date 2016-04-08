@@ -46,7 +46,7 @@ angular.module('kalabox.sites', [])
   Site.prototype.queue = function(desc, fn) {
     var self = this;
     // Add job to queue.
-    return guiEngine.queue.add(desc, function(update) {
+    return guiEngine.queue.add(desc, self, function(update) {
       // Signal that site is busy.
       self.busy = true;
       // Call fn function.
@@ -118,9 +118,6 @@ angular.module('kalabox.sites', [])
     return self.queue('Starting site: ' + self.name, function() {
       return kbox.then(function(kbox) {
         return kbox.app.get(self.name)
-        .tap(function(app) {
-          return kbox.setAppContext(app);
-        })
         .then(function(app) {
           return kbox.app.start(app);
         });
@@ -137,9 +134,6 @@ angular.module('kalabox.sites', [])
     return self.queue('Stopping site: ' + self.name, function() {
       return kbox.then(function(kbox) {
         return kbox.app.get(self.name)
-        .tap(function(app) {
-          return kbox.setAppContext(app);
-        })
         .then(function(app) {
           return kbox.app.stop(app);
         });
@@ -158,9 +152,6 @@ angular.module('kalabox.sites', [])
       return kbox.then(function(kbox) {
         // Initialize app context.
         return kbox.app.get(self.name)
-        .then(function(app) {
-          return kbox.setAppContext(app);
-        })
         // Do a pull on the site.
         .then(function() {
           var pull = kbox.integrations.get(self.providerName).pull();
@@ -185,9 +176,6 @@ angular.module('kalabox.sites', [])
       return kbox.then(function(kbox) {
         // Initialize app context.
         return kbox.app.get(self.name)
-        .then(function(app) {
-          return kbox.setAppContext(app);
-        })
         // Do a pull on the site.
         .then(function() {
           var push = kbox.integrations.get(self.providerName).push();
@@ -210,9 +198,6 @@ angular.module('kalabox.sites', [])
     return self.queue('Removing site: ' + self.name, function() {
       return kbox.then(function(kbox) {
         return kbox.app.get(self.name)
-        .tap(function(app) {
-          return kbox.setAppContext(app);
-        })
         .then(function(app) {
           return kbox.app.destroy(app);
         });
@@ -251,11 +236,10 @@ angular.module('kalabox.sites', [])
    */
   Site.add = function(opts) {
     // Add job to queue.
-    return guiEngine.queue.add('Adding site: ' + opts.site, function() {
+    return guiEngine.queue.add('Adding site: ' + opts.site,
+      opts.site,
+      function() {
       return kbox.then(function(kbox) {
-        // Make sure to delete app based dependencies.
-        kbox.core.deps.remove('app');
-        kbox.core.deps.remove('appConfig');
         // Get config.
         var config = kbox.core.deps.get('globalConfig');
         // Option defaults.
@@ -315,75 +299,79 @@ angular.module('kalabox.sites', [])
  * Object for getting a cached list of site instances.
  */
 .factory('sites', function(kbox, Site, placeHolders, _) {
-  var refreshFlag = true;
-  return {
-    // Returns true if list of sites should be refreshed.
-    needsRefresh: function() {
-      return refreshFlag;
-    },
-    // Resets the needs refresh flag.
-    resetNeedsRefresh: function() {
-      refreshFlag = false;
-    },
-    // Add a site.
-    add: function(opts) {
-      // Add a placeholder site so the user see it right away.
-      placeHolders.add({
-        name: opts.name
-      });
-      // Set refresh flag.
-      refreshFlag = true;
-      // Add site.
-      return Site.add(opts);
-    },
-    get: function(name) {
-      return kbox.then(function(kbox) {
 
-        // Get list of apps.
-        var sites = kbox.app.list({useCache: false})
-        // Only include apps with installed containers.
-        .filter(function(/*app*/) {
-          return true;
-          //return kbox.app.isInstalled(app);
-        })
-        // Map to sites.
-        .map(Site.fromApp);
+  // Constructor.
+  function Sites() {
+    console.log('constructor');
+    this.sites = [];
+  }
 
-        // Get list of place holder sites.
-        var placeHolderSites = sites.then(function(sites) {
-          return placeHolders.get()
-          .map(Site.fromPlaceHolder)
-          .filter(function(placeHolder) {
-            return !_.find(sites, function(site) {
-              var filterOut = placeHolder.name === site.name;
-              if (filterOut) {
-                placeHolders.remove(site.name);
-              }
-              return filterOut;
-            });
-          });
-        });
-
-        // Concat sites and place holder sites.
-        return kbox.Promise.join(
-          sites,
-          placeHolderSites,
-          function(sites, placeHolderSites) {
-            return _.flatten([sites, placeHolderSites]);
-          })
-        // Sort sites by site names.
-        .then(function(sites) {
-          return _.sortBy(sites, function(site) {
-            return site.name;
-          });
-        });
-
-      })
-      .then(function(sites) {
-        return name ? sites[name] : sites;
-      });
-    }
+  // Add site.
+  Sites.prototype.add = function(opts) {
+    // Add a placeholder site so the user see it right away.
+    placeHolders.add({
+      name: opts.name
+    });
+    // Add site.
+    return Site.add(opts);
   };
+
+  // Update site list.
+  Sites.prototype.update = function() {
+    var self = this;
+    return kbox.then(function(kbox) {
+
+      // Get an up to date list of sites.
+      return kbox.app.list({useCache: false})
+      .map(Site.fromApp)
+      .then(function(newSites) {
+
+        // Add new site that we don't already have.
+        _.each(newSites, function(newSite) {
+          var found = _.find(self.sites, function(site) {
+            return site.name === newSite.name;
+          });
+          if (!found) {
+            // Add site.
+            self.sites.push(newSite);
+            // Sort site.
+            self.sites = _.sortBy(self.sites, function(site) {
+              return site.name;
+            });
+          }
+        });
+
+        // Remove sites that no longer exist.
+        self.sites = _.filter(self.sites, function(site) {
+          return !!_.find(newSites, function(newSite) {
+            return newSite.name === site.name;
+          });
+        });
+
+      });
+
+    });
+
+  };
+
+  // Get list of sites.
+  Sites.prototype.get = function(name) {
+    var self = this;
+    // Update site list.
+    return this.update()
+    // Return site list.
+    .then(function() {
+      if (name) {
+        return self.sites[name];
+      } else {
+        return self.sites;
+      }
+    });
+  };
+
+  // Return class instance.
+  return new Sites();
+
 })
 /*
  * Object for getting a cached list of site instance states.
@@ -420,15 +408,22 @@ angular.module('kalabox.sites', [])
         // Ignore errors and return undefined.
         .catch(function(err) {
           console.log(err.message);
-          console.log(err.stack);
         });
       });
 
       // Promise chain for serializing events.
       var p = kbox.Promise.resolve();
 
+      // Get list of containers.
+      return kbox.engine.list()
+      // Seed memoized map.
+      .each(function(container) {
+        return mapId(container.id);
+      })
       // Get event stream.
-      return kbox.engine.events()
+      .then(function() {
+        return kbox.engine.events();
+      })
       .then(function(result) {
 
         // Set encoding so events give a string rather than a Buffer.
@@ -470,15 +465,13 @@ angular.module('kalabox.sites', [])
                       self.apps[app] = false;
                       self.emit('create', app);
                       self.emit('update', self.apps);
-                    } else if (action === 'destroy') {
-                      // App destroyed, so delete from list of app states.
-                      delete self.apps[app];
-                      self.emit('destroy', app);
-                      self.emit('update', self.apps);
                     } else if (action === 'start') {
                       // App started, set state to true.
                       self.apps[app] = true;
                       self.emit('start', app);
+                      self.emit('update', self.apps);
+                    } else if (action === 'destroy') {
+                      self.emit('destroy', app);
                       self.emit('update', self.apps);
                     } else if (action === 'die' || action === 'stop') {
                       // App stopped, set state to false.
