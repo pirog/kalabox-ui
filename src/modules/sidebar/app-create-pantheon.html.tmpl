@@ -15,13 +15,15 @@
         <option ng-repeat="env in site.environments" value="{{env}}">{{env}}</option>
       </select>
     </div>
-    <div class="form-group" show-errors>
-      <label class="checkbox">Download Files:
-        <input type="checkbox" ng-model="app.pullFiles">
-      </label><br/>
-      <label class="checkbox">Download Database:
-        <input type="checkbox" ng-model="app.pullDatabase">
-      </label><br/>
+    <div class="form-group show-labels" show-errors>
+      <div class="switch-group">
+        <label for="pullFiles">Pull Files?</label>
+        <switch id="pullFiles" name="pullFiles" ng-model="app.pullFiles" class="green"></switch>
+      </div>
+      <div class="switch-group">
+        <label for="pullDatabase">Pull Database?</label>
+        <switch id="pullDatabase" name="pullDatabase" ng-model="app.pullDatabase" class="green"></switch>
+      </div>
     </div>
   </form>
   <div class="form-actions">

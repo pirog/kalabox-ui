@@ -5,7 +5,8 @@ angular.module('kalabox.sidebar', [
   'ui.bootstrap',
   'kalabox.nodewrappers',
   'kalabox.guiEngine',
-  'kalabox.dashboard'
+  'kalabox.dashboard',
+  'uiSwitch'
 ])
 .config(function($stateProvider) {
   $stateProvider.state('dashboard.sidebar', {

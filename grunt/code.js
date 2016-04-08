@@ -58,12 +58,18 @@ module.exports = {
         'app-click',
         'pantheon-app-click',
         'site',
-        'select-on-click'
+        'select-on-click',
+        'switch'
       ],
       relaxerror: [
         'Empty heading.',
         'Element “img” is missing required attribute “src”',
-        'Element “browser” not allowed as child of element “li” in this context'
+        'Element “browser” not allowed as child of element “li” in this ' +
+        'context',
+        'Element “switch” not allowed as child of element “div” in this ' +
+        'context',
+        'The “for” attribute of the “label” element must refer to a ' +
+        'non-hidden form control'
       ]
     },
     files: {
