@@ -302,7 +302,6 @@ angular.module('kalabox.sites', [])
 
   // Constructor.
   function Sites() {
-    console.log('constructor');
     this.sites = [];
   }
 
