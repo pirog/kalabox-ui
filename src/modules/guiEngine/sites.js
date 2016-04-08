@@ -203,6 +203,10 @@ angular.module('kalabox.sites', [])
           return kbox.app.destroy(app);
         });
       });
+    })
+    // Make sure site remains busy until it's removed.
+    .then(function() {
+      self.busy = true;
     });
   };
 
@@ -229,6 +233,7 @@ angular.module('kalabox.sites', [])
       }
     });
     site.isPlaceHolder = true;
+    site.busy = true;
     return site;
   };
 
@@ -262,67 +267,61 @@ angular.module('kalabox.sites', [])
   return Site;
 
 })
-.factory('placeHolders', function(_, $q) {
-
-  var singleton = {};
-
-  return {
-    add: function(opts) {
-      singleton[opts.name] = opts;
-    },
-    remove: function(name) {
-      return this.get(name)
-      .then(function(exists) {
-        if (exists) {
-          delete singleton[name];
-        }
-      });
-    },
-    get: function(name) {
-      var sites = _.reduce(singleton, function(acc, elt) {
-        acc.push(elt);
-        return acc;
-      }, []);
-      return $q.try(function() {
-        if (name) {
-          return _.find(sites, function(site) {
-            return site.name === name;
-          });
-        } else {
-          return sites;
-        }
-      });
-    }
-  };
-
-})
 /*
  * Object for getting a cached list of site instances.
  */
-.factory('sites', function(kbox, Site, placeHolders, _) {
+.factory('sites', function(kbox, Site, _) {
+
+  // Node modules.
+  var events = require('events');
+  var util = require('util');
 
   // Constructor.
   function Sites() {
     this.sites = [];
+    this.tempSites = [];
+    events.EventEmitter.call(this);
   }
+
+  // Inherit from event emitter.
+  util.inherits(Sites, events.EventEmitter);
 
   // Add site.
   Sites.prototype.add = function(opts) {
+
+    // Keep reference for later.
+    var self = this;
+
     // Add a placeholder site so the user see it right away.
-    placeHolders.add({
-      name: opts.name
-    });
+    this.tempSites.push(Site.fromPlaceHolder(opts));
+    // Signal an update.
+    this.emit('update');
+
     // Add site.
-    return Site.add(opts);
+    return Site.add(opts)
+    // Make sure the busy flag gets unset when add is complete.
+    .finally(function() {
+      var found = _.find(self.sites, function(site) {
+        return site.name === opts.name;
+      });
+      if (found) {
+        found.busy = false;
+      }
+    });
+
   };
 
   // Update site list.
   Sites.prototype.update = function() {
+
+    // Keep reference for later.
     var self = this;
+
     return kbox.then(function(kbox) {
 
       // Get an up to date list of sites.
       return kbox.app.list({useCache: false})
+      // Map from apps to sites.
       .map(Site.fromApp)
       .then(function(newSites) {
 
@@ -339,6 +338,13 @@ angular.module('kalabox.sites', [])
               return site.name;
             });
           }
+        });
+
+        // Remove temp sites that are no longer needed.
+        self.tempSites = _.filter(self.tempSites, function(tempSite) {
+          return !_.find(self.sites, function(site) {
+            return tempSite.name === site.name;
+          });
         });
 
         // Remove sites that no longer exist.
@@ -364,7 +370,12 @@ angular.module('kalabox.sites', [])
       if (name) {
         return self.sites[name];
       } else {
-        return self.sites;
+        // Concat sites and temp sites, then sort by name.
+        return _.sortBy(
+          _.flatten([self.sites, self.tempSites]),
+          function(site) {
+            return site.name;
+          });
       }
     });
   };

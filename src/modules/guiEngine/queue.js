@@ -23,36 +23,45 @@ angular.module('kalabox.guiEngine')
    * Add a job to the queue.
    */
   function add(desc, site, fn) {
-    var siteName = site.name;
-    // Add to end of promise chain.
-    _hds[siteName] = _hds[siteName] || Promise.resolve();
-    _hds[siteName] = _hds[siteName].then(function() {
-      if (!_stopFlag) {
-        // Set current job.
-        _currents[siteName] = {
-          title: desc,
-          message: null,
-          fn: fn
-        };
-        // Update function to update current job's message.
-        var update = function(message) {
-          if (_currents[siteName]) {
-            _currents[siteName].message = message;
-          }
-        };
-        // Run function.
-        return $q.try(function() {
-          return fn(update);
-        });
-      }
-    })
-    // Set current job back to null.
-    .finally(function() {
-      _currents[siteName] = null;
-    })
-    // Make sure errors get reported to the error service.
-    .catch(function(err) {
-      return errorService.report(err);
+    // Create new promise to signal when this added queue job is done.
+    return $q.fromNode(function(cb) {
+      var siteName = site.name;
+      // Add to end of promise chain.
+      _hds[siteName] = _hds[siteName] || Promise.resolve();
+      _hds[siteName] = _hds[siteName].then(function() {
+        if (!_stopFlag) {
+          // Set current job.
+          _currents[siteName] = {
+            title: desc,
+            message: null,
+            fn: fn
+          };
+          // Update function to update current job's message.
+          var update = function(message) {
+            if (_currents[siteName]) {
+              _currents[siteName].message = message;
+            }
+          };
+          // Run function.
+          return $q.try(function() {
+            return fn(update);
+          });
+        }
+      })
+      // Set current job back to null.
+      .finally(function() {
+        _currents[siteName] = null;
+      })
+      .then(function() {
+        // Signal job is done.
+        cb();
+      })
+      // Make sure errors get reported to the error service.
+      .catch(function(err) {
+        // Signal job is done with an error.
+        cb(err);
+        return errorService.report(err);
+      });
     });
   }
 

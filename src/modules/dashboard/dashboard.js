@@ -207,6 +207,11 @@ angular.module('kalabox.dashboard', [
   reloadSites();
 
   // Update site states whenever an update event occurs.
+  sites.on('update', function() {
+    reloadSites();
+  });
+
+  // Update site states whenever an update event occurs.
   siteStates.on('update', function(apps) {
     $scope.ui.states = apps;
   });
