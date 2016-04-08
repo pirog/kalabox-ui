@@ -89,8 +89,9 @@ angular.module('kalabox.sites', [])
     })
     // Find provider site that matches this site.
     .then(function(sites) {
+      var siteName = self.opts ? self.opts.providerInfo.site : self.name;
       return _.find(sites, function(site) {
-        return site.name === self.name;
+        return site.name === siteName;
       });
     })
     // Throw error if site doesn't exist.
