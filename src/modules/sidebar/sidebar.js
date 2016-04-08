@@ -194,6 +194,10 @@ angular.module('kalabox.sidebar', [
   function($scope, kbox, _, guiEngine, $state, $stateParams, sites) {
     $scope.site = $stateParams.site;
     $scope.provider = $stateParams.provider;
+    $scope.app = {};
+    $scope.app.pullFiles = true;
+    $scope.app.pullDatabase = true;
+
     guiEngine.try(function() {
 
       // Modal function.
@@ -208,7 +212,9 @@ angular.module('kalabox.sidebar', [
             email: provider.username,
             site: site.name,
             env: appConfig.env,
-            name: appConfig.name.toLowerCase()
+            name: appConfig.name.toLowerCase(),
+            nofiles: !appConfig.pullFiles,
+            nodb: !appConfig.pullDatabase
           });
 
           // Close the modal.
