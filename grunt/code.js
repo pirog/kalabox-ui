@@ -56,6 +56,7 @@ module.exports = {
         'show-errors',
         'notification-center',
         'app-click',
+        'pantheon-app-click',
         'site',
         'select-on-click'
       ],

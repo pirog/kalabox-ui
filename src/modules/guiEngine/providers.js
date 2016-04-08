@@ -56,13 +56,15 @@ angular.module('kalabox.dashboard')
       // Signal provider is refreshing.
       self.refreshing = true;
       var sites = self.integration.sites();
+      var siteProvider = _.clone(self);
+      delete siteProvider.sites;
       // Get list of sites.
       return sites.run(self.username)
       // Map sites.
       .map(function(site) {
         self.sites.push({
           name: site.name,
-          provider: self,
+          provider: siteProvider,
           getEnvironments: site.getEnvironments
         });
       });

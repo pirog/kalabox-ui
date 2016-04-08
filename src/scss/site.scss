@@ -53,6 +53,30 @@
 }
 
 // Site styling.
+#overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: #ddd;
+  z-index: 1000;
+  opacity: .4;
+}
+.loader {
+  position: absolute;
+  z-index: 1000;
+  left: 56px;
+  .ball-clip-rotate>div {
+    border: 3px solid $gray-darker;
+    border-bottom-color: transparent;
+    height: 80px;
+    width: 80px;
+    display: block;
+    margin: auto;
+    margin-top: 40px;
+    opacity: 1;
+  }
+}
+
 .site-wrapper {
   margin: 10px 0px;
 }
