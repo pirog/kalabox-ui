@@ -17,7 +17,7 @@
   color: $gray-lightest;
   width: 280px;
   text-align: right;
-  z-index: 10;
+  z-index: 20;
   .close {
     color: $gray-lightest;
     opacity: .7;
@@ -73,14 +73,18 @@
     text-align: right;
   }
 
+  form .form-group.show-labels label {
+    display: inline-block;
+    vertical-align: top;
+    margin-bottom: 0px;
+    margin-right: 5px;
+  }
+
   form {
     padding: 15px;
     .form-group {
       label {
         display: none;
-      }
-      label.checkbox {
-        display: inline-block;
       }
       .form-control {
         border: none;
@@ -148,4 +152,21 @@ i.backdrop {
   input {
     width: 40%;
   }
+}
+
+.switch-group {
+  height: 1.5em;
+  margin-bottom: 1em;
+}
+.switch {
+  vertical-align: top;
+  width: 30px;
+  height: 20px;
+}
+.switch small {
+  width: 20px;
+  height: 20px;
+}
+.switch.checked small {
+  left: 11px;
 }
