@@ -15,6 +15,14 @@
         <option ng-repeat="env in site.environments" value="{{env}}">{{env}}</option>
       </select>
     </div>
+    <div class="form-group" show-errors>
+      <label class="checkbox">Download Files:
+        <input type="checkbox" ng-model="app.pullFiles">
+      </label><br/>
+      <label class="checkbox">Download Database:
+        <input type="checkbox" ng-model="app.pullDatabase">
+      </label><br/>
+    </div>
   </form>
   <div class="form-actions">
     <button class="btn btn-primary" type="button" ng-disabled="authForm.$invalid" ng-click="ok(app); $event.stopPropagation();">Submit</button>

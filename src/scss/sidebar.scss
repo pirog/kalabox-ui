@@ -79,6 +79,9 @@
       label {
         display: none;
       }
+      label.checkbox {
+        display: inline-block;
+      }
       .form-control {
         border: none;
         border-bottom: 1px grey solid;
