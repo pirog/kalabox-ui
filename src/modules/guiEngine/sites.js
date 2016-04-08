@@ -85,12 +85,10 @@ angular.module('kalabox.sites', [])
     return self.getProvider()
     // Get list of provider's sites.
     .then(function(provider) {
-      console.log(provider);
       return provider.sites;
     })
     // Find provider site that matches this site.
     .then(function(sites) {
-      console.log(sites);
       var siteName = self.opts ? self.opts.providerInfo.site : self.name;
       return _.find(sites, function(site) {
         return site.name === siteName;
