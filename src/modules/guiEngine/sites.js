@@ -203,6 +203,10 @@ angular.module('kalabox.sites', [])
           return kbox.app.destroy(app);
         });
       });
+    })
+    // Make sure site remains busy until it's removed.
+    .then(function() {
+      self.busy = true;
     });
   };
 
