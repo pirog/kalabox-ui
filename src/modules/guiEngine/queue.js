@@ -14,7 +14,7 @@ angular.module('kalabox.guiEngine')
 
   // Handle kbox status message updates.
   statusUpdates.then(function(statusUpdates) {
-    statusUpdates.on('update', function(message) {
+    statusUpdates.on('update', function(/*message*/) {
       // @todo:
     });
   });
