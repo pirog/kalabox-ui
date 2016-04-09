@@ -142,7 +142,7 @@ angular.module('kalabox.sidebar', [
 )
 .controller(
   'AppCreate',
-  function($scope, kbox, _, guiEngine, $state, $stateParams, Site) {
+  function($scope, kbox, _, guiEngine, $state, $stateParams, sites) {
     $scope.app = $stateParams.app;
 
     guiEngine.try(function() {
@@ -151,7 +151,7 @@ angular.module('kalabox.sidebar', [
       $scope.ok = function(appName) {
         guiEngine.try(function() {
           // Add site.
-          Site.add({
+          sites.add({
             provider: {name: $scope.app.name},
             site: appName,
             name: appName.toLowerCase()
