@@ -343,7 +343,11 @@ angular.module('kalabox.sites', [])
         // Remove temp sites that are no longer needed.
         self.tempSites = _.filter(self.tempSites, function(tempSite) {
           return !_.find(self.sites, function(site) {
-            return tempSite.name === site.name;
+            var found = tempSite.name === site.name;
+            if (found) {
+              site.busy = true;
+            }
+            return found;
           });
         });
 
