@@ -74,15 +74,17 @@ module.exports = {
       vendorDir + 'angular-bootstrap/ui-bootstrap.min.js',
       vendorDir + 'angular-bootstrap/ui-bootstrap-tpls.min.js',
       vendorDir + 'angular-bluebird-promises/dist/angular-bluebird-promises.js',
-      vendorDir + 'jasny-bootstrap/dist/js/jasny-bootstrap.min.js'
+      vendorDir + 'jasny-bootstrap/dist/js/jasny-bootstrap.min.js',
+      vendorDir + 'angular-ui-switch/angular-ui-switch.min.js'
     ],
     css: [
-      'src/lib/vendor/font-awesome/css/font-awesome.min.css',
-      'src/lib/vendor/loaders.css/loaders.min.css'
+      vendorDir + 'font-awesome/css/font-awesome.min.css',
+      vendorDir + 'angular-ui-switch/angular-ui-switch.min.css',
+      vendorDir + 'loaders.css/loaders.min.css'
     ],
     assets: [
-      'src/lib/vendor/font-awesome/fonts/fontawesome-webfont.woff',
-      'src/lib/vendor/font-awesome/fonts/fontawesome-webfont.ttf'
+      vendorDir + 'font-awesome/fonts/fontawesome-webfont.woff',
+      vendorDir + 'font-awesome/fonts/fontawesome-webfont.ttf'
     ]
   },
 };

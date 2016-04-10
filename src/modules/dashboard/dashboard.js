@@ -207,6 +207,11 @@ angular.module('kalabox.dashboard', [
   reloadSites();
 
   // Update site states whenever an update event occurs.
+  sites.on('update', function() {
+    reloadSites();
+  });
+
+  // Update site states whenever an update event occurs.
   siteStates.on('update', function(apps) {
     $scope.ui.states = apps;
   });
@@ -242,11 +247,6 @@ angular.module('kalabox.dashboard', [
         $scope.errorCount = $scope.ui.errors.length;
       });
     }
-  });
-
-  // Check if a job queue job is running.
-  guiEngine.loop.add({interval: 0.3 * 1000}, function() {
-    $scope.ui.currentJob = guiEngine.queue.currentJob();
   });
 
 })

@@ -1,5 +1,13 @@
-<div class="site-wrapper col-xs-4">
+<div class="site-wrapper col-xs-4" ng-class="{'overlay-active': site.busy}">
   <div class="site" ng-class="siteClasses()">
+    <div id="overlay" ng-if="site.busy">
+    </div>
+    <div class="loader" ng-if="site.busy">
+      <div class="loader-inner ball-clip-rotate">
+        <div>
+        </div>
+      </div>
+    </div>
     <div class="row image">
       <a ng-href="" site-browser><img class="col-xs-12 img-responsive" alt="Snapshot of your site"  ng-src="{{site.image}}"/></a>
     </div>

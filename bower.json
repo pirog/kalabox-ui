@@ -13,7 +13,8 @@
     "d3": "~3.4.11",
     "font-awesome": "~4.1.0",
     "lodash": "~2.4.1",
-    "loaders.css": "~0.1.2"
+    "loaders.css": "~0.1.2",
+    "angular-ui-switch": "~0.1.1"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.0",
