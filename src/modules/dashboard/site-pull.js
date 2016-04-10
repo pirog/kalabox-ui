@@ -9,15 +9,18 @@ angular.module('kalabox.dashboard')
       element.on('click', function() {
         // Run inside of a gui task.
         guiEngine.try(function() {
-          var sitePullModal = $scope.open(
-            'modules/dashboard/site-pull-modal.html.tmpl',
-            'SitePullModal',
-            {
-              site: $scope.site,
-              environments: []
-            }
-          );
-          return sitePullModal.result;
+          return $scope.site.getEnvironments()
+          .then(function(envs) {
+            var sitePullModal = $scope.open(
+              'modules/dashboard/site-pull-modal.html.tmpl',
+              'SitePullModal',
+              {
+                site: $scope.site,
+                environments: envs
+              }
+            );
+            return sitePullModal.result;
+          });
         });
       });
     }

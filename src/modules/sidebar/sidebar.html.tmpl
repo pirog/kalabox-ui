@@ -44,7 +44,7 @@
             </form>
           </li>
           <li ng-repeat="site in provider.sites | filter:siteAvailableSearch" class="new-site">
-            <a href="" site-add>{{site.name}}</a>
+            <a ng-bind="site.name" pantheon-app-click></a>
           </li>
         </ul>
       </li>

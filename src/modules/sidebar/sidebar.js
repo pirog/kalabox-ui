@@ -5,7 +5,8 @@ angular.module('kalabox.sidebar', [
   'ui.bootstrap',
   'kalabox.nodewrappers',
   'kalabox.guiEngine',
-  'kalabox.dashboard'
+  'kalabox.dashboard',
+  'uiSwitch'
 ])
 .config(function($stateProvider) {
   $stateProvider.state('dashboard.sidebar', {
@@ -26,6 +27,11 @@ angular.module('kalabox.sidebar', [
     url: '/dashboard/sidebar/app-create/{app:json}',
     templateUrl: 'modules/sidebar/app-create.html.tmpl',
     controller: 'AppCreate'
+  })
+  .state('dashboard.sidebar.app-create-pantheon', {
+    url: '/dashboard/sidebar/app-create-pantheon/{site:json}/{provider:json}',
+    templateUrl: 'modules/sidebar/app-create-pantheon.html.tmpl',
+    controller: 'AppCreatePantheon'
   });
 })
 .controller(
@@ -38,6 +44,9 @@ angular.module('kalabox.sidebar', [
     };
     $scope.sidebar = {};
     $scope.sidebar.errorMessage = false;
+    $scope.closeSidebar = function() {
+      angular.element('#addSite').offcanvas('hide');
+    };
   }
 )
 .controller(
@@ -133,7 +142,7 @@ angular.module('kalabox.sidebar', [
 )
 .controller(
   'AppCreate',
-  function($scope, kbox, _, guiEngine, $state, $stateParams, Site) {
+  function($scope, kbox, _, guiEngine, $state, $stateParams, sites) {
     $scope.app = $stateParams.app;
 
     guiEngine.try(function() {
@@ -142,13 +151,13 @@ angular.module('kalabox.sidebar', [
       $scope.ok = function(appName) {
         guiEngine.try(function() {
           // Add site.
-          Site.add({
+          sites.add({
             provider: {name: $scope.app.name},
             site: appName,
             name: appName.toLowerCase()
           });
-          // Navigate back to main provider view.
-          $state.go('dashboard.sidebar', {}, {location: false});
+          // Close sidebar.
+          $scope.closeSidebar();
         });
       };
     });
@@ -164,4 +173,60 @@ angular.module('kalabox.sidebar', [
       });
     }
   };
-});
+})
+.directive('pantheonAppClick', function(guiEngine, $state) {
+  return {
+    scope: true,
+    link: function($scope, element) {
+      element.on('click', function() {
+        guiEngine.try(function() {
+          // Get list of site environments.
+          return $scope.site.getEnvironments()
+          .then(function(envs) {
+            var provider = $scope.provider;
+            $scope.site.environments = envs;
+            $state.go('dashboard.sidebar.app-create-pantheon',
+              {site: $scope.site, provider: provider}, {location: false});
+          });
+        });
+      });
+    }
+  };
+})
+.controller(
+  'AppCreatePantheon',
+  function($scope, kbox, _, guiEngine, $state, $stateParams, sites) {
+    $scope.site = $stateParams.site;
+    $scope.provider = $stateParams.provider;
+    $scope.app = {};
+    $scope.app.pullFiles = true;
+    $scope.app.pullDatabase = true;
+
+    guiEngine.try(function() {
+
+      // Modal function.
+      $scope.ok = function(appConfig) {
+        // Run inside a gui task.
+        guiEngine.try(function() {
+          var provider = $stateParams.provider;
+          var site = $stateParams.site;
+          // Add site.
+          sites.add({
+            provider: provider,
+            email: provider.username,
+            site: site.name,
+            env: appConfig.env,
+            name: appConfig.name.toLowerCase(),
+            nofiles: !appConfig.pullFiles,
+            nodb: !appConfig.pullDatabase
+          });
+
+          // Close sidebar.
+          $scope.closeSidebar();
+
+        });
+      };
+    });
+
+  }
+);

@@ -53,6 +53,7 @@
 }
 
 // Site styling.
+
 .site-wrapper {
   margin: 10px 0px;
 }
@@ -146,54 +147,77 @@
       text-align: center;
       cursor: pointer;
     }
-  .site-actions {
-    margin: 10px;
-    .fa-2 {
-      font-size: 1.5em;
-    }
-    a.site-power, div.site-actions-dropdown {
-      @include roll-over-button(40px, 80px);
-    }
-    a.site-power:hover {
-      background-color: $btn-primary-bg;
-      border-color: $btn-primary-bg;
-      color: $btn-primary-color;
-    }
-    div.site-actions-dropdown:hover {
-      width: 90px;
-      background-color: $btn-info-bg;
-      border-color: $btn-info-bg;
-      color: $btn-info-color;
-    }
-    a.site-up {
-      color: $brand-success;
-      i {
-        color: $brand-success;
-      }
-    }
-    .dropdown-menu li {
-      a {
-        padding: 3px 15px;
-        color: $gray-light;
-      }
+    .site-actions {
+      margin: 10px;
       .fa-2 {
-        text-align: center;
-        width: 20px;
+        font-size: 1.5em;
+      }
+      a.site-power, div.site-actions-dropdown {
+        @include roll-over-button(40px, 80px);
+      }
+      a.site-power:hover {
+        background-color: $btn-primary-bg;
+        border-color: $btn-primary-bg;
+        color: $btn-primary-color;
+      }
+      div.site-actions-dropdown:hover {
+        width: 90px;
+        background-color: $btn-info-bg;
+        border-color: $btn-info-bg;
+        color: $btn-info-color;
+      }
+      a.site-up {
+        color: $brand-success;
+        i {
+          color: $brand-success;
+        }
+      }
+      .dropdown-menu li {
+        a {
+          padding: 3px 15px;
+          color: $gray-light;
+        }
+        .fa-2 {
+          text-align: center;
+          width: 20px;
+        }
+      }
+      li span {
+        position: absolute;
+        left: 48px;
+      }
+      .dropdown-menu li:hover span {
+        color: $text-color;
+      }
+      .dropdown-menu li a:hover {
+        background-color: $body-bg;
+        cursor: pointer;
       }
     }
-    li span {
-      position: absolute;
-      left: 48px;
-    }
-    .dropdown-menu li:hover span {
-      color: $text-color;
-    }
-    .dropdown-menu li a:hover {
-      background-color: $body-bg;
-      cursor: pointer;
-    }
-
   }
+
+  #overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: #ddd;
+    z-index: 10;
+    opacity: .4;
+  }
+  .loader {
+    position: absolute;
+    z-index: 10;
+    left: 56px;
+    .ball-clip-rotate>div {
+      border: 3px solid $gray-darker;
+      border-bottom-color: transparent;
+      height: 80px;
+      width: 80px;
+      display: block;
+      margin: auto;
+      margin-top: 40px;
+      opacity: 1;
+    }
   }
 }
 
