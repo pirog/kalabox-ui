@@ -51,12 +51,15 @@ angular.module('kalabox.dashboard')
     var self = this;
     // Refresh sites.
     return $q.try(function() {
+      if (!self.username) {
+        throw new Error('Provider has no user name!');
+      }
       // Clear list of sites.
       self.sites = [];
       // Signal provider is refreshing.
       self.refreshing = true;
       var sites = self.integration.sites();
-      var siteProvider = _.clone(self);
+      var siteProvider = _.cloneDeep(self);
       delete siteProvider.sites;
       // Get list of sites.
       return sites.run(self.username)
@@ -80,7 +83,6 @@ angular.module('kalabox.dashboard')
     // Wrap errors.
     .catch(function(err) {
       console.log('Error refreshing sites: %s', self.username);
-      self.username = null;
       return err;
     });
   };
@@ -129,15 +131,20 @@ angular.module('kalabox.dashboard')
 })
 .factory('providers', function(Provider, _) {
   return {
-    get: function(name) {
+    get: function(providerName, username) {
       // Get a list of providers.
       return Provider.list()
       // Either return list or if a name is given then search.
       .then(function(providers) {
-        if (name) {
+        if (providerName) {
           // Search for provider buy name.
           var found = _.find(providers, function(provider) {
-            return provider.name === name;
+            var correctProviderName = provider.name === providerName;
+            var correctUsername =
+              username ?
+                provider.username === username :
+                true;
+            return correctProviderName && correctUsername;
           });
           if (!found) {
             throw new Error('Provider not found: ' + name);
