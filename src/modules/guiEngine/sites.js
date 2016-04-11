@@ -436,8 +436,12 @@ angular.module('kalabox.sites', [])
           return data.Name ? _.trim(data.Name, '/') : null;
         })
         // Ignore errors and return undefined.
-        .catch(function(err) {
-          console.log(err.message);
+        .catch(function() {
+          /*
+           * It's expected to have a lot of instances where we fail to inspect
+           * a container here, so ignore errors and assume we didn't need to
+           * map that container.
+           */
         });
       });
 
