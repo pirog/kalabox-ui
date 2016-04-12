@@ -18,10 +18,6 @@ angular.module('kalabox.guiEngine')
     return n + jitterResult;
   }
 
-  function now() {
-    return moment();
-  }
-
   /*
    * Add a function to reoccur at opts.interval intervals.
    * NOTE: jitter will also be applied to delays to keep jobs from all
@@ -40,37 +36,32 @@ angular.module('kalabox.guiEngine')
     // Flag for stopping repeating interval.
     var stopFlag = false;
     // Recursive function.
-    function rec(next) {
-      // Figure out if job should be run based on schedule.
-      var shouldRunJob = moment().diff(next) > 0;
-      if (shouldRunJob) {
-        // Run the job.
-        return $q.try(fn)
-        // Schedule the next run of the job.
-        .finally(function() {
-          // Find out when job should run again.
-          var duration = applyJitter(opts.jitter, opts.interval);
-          var schedule = now().add(duration, 'ms');
-          // Recurse.
-          return rec(schedule);
-        })
-        // Handle errors.
-        .catch(function(err) {
-          return errorHandler(err);
-        });
-      } else {
-        // Job is not ready to run, delay then recurse.
-        return Promise.delay(50)
-        .then(function() {
-          // Only recurse if stop flag has not been set.
-          if (!stopFlag) {
-            return rec(next);
-          }
-        });
-      }
+    function rec() {
+      // Start a new promise.
+      return Promise.fromNode(function(cb) {
+        // Apply jitter to interval to get next timeout duration.
+        var duration = applyJitter(opts.jitter, opts.interval);
+        // Init a timeout.
+        setTimeout(function() {
+          // Run handler function.
+          return $q.try(fn)
+          // Handle errors.
+          .catch(function(err) {
+            return errorHandler(err);
+          })
+          // Resolve promise.
+          .nodeify(cb);
+        }, duration);
+      })
+      // Recurse unless top flag has been set.
+      .then(function() {
+        if (!stopFlag) {
+          return rec();
+        }
+      });
     }
     // Hold onto promise returned by recursive function so caller can wait on it.
-    var prm = rec(now());
+    var prm = rec();
     // Return micro api so called can turn it off and wait for it to finish.
     var api = {
       fn: fn,
