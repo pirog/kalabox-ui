@@ -73,7 +73,17 @@ angular.module('kalabox.sites', [])
    */
   Site.prototype.getProvider = function() {
     var self = this;
-    return providers.get(self.providerName);
+    // Get app.
+    return kbox.then(function(kbox) {
+      return kbox.app.get(self.name);
+    })
+    // Find correct provider.
+    .then(function(app) {
+      return providers.get(
+        self.providerName,
+        app.config.pluginconfig[self.providerName].email
+      );
+    });
   };
 
   /*
@@ -85,7 +95,12 @@ angular.module('kalabox.sites', [])
     return self.getProvider()
     // Get list of provider's sites.
     .then(function(provider) {
-      return provider.sites;
+      // Refresh list of sites.
+      return provider.refresh()
+      // Return list of sites.
+      .then(function() {
+        return provider.sites;
+      });
     })
     // Find provider site that matches this site.
     .then(function(sites) {
@@ -421,8 +436,12 @@ angular.module('kalabox.sites', [])
           return data.Name ? _.trim(data.Name, '/') : null;
         })
         // Ignore errors and return undefined.
-        .catch(function(err) {
-          console.log(err.message);
+        .catch(function() {
+          /*
+           * It's expected to have a lot of instances where we fail to inspect
+           * a container here, so ignore errors and assume we didn't need to
+           * map that container.
+           */
         });
       });
 
