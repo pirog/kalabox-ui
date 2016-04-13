@@ -22,9 +22,14 @@ before-install() {
   echo "TRAVIS_OS_NAME: ${TRAVIS_OS_NAME}"
   echo "PATH: ${PATH}"
 
-  # Install grunt cli and bower
-  npm install -g grunt-cli bower
+  # Install grunt cli, bower, and protractor
+  npm install -g grunt-cli bower protractor
   gem install sass
+
+  # Make sure webdriver-manager is up-to-date and start it.
+  webdriver-manager update
+  webdriver-manager start
+
 
   # Sanity checks
   node --version
@@ -33,6 +38,7 @@ before-install() {
   bower --version
   ruby --version
   sass --version
+  protractor --version
 
 }
 
@@ -50,7 +56,11 @@ before-script() {
 # Run the tests.
 #
 script() {
+  # Basic Grunt testing
   run_command grunt test
+
+  # Run protractor tests
+  run_command protractor src/travis-conf.js
 }
 
 # after-script
