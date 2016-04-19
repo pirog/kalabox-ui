@@ -20,7 +20,37 @@ angular.module('kalabox.sites', [])
     this.busy = false;
     this.update();
     this.environments = [];
+    // Status message.
+    this.status = null;
+    // Action progress value from 0.0 -> 1.0
+    this.progress = 0;
+    // Initialize anything that needs to run inside of a promise.
+    this.init();
   }
+
+  /*
+   * Constructor initialization that requires promises.
+   */
+  Site.prototype.init = function() {
+    var self = this;
+    // Get app.
+    kbox.then(function(kbox) {
+      return kbox.app.get(self.name)
+      .catch(function() {});
+    })
+    // If app exists then handle status messages.
+    .then(function(app) {
+      if (app) {
+        app.events.on('status', function(msg) {
+          // Update status message.
+          self.status = msg;
+          // Increase progress.
+          var step = (1 - self.progress) / 10;
+          self.progress += step;
+        });
+      }
+    });
+  };
 
   /*
    * Update site properties.
@@ -53,9 +83,14 @@ angular.module('kalabox.sites', [])
       return $q.try(function() {
         return fn.call(self, update);
       })
-      // Signal site is no longer busy.
+      // When queue is finished.
       .finally(function() {
+        // Signal site is no longer busy.
         self.busy = false;
+        // Clear status message.
+        self.status = null;
+        // Set progress back to zero.
+        self.progress = 0;
       });
     });
   };
@@ -248,7 +283,10 @@ angular.module('kalabox.sites', [])
       }
     });
     site.isPlaceHolder = true;
+    // Set busy.
     site.busy = true;
+    // Set initial status message.
+    site.status = 'Creating...';
     return site;
   };
 
