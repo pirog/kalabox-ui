@@ -26,10 +26,6 @@ before-install() {
   npm install -g grunt-cli bower protractor
   gem install sass
 
-  # Make sure webdriver-manager is up-to-date and start it.
-  webdriver-manager update
-  webdriver-manager start
-
 
   # Sanity checks
   node --version
@@ -60,7 +56,7 @@ script() {
   run_command grunt test
 
   # Run protractor tests
-  run_command protractor src/travis-conf.js
+  run_command grunt e2e
 }
 
 # after-script
