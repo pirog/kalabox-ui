@@ -45,7 +45,7 @@ angular.module('kalabox.sites', [])
           // Update status message.
           self.status = msg;
           // Increase progress.
-          var step = (1 - self.progress) / 10;
+          var step = (1 - self.progress) / 8;
           self.progress += step;
         });
       }
@@ -399,6 +399,8 @@ angular.module('kalabox.sites', [])
             var found = tempSite.name === site.name;
             if (found) {
               site.busy = true;
+              site.status = tempSite.status;
+              site.progress = tempSite.progress;
             }
             return found;
           });
