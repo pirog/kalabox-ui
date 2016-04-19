@@ -36,6 +36,11 @@ before-install() {
   sass --version
   protractor --version
 
+  sudo apt-get install curl
+  export DISPLAY=:99.0
+  sh -e /etc/init.d/xvfb start +extension RANDR
+  sleep 5
+
 }
 
 
@@ -56,7 +61,7 @@ script() {
   run_command grunt test
 
   # Run protractor tests
-  run_command grunt e2e
+  DISPLAY=:99.0 grunt e2e --verbose
 }
 
 # after-script
