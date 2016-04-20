@@ -1,6 +1,8 @@
 <div class="site-wrapper col-xs-4" ng-class="{'overlay-active': site.busy}">
   <div class="site" ng-class="siteClasses()">
     <div id="overlay" ng-if="site.busy">
+    {{site.status}}
+    <br>{{site.progress}}
     </div>
     <svg ng-if="site.busy" version="1.1" id="loader" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
        width="100px" height="100px" viewBox="0 0 120 120" xml:space="preserve">
