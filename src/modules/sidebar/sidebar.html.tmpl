@@ -8,21 +8,21 @@
   </div>
   <div class="row" ui-view>
     <div class="alert alert-danger" ng-if="sidebar.errorMessage" ng-bind="sidebar.errorMessage"></div>
-    <h4>Add Account</h4>
+    <h4 class="add-account">Add Account</h4>
     <ul class="nav navmenu-nav navmenu-inverse providers-next">
       <li class="provider integration" ng-repeat="provider in $root.providers | filter : { username : '!' }" ng-controller="ProviderCtrl" ng-class="providerClasses(provider)">
         <a ng-href="" ng-bind="provider.displayName" provider-click></a>
         <i ng-class="provider.name"></i>
       </li>
     </ul>
-    <h4>Add Site</h4>
+    <h4 class="add-site">Add Site</h4>
     <ul class="nav navmenu-nav navmenu-inverse providers-existing">
       <li class="app" ng-repeat="app in $root.apps | filter:{ name : '!pantheon' }" ng-controller="AppCtrl">
         <a ng-bind="appDisplayName(app)" app-click></a>
         <i ng-class="app.name"></i>
       </li>
     </ul>
-    <h4 ng-if="">Add Site From Pantheon</h4>
+    <h4 ng-if="" class="add-pantheon-site">Add Site From Pantheon</h4>
     <ul class="nav navmenu-nav navmenu-inverse providers-existing">
       <li class="provider" ng-repeat="provider in $root.providers | filter : { username : '!!' }" ng-class="providerClasses(provider)" ng-controller="ProviderCtrl" uib-dropdown auto-close="outsideClick">
         <a ng-href="" ng-bind="provider.displayName" class="dropdown-toggle" provider-click uib-dropdown-toggle></a>
