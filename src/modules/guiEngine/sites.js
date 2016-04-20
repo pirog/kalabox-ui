@@ -82,44 +82,64 @@ angular.module('kalabox.sites', [])
   };
 
   /*
+   * Runs before an action is queued.
+   */
+  Site.prototype.beforeQueue = function() {
+    var self = this;
+    return $q.try(function() {
+      // Signal that site is busy.
+      self.busy = true;
+    });
+  };
+
+  /*
+   * Runs after an action is queued.
+   */
+  Site.prototype.afterQueue = function() {
+    var self = this;
+    // Have progress incrementally step to being complete over a short
+    // amount of time.
+    return Promise.try(function() {
+      self.status = 'Completing...';
+      function rec() {
+        if (self.progress < 1) {
+          self.progress += _.min([0.1, 1 - self.progress]);
+          return Promise.delay(0.5 * 1000)
+          .then(function() {
+            return rec();
+          });
+        }
+      }
+      return rec();
+    })
+    // Cleanup.
+    .then(function() {
+      // Signal site is no longer busy.
+      self.busy = false;
+      // Clear status message.
+      self.status = null;
+      // Set progress back to zero.
+      self.progress = 0;
+    });
+  };
+
+  /*
    * Call fn function within a gui engine queue.
-   **/
+   */
   Site.prototype.queue = function(desc, fn) {
     var self = this;
     // Add job to queue.
     return guiEngine.queue.add(desc, self, function(update) {
-      // Signal that site is busy.
-      self.busy = true;
+      // Setup for queued action.
+      return self.beforeQueue()
       // Call fn function.
-      return $q.try(function() {
+      .then(function() {
         return fn.call(self, update);
       })
       // When queue is finished.
       .finally(function() {
-        // Have progress incrementally step to being complete over a short
-        // amount of time.
-        return Promise.try(function() {
-          self.status = 'Completing...';
-          function rec() {
-            if (self.progress < 1) {
-              self.progress += _.min([0.1, 1 - self.progress]);
-              return Promise.delay(0.5 * 1000)
-              .then(function() {
-                return rec();
-              });
-            }
-          }
-          return rec();
-        })
-        // Cleanup.
-        .then(function() {
-          // Signal site is no longer busy.
-          self.busy = false;
-          // Clear status message.
-          self.status = null;
-          // Set progress back to zero.
-          self.progress = 0;
-        });
+        // Cleanup after queued action.
+        return self.afterQueue();
       });
     });
   };
@@ -387,7 +407,7 @@ angular.module('kalabox.sites', [])
         return site.name === opts.name;
       });
       if (found) {
-        found.busy = false;
+        return found.afterQueue();
       }
     });
 
