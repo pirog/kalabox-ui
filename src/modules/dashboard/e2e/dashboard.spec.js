@@ -13,12 +13,11 @@ describe('dashboard module tests', function() {
   });
   it('should link to the sidebar from add site button', function() {
     browser.get('/dashboard');
-    var addSite = element(by.css('div.site.add a'));
+    var addSite = $('div.site.add a');
     addSite.click().then(function() {
-      var provider = element(by.binding('provider.displayName'));
-      expect(provider.getText()).toEqual('Pantheon');
+      var provider = $('h4');
+      expect(provider.getText()).toEqual('ADD ACCOUNT');
     });
-
   });
 
 });
