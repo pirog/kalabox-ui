@@ -36,19 +36,30 @@ angular.module('kalabox.sites', [])
     // Get app.
     kbox.then(function(kbox) {
       return kbox.app.get(self.name)
-      .catch(function() {});
-    })
-    // If app exists then handle status messages.
-    .then(function(app) {
-      if (app) {
-        app.events.on('status', function(msg) {
-          // Update status message.
-          self.status = msg;
-          // Increase progress.
-          var step = (1 - self.progress) / 8;
-          self.progress += step;
-        });
-      }
+      .catch(function() {})
+      // If app exists then handle status messages.
+      .then(function(app) {
+        if (app) {
+          // Create a throttled event emitter.
+          var throttledEvents = new kbox.util.ThrottledEvents({
+            throttle: function(size) {
+              return size < 5 ? 0.5 : size / 2;
+            }
+          });
+          // When a status update happens, update site status and progress.
+          throttledEvents.on('status', function(msg) {
+            // Update status message.
+            self.status = msg;
+            // Increase progress.
+            var step = (1 - self.progress) / 8;
+            self.progress += step;
+          });
+          // Emit a status update to be handled above.
+          app.events.on('status', function(msg) {
+            throttledEvents.emit('status', msg);
+          });
+        }
+      });
     });
   };
 
@@ -85,12 +96,30 @@ angular.module('kalabox.sites', [])
       })
       // When queue is finished.
       .finally(function() {
-        // Signal site is no longer busy.
-        self.busy = false;
-        // Clear status message.
-        self.status = null;
-        // Set progress back to zero.
-        self.progress = 0;
+        // Have progress incrementally step to being complete over a short
+        // amount of time.
+        return Promise.try(function() {
+          self.status = 'Completing...';
+          function rec() {
+            if (self.progress < 1) {
+              self.progress += _.min([0.1, 1 - self.progress]);
+              return Promise.delay(0.5 * 1000)
+              .then(function() {
+                return rec();
+              });
+            }
+          }
+          return rec();
+        })
+        // Cleanup.
+        .then(function() {
+          // Signal site is no longer busy.
+          self.busy = false;
+          // Clear status message.
+          self.status = null;
+          // Set progress back to zero.
+          self.progress = 0;
+        });
       });
     });
   };
