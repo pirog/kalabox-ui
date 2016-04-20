@@ -22,9 +22,10 @@ before-install() {
   echo "TRAVIS_OS_NAME: ${TRAVIS_OS_NAME}"
   echo "PATH: ${PATH}"
 
-  # Install grunt cli and bower
-  npm install -g grunt-cli bower
+  # Install grunt cli, bower, and protractor
+  npm install -g grunt-cli bower protractor
   gem install sass
+
 
   # Sanity checks
   node --version
@@ -33,6 +34,12 @@ before-install() {
   bower --version
   ruby --version
   sass --version
+  protractor --version
+
+  sudo apt-get install curl
+  export DISPLAY=:99.0
+  sh -e /etc/init.d/xvfb start +extension RANDR
+  sleep 5
 
 }
 
@@ -50,7 +57,11 @@ before-script() {
 # Run the tests.
 #
 script() {
+  # Basic Grunt testing
   run_command grunt test
+
+  # Run protractor tests
+  DISPLAY=:99.0 grunt e2e --verbose
 }
 
 # after-script

@@ -13,6 +13,7 @@ module.exports = function(grunt) {
   var frontend = require('./grunt/frontend.js');
   var nw = require('./grunt/nw.js');
   var util = require('./grunt/util.js');
+  var e2e = require('./grunt/e2e.js');
 
   /*
    * Helper funct to return some common build tasks
@@ -146,6 +147,10 @@ module.exports = function(grunt) {
       build: {command: nw.shell.build(grunt)},
     },
     delta: frontend.delta,
+    protractor: {
+      'protractor-setup': e2e.setup(grunt),
+      test: e2e.protractor
+    }
   };
 
   // Init our grunt config
@@ -182,8 +187,13 @@ module.exports = function(grunt) {
     'jshint',
     'jscs',
     'htmlangular'
- ]);
+  ]);
 
+  var e2eTask = commonBuildTasks();
+  e2eTask.push('protractor-setup');
+  e2eTask.push('protractor:test');
+
+  grunt.registerTask('e2e', e2eTask);
   /**
    * The `build` task gets your app ready to run for development and testing.
    */

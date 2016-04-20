@@ -27,6 +27,11 @@
     "before": false,
     "beforeEach": false,
     "afterEach": false,
-    "Promise": true
+    "Promise": true,
+    "browser": false,
+    "$": false,
+    "expect": false,
+    "by": false,
+    "element": false
   }
 }

@@ -15,6 +15,7 @@ angular.module('kalabox', [
   function($scope, $window) {
   var vm = this;
   vm.bodyClasses = 'default';
+  var gui = require('nw.gui');
 
   // this'll be called on every state change in the app
   $scope.$on('$stateChangeSuccess', function(event, toState) {
@@ -26,9 +27,12 @@ angular.module('kalabox', [
   });
   $window.addEventListener('keydown', function(event) {
     if (event.keyIdentifier === 'F12') {
-      require('nw.gui').Window.get().showDevTools();
+      gui.Window.get().showDevTools();
     }
   });
+  $scope.quit = function() {
+    gui.App.quit();
+  };
 })
 .run(function(kbox, notificationQueue) {
   kbox.then(function(kbox) {
