@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container sidebar">
   <div class="row">
     <div class="col-xs-12">
       <div class="pull-right close" data-toggle="offcanvas" data-target="#addSite">
@@ -25,9 +25,9 @@
     <h4 ng-if="" class="add-pantheon-site">Add Site From Pantheon</h4>
     <ul class="nav navmenu-nav navmenu-inverse providers-existing">
       <li class="provider" ng-repeat="provider in $root.providers | filter : { username : '!!' }" ng-class="providerClasses(provider)" ng-controller="ProviderCtrl" uib-dropdown auto-close="outsideClick">
-        <a ng-href="" ng-bind="provider.displayName" class="dropdown-toggle" provider-click uib-dropdown-toggle></a>
+        <a ng-href="" ng-bind="provider.displayName" class="provider-name dropdown-toggle" provider-click uib-dropdown-toggle></a>
         <i ng-class="provider.name"></i>
-        <ul class="dropdown-menu navmenu-nav" role="menu" uib-dropdown-menu>
+        <ul class="dropdown-menu navmenu-nav provider-sites" role="menu" uib-dropdown-menu>
           <li>
             <div ng-if="provider.refreshing" class="loader">
               <div class="loader-inner ball-clip-rotate">

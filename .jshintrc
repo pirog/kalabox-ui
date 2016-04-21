@@ -33,6 +33,7 @@
     "expect": false,
     "by": false,
     "element": false,
-    "protractor": false
+    "protractor": false,
+    "RC": false
   }
 }
