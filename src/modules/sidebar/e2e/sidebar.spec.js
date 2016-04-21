@@ -17,6 +17,32 @@ function getToUserPantheonSites() {
   });
 }
 
+function createPantheonDrupal8Form() {
+  return getToUserPantheonSites().then(function() {
+    var site = element(by.cssContainingText('.new-site', 'kalabox-drupal8'));
+    return site.click();
+  })
+  .then(function() {
+    // Wait for the form.
+    var siteAddFormPresent = EC.presenceOf($('div.authForm'));
+    return browser.wait(siteAddFormPresent, 5000);
+  });
+}
+
+function createD8Site(siteName, siteEnv) {
+  return createPantheonDrupal8Form().then(function() {
+    // Insert sitename
+    var sitenameInput = $('#appName');
+    sitenameInput.sendKeys(siteName);
+
+    // Insert environment
+    element(by.cssContainingText('#appEnv option', siteEnv)).click();
+
+    // Try submitting the form.
+    return element(by.buttonText('Submit')).click();
+  });
+}
+
 describe('sidebar module tests', function() {
   beforeEach(function() {
     browser.get('/dashboard');
@@ -68,16 +94,7 @@ describe('sidebar module tests', function() {
 
   it('don\t allow a blank Pantheon sitename', function() {
     // Click on the kalabox-drupal8.
-    getToUserPantheonSites().then(function() {
-      var site = element(by.cssContainingText('.new-site', 'kalabox-drupal8'));
-      return site.click();
-    })
-    .then(function() {
-      // Wait for the form.
-      var siteAddFormPresent = EC.presenceOf($('div.authForm'));
-      return browser.wait(siteAddFormPresent, 5000);
-    })
-    .then(function() {
+    createPantheonDrupal8Form().then(function() {
       // Try submitting the form blank.
       var sitenameInput = $('#appName');
       sitenameInput.sendKeys('');
@@ -87,6 +104,25 @@ describe('sidebar module tests', function() {
     });
   });
 
+  it('throw error on trying to use a taken app name', function() {
+    var siteName = 'myd8site';
+    var siteEnv = 'dev';
+
+    createD8Site(siteName, siteEnv).then(function() {
+      // Wait until app has finished being created.
+      var nameElement = element(by.cssContainingText('.site-name', siteName));
+      var siteInfo = nameElement.element(by.xpath('following-sibling::div'));
+      var siteDoneCreating = EC.presenceOf(siteInfo.$('.site-power.site-up'));
+      return browser.wait(siteDoneCreating, 1000 * 240);
+    }).then(function() {
+      // Try pulling same site with same name.
+      return createD8Site(siteName, siteEnv);
+    }).then(function() {
+      // Should receive a validation error.
+      var errorPresent = EC.presenceOf($('.authForm .alert-error'));
+      return expect(errorPresent);
+    });
+  });
 /*
   it('pull down a Drupal 8 site from Pantheon', function() {
     getToUserPantheonSites.then(functin() {

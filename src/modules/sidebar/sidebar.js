@@ -206,11 +206,6 @@ angular.module('kalabox.sidebar', [
 
       // Modal function.
       $scope.ok = function(appConfig) {
-        // @todo: Validate presence of name.
-        if (!appConfig.username) {
-          $scope.$valid = false;
-          return '';
-        }
         // Run inside a gui task.
         guiEngine.try(function() {
           var provider = $stateParams.provider;
