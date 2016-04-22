@@ -24,7 +24,7 @@ function createPantheonDrupal8Form() {
   })
   .then(function() {
     // Wait for the form.
-    var siteAddFormPresent = EC.presenceOf($('div.authForm'));
+    var siteAddFormPresent = EC.presenceOf($('div.app-create-pantheon'));
     return browser.wait(siteAddFormPresent, 5000);
   });
 }
@@ -43,15 +43,19 @@ function createD8Site(siteName, siteEnv) {
   });
 }
 
+function openSidebar() {
+  var addSite = $('div.site.add a');
+  var isClickable = EC.elementToBeClickable(addSite);
+  return browser.wait(isClickable, 5000).then(function() {
+    browser.sleep(5000);
+    addSite.click();
+  });
+}
+
 describe('sidebar module tests', function() {
   beforeEach(function() {
     browser.get('/dashboard');
-    var addSite = $('div.site.add a');
-    var isClickable = EC.elementToBeClickable(addSite);
-    browser.wait(isClickable, 5000)
-    .then(function() {
-      addSite.click();
-    });
+    openSidebar();
   });
 
   it('allow Pantheon sign-in', function() {
@@ -109,18 +113,28 @@ describe('sidebar module tests', function() {
     var siteEnv = 'dev';
 
     createD8Site(siteName, siteEnv).then(function() {
-      // Wait until app has finished being created.
-      var nameElement = element(by.cssContainingText('.site-name', siteName));
+      // App has started creating.
+      var nameElement = element(by.cssContainingText('h3.site-name', siteName));
+      var nameElementExists = EC.presenceOf(nameElement);
+      return browser.wait(nameElementExists, 3000).then(function() {
+        return nameElement;
+      });
+    }).then(function() {
+      return browser.sleep(5000);
+      /* @TODO: Wait until app has finished being created.
       var siteInfo = nameElement.element(by.xpath('following-sibling::div'));
       var siteDoneCreating = EC.presenceOf(siteInfo.$('.site-power.site-up'));
-      return browser.wait(siteDoneCreating, 1000 * 240);
+      return browser.wait(siteDoneCreating, 1000000);
+      */
     }).then(function() {
       // Try pulling same site with same name.
+      return openSidebar();
+    }).then(function() {
       return createD8Site(siteName, siteEnv);
     }).then(function() {
       // Should receive a validation error.
-      var errorPresent = EC.presenceOf($('.authForm .alert-error'));
-      return expect(errorPresent);
+      var errorPresent = EC.presenceOf($('.app-create-pantheon .alert-error'));
+      return browser.wait(errorPresent, 2000);
     });
   });
 /*

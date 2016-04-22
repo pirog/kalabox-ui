@@ -18,7 +18,12 @@ exports.config = {
   specs: [
     'src/modules/*/e2e/*.spec.js'
   ],
-
+  jasmineNodeOpts: {
+    showColors: true,
+    defaultTimeoutInterval: 1000000,
+    isVerbose: true,
+    includeStackTrace: true,
+  },
   baseUrl: baseUrl,
   rootElement: 'body',
 
