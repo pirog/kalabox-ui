@@ -8,12 +8,12 @@ function getToUserPantheonSites() {
    // Click on PANTHEON_USER's account.
   var account = element(by.cssContainingText('.provider-name', username));
   var accountClickable = EC.elementToBeClickable(account);
-  return browser.wait(accountClickable, 5000).then(function() {
+  return browser.wait(accountClickable).then(function() {
     return account.click();
   }).then(function() {
     // Wait for sites to load.
     var sitesLoaded = EC.presenceOf($('ul.provider-sites .new-site'));
-    return browser.wait(sitesLoaded, 10000);
+    return browser.wait(sitesLoaded);
   });
 }
 
@@ -25,7 +25,7 @@ function createPantheonDrupal8Form() {
   .then(function() {
     // Wait for the form.
     var siteAddFormPresent = EC.presenceOf($('div.app-create-pantheon'));
-    return browser.wait(siteAddFormPresent, 5000);
+    return browser.wait(siteAddFormPresent);
   });
 }
 
@@ -33,7 +33,9 @@ function createD8Site(siteName, siteEnv) {
   return createPantheonDrupal8Form().then(function() {
     // Insert sitename
     var sitenameInput = $('#appName');
-    sitenameInput.sendKeys(siteName);
+    sitenameInput.clear().then(function() {
+      sitenameInput.sendKeys(siteName);
+    });
 
     // Insert environment
     element(by.cssContainingText('#appEnv option', siteEnv)).click();
@@ -46,7 +48,7 @@ function createD8Site(siteName, siteEnv) {
 function openSidebar() {
   var addSite = $('div.site.add a');
   var isClickable = EC.elementToBeClickable(addSite);
-  return browser.wait(isClickable, 5000).then(function() {
+  return browser.wait(isClickable).then(function() {
     browser.sleep(5000);
     addSite.click();
   });
@@ -61,12 +63,12 @@ describe('sidebar module tests', function() {
   it('allow Pantheon sign-in', function() {
     var addPantheon = $('ul.providers-next a', 'Pantheon');
     var addPantheonClickable = EC.elementToBeClickable(addPantheon);
-    browser.wait(addPantheonClickable, 5000).then(function() {
+    browser.wait(addPantheonClickable).then(function() {
       return addPantheon.click();
     }).then(function() {
       var authPage = $('div.pantheon-authorization');
       var authPageLoaded = EC.presenceOf(authPage);
-      return browser.wait(authPageLoaded, 5000);
+      return browser.wait(authPageLoaded);
     }).then(function() {
       return expect($('h4').getText()).toBe('AUTHENTICATE WITH PANTHEON');
     }).then(function() {
@@ -76,13 +78,13 @@ describe('sidebar module tests', function() {
       return $('button.btn-primary').click();
     }).then(function() {
       var loaderPresent = EC.presenceOf($('div.loader'));
-      return browser.wait(loaderPresent, 5000);
+      return browser.wait(loaderPresent);
     }).then(function() {
       return expect($('.loader h4').getText())
       .toBe('AUTHENTICATING');
     }).then(function() {
       var backToSidebar = EC.presenceOf($('h4.add-account'));
-      return browser.wait(backToSidebar, 5000);
+      return browser.wait(backToSidebar);
     });
   });
 
@@ -108,40 +110,36 @@ describe('sidebar module tests', function() {
     });
   });
 
+  it('can pull down a Pantheon D8 site', function() {
+    var siteName = 'testd8site';
+    var siteEnv = 'dev';
+    createD8Site(siteName, siteEnv).then(function() {
+      // Start creating.
+      return browser.wait(protractor.until.elementLocated(
+        by.css('.site-wrapper.overlay-active')));
+    }).then(function() {
+      // Wait until done creating.
+      var busySites = $('.site-wrapper.overlay-active');
+      var noBusySites = EC.not(EC.presenceOf(busySites));
+      return browser.wait(noBusySites);
+    }).then(function() {
+      // Check for presence of new site.
+      var newSite = element(by.cssContainingText('.site-name', siteName));
+      var newSiteExists = EC.presenceOf(newSite);
+      return expect(newSiteExists);
+    });
+  });
+
   it('throw error on trying to use a taken app name', function() {
-    var siteName = 'myd8site';
+    var siteName = 'testd8site';
     var siteEnv = 'dev';
 
-    createD8Site(siteName, siteEnv).then(function() {
-      // App has started creating.
-      var nameElement = element(by.cssContainingText('h3.site-name', siteName));
-      var nameElementExists = EC.presenceOf(nameElement);
-      return browser.wait(nameElementExists, 3000).then(function() {
-        return nameElement;
-      });
-    }).then(function() {
-      return browser.sleep(5000);
-      /* @TODO: Wait until app has finished being created.
-      var siteInfo = nameElement.element(by.xpath('following-sibling::div'));
-      var siteDoneCreating = EC.presenceOf(siteInfo.$('.site-power.site-up'));
-      return browser.wait(siteDoneCreating, 1000000);
-      */
-    }).then(function() {
       // Try pulling same site with same name.
-      return openSidebar();
-    }).then(function() {
-      return createD8Site(siteName, siteEnv);
-    }).then(function() {
+    createD8Site(siteName, siteEnv).then(function() {
       // Should receive a validation error.
       var errorPresent = EC.presenceOf($('.app-create-pantheon .alert-error'));
-      return browser.wait(errorPresent, 2000);
+      return browser.wait(errorPresent);
     });
   });
-/*
-  it('pull down a Drupal 8 site from Pantheon', function() {
-    getToUserPantheonSites.then(functin() {
 
-    });
-  });
-*/
 });
