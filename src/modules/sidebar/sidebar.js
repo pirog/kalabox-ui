@@ -148,16 +148,30 @@ angular.module('kalabox.sidebar', [
     guiEngine.try(function() {
       $scope.errorMessage = false;
       // Auth on submission.
-      $scope.ok = function(appName) {
+      $scope.ok = function(siteName) {
         guiEngine.try(function() {
-          // Add site.
-          sites.add({
-            provider: {name: $scope.app.name},
-            site: appName,
-            name: appName.toLowerCase()
+          kbox.then(function(kbox) {
+            return kbox.app.exists(siteName.toLowerCase());
+          }).then(function(exists) {
+            if (exists) {
+              $scope.errorMessage = 'Darn! This app name is already ' +
+              'taken. Please select another.';
+            } else {
+              // Add site.
+              sites.add({
+                provider: {name: $scope.app.name},
+                site: siteName,
+                name: siteName.toLowerCase()
+              });
+              // Close sidebar.
+              $scope.closeSidebar();
+            }
+          }).catch(function(error) {
+            console.log(error);
+            $scope.errorMessage = 'Weird, something went wrong. If this error' +
+            ' continues, press F12 and see if there is a error in the console.';
           });
-          // Close sidebar.
-          $scope.closeSidebar();
+
         });
       };
     });
@@ -201,29 +215,51 @@ angular.module('kalabox.sidebar', [
     $scope.app = {};
     $scope.app.pullFiles = true;
     $scope.app.pullDatabase = true;
+    $scope.errorMessage = false;
 
+    // Assign next available name as default.
     guiEngine.try(function() {
+      kbox.then(function(kbox) {
+        kbox.app.nextAppName($scope.site.name,
+          function(err, appName) {
+            $scope.app.name = appName;
+          });
+      });
 
       // Modal function.
       $scope.ok = function(appConfig) {
         // Run inside a gui task.
+        // @TODO: Abstract this to work both for regular AppCreate and
+        // AppCreatePantheon.
         guiEngine.try(function() {
           var provider = $stateParams.provider;
           var site = $stateParams.site;
-          // Add site.
-          sites.add({
-            provider: provider,
-            email: provider.username,
-            site: site.name,
-            env: appConfig.env,
-            name: appConfig.name.toLowerCase(),
-            nofiles: !appConfig.pullFiles,
-            nodb: !appConfig.pullDatabase
+          kbox.then(function(kbox) {
+            return kbox.app.exists(appConfig.name.toLowerCase());
+          }).then(function(exists) {
+            if (exists) {
+              $scope.errorMessage = 'Darn! This app name is already ' +
+              'taken. Please select another.';
+            } else {
+              // Add site.
+              sites.add({
+                provider: provider,
+                email: provider.username,
+                site: site.name,
+                env: appConfig.env,
+                name: appConfig.name.toLowerCase(),
+                nofiles: !appConfig.pullFiles,
+                nodb: !appConfig.pullDatabase
+              });
+
+              // Close sidebar.
+              $scope.closeSidebar();
+            }
+          }).catch(function(error) {
+            console.log(error);
+            $scope.errorMessage = 'Weird, something went wrong. If this error' +
+            ' continues, press F12 and see if there is a error in the console.';
           });
-
-          // Close sidebar.
-          $scope.closeSidebar();
-
         });
       };
     });
