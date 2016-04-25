@@ -68,7 +68,7 @@ function findSite(siteName) {
   return newSiteH3.element(by.xpath('..'));
 }
 
-xdescribe('sidebar module tests', function() {
+describe('sidebar module tests', function() {
   beforeEach(function() {
     browser.get('/dashboard');
     openSidebar();
@@ -124,7 +124,7 @@ xdescribe('sidebar module tests', function() {
     });
   });
 
-  it('can pull down a Pantheon D8 site', function() {
+  /*it('can pull down a Pantheon D8 site', function() {
     var siteName = 'testd8site';
     var siteEnv = 'dev';
     createD8Site(siteName, siteEnv).then(function() {
@@ -145,9 +145,9 @@ xdescribe('sidebar module tests', function() {
       var newSiteExists = EC.presenceOf(newSite);
       return expect(newSiteExists);
     });
-  });
+  });*/
 
-  it('throw error on trying to use a taken app name', function() {
+  /*it('throw error on trying to use a taken app name', function() {
     var siteName = 'testd8site';
     var siteEnv = 'dev';
 
@@ -157,9 +157,9 @@ xdescribe('sidebar module tests', function() {
       var errorPresent = EC.presenceOf($('.app-create-pantheon .alert-error'));
       return browser.wait(errorPresent);
     });
-  });
+  });*/
 
-  it('app has connection info', function() {
+  /*it('app has connection info', function() {
     var siteName = 'cvtenrollee';
 
     // Open connection modal.
@@ -173,5 +173,5 @@ xdescribe('sidebar module tests', function() {
       console.log(databaseText);
       expect(databaseText.count()).toEqual(11);
     });
-  });
+  });*/
 });
