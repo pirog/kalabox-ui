@@ -68,7 +68,7 @@ function findSite(siteName) {
   return newSiteH3.element(by.xpath('..'));
 }
 
-describe('sidebar module tests', function() {
+xdescribe('sidebar module tests', function() {
   beforeEach(function() {
     browser.get('/dashboard');
     openSidebar();
