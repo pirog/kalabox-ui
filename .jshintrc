@@ -22,6 +22,7 @@
   "loopfunc": true,
   "globals": {
     "describe": false,
+    "xdescribe": false,
     "angular": true,
     "it": false,
     "before": false,
