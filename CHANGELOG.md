@@ -9,6 +9,7 @@ v0.12.15
 
 * Updated our development process with new contribution guidelines and standards [#1236](https://github.com/kalabox/kalabox/issues/1236)
 * Provide new progress bar and messaging on performing actions on sites. [#1256](https://github.com/kalabox/kalabox/issues/1256)
+* Provide internal connection info for DB configuration. [#1230](https://github.com/kalabox/kalabox/issues/1230)
 
 #### Bug fixes
 

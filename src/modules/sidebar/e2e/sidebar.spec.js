@@ -63,6 +63,11 @@ function showsProgress() {
   return browser.wait(EC.and(progressBarShown, messageShown));
 }
 
+function findSite(siteName) {
+  var newSiteH3 = element(by.cssContainingText('.site-name', siteName));
+  return newSiteH3.element(by.xpath('..'));
+}
+
 describe('sidebar module tests', function() {
   beforeEach(function() {
     browser.get('/dashboard');
@@ -154,4 +159,19 @@ describe('sidebar module tests', function() {
     });
   });
 
+  it('app has connection info', function() {
+    var siteName = 'cvtenrollee';
+
+    // Open connection modal.
+    var newSite = findSite(siteName);
+    newSite.element(by.css('.site-actions-dropdown')).click().then(function() {
+      return newSite.element(by.css('.site-connection')).click();
+    }).then(function() {
+      var databaseFields = element.all(by.css('.service.database input'));
+      return databaseFields.getText();
+    }).then(function(databaseText) {
+      console.log(databaseText);
+      expect(databaseText.count()).toEqual(11);
+    });
+  });
 });
