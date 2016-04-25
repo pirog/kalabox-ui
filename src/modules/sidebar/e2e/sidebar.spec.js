@@ -29,7 +29,7 @@ function createPantheonDrupal8Form() {
   });
 }
 
-/*function createD8Site(siteName, siteEnv) {
+function createD8Site(siteName, siteEnv) {
   return createPantheonDrupal8Form().then(function() {
     // Insert sitename
     var sitenameInput = $('#appName');
@@ -43,7 +43,7 @@ function createPantheonDrupal8Form() {
     // Try submitting the form.
     return element(by.buttonText('Submit')).click();
   });
-}*/
+}
 
 function openSidebar() {
   var addSite = $('div.site.add a');
@@ -54,14 +54,14 @@ function openSidebar() {
   });
 }
 
-/*function showsProgress() {
+function showsProgress() {
   // Both progress bar and messages shown on at least one site.
   var progressBar = $('.site-wrapper .progress-bar');
   var progressBarShown = EC.presenceOf(progressBar);
   var messages = $('.site-wrapper h3.site-action');
   var messageShown = EC.presenceOf(messages);
   return browser.wait(EC.and(progressBarShown, messageShown));
-}*/
+}
 
 /*function findSite(siteName) {
   var newSiteH3 = element(by.cssContainingText('.site-name', siteName));
@@ -124,7 +124,7 @@ describe('sidebar module tests', function() {
     });
   });
 
-  /*it('can pull down a Pantheon D8 site', function() {
+  it('can pull down a Pantheon D8 site', function() {
     var siteName = 'testd8site';
     var siteEnv = 'dev';
     createD8Site(siteName, siteEnv).then(function() {
@@ -145,7 +145,7 @@ describe('sidebar module tests', function() {
       var newSiteExists = EC.presenceOf(newSite);
       return expect(newSiteExists);
     });
-  });*/
+  });
 
   /*it('throw error on trying to use a taken app name', function() {
     var siteName = 'testd8site';
