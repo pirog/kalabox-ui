@@ -61,7 +61,7 @@ script() {
   run_command grunt test
 
   # Run protractor tests
-  DISPLAY=:99.0 travis_wait grunt e2e --verbose
+  DISPLAY=:99.0 grunt e2e --verbose
 }
 
 # after-script
