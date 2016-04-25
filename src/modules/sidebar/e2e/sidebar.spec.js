@@ -70,6 +70,7 @@ function showsProgress() {
 
 describe('sidebar module tests', function() {
   beforeEach(function() {
+    console.log('foo');
     browser.get('/dashboard');
     openSidebar();
   });
@@ -125,21 +126,26 @@ describe('sidebar module tests', function() {
   });
 
   it('can pull down a Pantheon D8 site', function() {
+    console.log('testing-1');
     var siteName = 'testd8site';
     var siteEnv = 'dev';
     createD8Site(siteName, siteEnv).then(function() {
+      console.log('testing-2');
       // Start creating.
       return browser.wait(protractor.until.elementLocated(
         by.css('.site-wrapper.overlay-active')));
     }).then(function() {
+      console.log('testing-3');
       // Make sure progress bar shows up.
       return showsProgress();
     }).then(function() {
+      console.log('testing-4');
       // Wait until done creating.
       var busySites = $('.site-wrapper.overlay-active');
       var noBusySites = EC.not(EC.presenceOf(busySites));
       return browser.wait(noBusySites);
     }).then(function() {
+      console.log('testing-5');
       // Check for presence of new site.
       var newSite = element(by.cssContainingText('.site-name', siteName));
       var newSiteExists = EC.presenceOf(newSite);
