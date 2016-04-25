@@ -54,6 +54,15 @@ function openSidebar() {
   });
 }
 
+function showsProgress() {
+  // Both progress bar and messages shown on at least one site.
+  var progressBar = $('.site-wrapper .progress-bar');
+  var progressBarShown = EC.presenceOf(progressBar);
+  var messages = $('.site-wrapper h3.site-action');
+  var messageShown = EC.presenceOf(messages);
+  return browser.wait(EC.and(progressBarShown, messageShown));
+}
+
 describe('sidebar module tests', function() {
   beforeEach(function() {
     browser.get('/dashboard');
@@ -117,6 +126,9 @@ describe('sidebar module tests', function() {
       // Start creating.
       return browser.wait(protractor.until.elementLocated(
         by.css('.site-wrapper.overlay-active')));
+    }).then(function() {
+      // Make sure progress bar shows up.
+      return showsProgress();
     }).then(function() {
       // Wait until done creating.
       var busySites = $('.site-wrapper.overlay-active');
