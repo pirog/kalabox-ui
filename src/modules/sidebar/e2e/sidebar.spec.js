@@ -54,14 +54,14 @@ function openSidebar() {
   });
 }
 
-function showsProgress() {
+/*function showsProgress() {
   // Both progress bar and messages shown on at least one site.
   var progressBar = $('.site-wrapper .progress-bar');
   var progressBarShown = EC.presenceOf(progressBar);
   var messages = $('.site-wrapper h3.site-action');
   var messageShown = EC.presenceOf(messages);
   return browser.wait(EC.and(progressBarShown, messageShown));
-}
+}*/
 
 /*function findSite(siteName) {
   var newSiteH3 = element(by.cssContainingText('.site-name', siteName));
@@ -136,11 +136,12 @@ describe('sidebar module tests', function() {
       return browser.wait(protractor.until.elementLocated(
         by.css('.site-wrapper.overlay-active')));
     })*/
-    .then(function() {
+    /*.then(function() {
       console.log('testing-3 ' + new Date());
       // Make sure progress bar shows up.
       return showsProgress();
-    }).then(function() {
+    })*/
+    .then(function() {
       console.log('testing-4 ' + new Date());
       // Wait until done creating.
       var busySites = $('.site-wrapper.overlay-active');
