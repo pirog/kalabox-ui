@@ -130,7 +130,7 @@ module.exports = {
   // https://github.com/nadavsinai/node-wekbit-testing/blob/master/protractor.conf.js
   protractor: {
     options: {
-      configFile: 'test/protractor.conf.js',
+      configFile: 'protractor.conf.js',
       args: {
         chromeDriver: 'test/support/chromedriver',
         chromeOnly: true,

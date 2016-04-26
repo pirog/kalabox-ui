@@ -12,19 +12,19 @@ addons:
 before_install:
 - cp ci/travis-ci.sh $HOME/
 - chmod +x $HOME/travis-ci.sh
-- $HOME/travis-ci.sh before-install
+- "$HOME/travis-ci.sh before-install"
 before_script:
-- $HOME/travis-ci.sh before-script
+- "$HOME/travis-ci.sh before-script"
 script:
-- $HOME/travis-ci.sh script
+- "$HOME/travis-ci.sh script"
 after_script:
-- $HOME/travis-ci.sh after-script
+- "$HOME/travis-ci.sh after-script"
 after_success:
-- $HOME/travis-ci.sh after-success
+- "$HOME/travis-ci.sh after-success"
 before_deploy:
-- $HOME/travis-ci.sh before-deploy
+- "$HOME/travis-ci.sh before-deploy"
 after_deploy:
-- $HOME/travis-ci.sh after-deploy
+- "$HOME/travis-ci.sh after-deploy"
 cache:
   directories:
   - node_modules
@@ -41,27 +41,29 @@ notifications:
 env:
   global:
   - CXX=g++-4.8
+  - secure: bkvWAvTyM1Dq2rzPeXHidK9HNhBGpI3O0vO61/kVcDg0qYL5BXqzWb8/2po6jezoS4iM3eO3CXCs2SK/coa21S6wWw7m/03RGyAc6NTq0kCLWNytAlTKD4FEolt6yjRnEizdQ9FcsZKuuo4aIFIS9ZDAMf6DOB94h2jOaYSsENA=
+  - secure: K+Q5Ai/0z0RWFtvFBHMQhgT1oIpL5TGLxqBHU+1AtjTZbWJuzP7l0UIjIBvvSQ/3tRP+Eqlzvkjj0d8Dzbo45x+S77ZICL1Ov0+ElYlWX/xdxzJdzMBZOlCN+PTFr4omHXcjTTBmPkDhMcLAUaZXk99oEmZBBhTsTlEnX2MuwSg=
 deploy:
-  - provider: releases
-    api_key:
-      secure: WN0vN7NmxNkU5dKyfoTT+RnulYaJc0Cta2TuDTztaZo4fGDzbm+3oEbu0wb4+JOZR5mRpP21DKH7wNcwAVJ/IrI/AGQicuGkfx70aUCwtsfVyX/Oj6bDrhJMhZqI9Gwf6UV3/Ec0cnhwu5HoABHCxb/6mMBkzRwt6ztjaRYMat8=
-    file:
-      - prod_build/kalabox-ui-linux64-$TRAVIS_TAG.tar.gz
-      - prod_build/kalabox-ui-osx64-$TRAVIS_TAG.tar.gz
-      - prod_build/kalabox-ui-win64-$TRAVIS_TAG.zip
-    skip_cleanup: true
-    on:
-      repo: kalabox/kalabox-ui
-      tags: true
-  - provider: s3
-    access_key_id: AKIAJB7JYZIZLCZWPTYA
-    secret_access_key:
-      secure: Hu3wtqpUdWdAN7JbU5229XNup23lHk8Iqe2wWlxavcfXz63NmGtSbz5fFOt/rLLy5AUgSCpJNd/2O+kCGvsywS4AeunfmiybQahr6TCtViymNB/Qbv/iK4VLMXPNKLypzkEyaBLoEyqWgOMnAuH4ytXNNolGVDiatJDHQtLaiwo=
-    bucket: gui.kalabox.io
-    local-dir: dev_build
-    acl: public_read
-    region: us-west-2
-    skip_cleanup: true
-    on:
-      repo: kalabox/kalabox-ui
-      branch: v0.12
+- provider: releases
+  api_key:
+    secure: WN0vN7NmxNkU5dKyfoTT+RnulYaJc0Cta2TuDTztaZo4fGDzbm+3oEbu0wb4+JOZR5mRpP21DKH7wNcwAVJ/IrI/AGQicuGkfx70aUCwtsfVyX/Oj6bDrhJMhZqI9Gwf6UV3/Ec0cnhwu5HoABHCxb/6mMBkzRwt6ztjaRYMat8=
+  file:
+  - prod_build/kalabox-ui-linux64-$TRAVIS_TAG.tar.gz
+  - prod_build/kalabox-ui-osx64-$TRAVIS_TAG.tar.gz
+  - prod_build/kalabox-ui-win64-$TRAVIS_TAG.zip
+  skip_cleanup: true
+  on:
+    repo: kalabox/kalabox-ui
+    tags: true
+- provider: s3
+  access_key_id: AKIAJB7JYZIZLCZWPTYA
+  secret_access_key:
+    secure: Hu3wtqpUdWdAN7JbU5229XNup23lHk8Iqe2wWlxavcfXz63NmGtSbz5fFOt/rLLy5AUgSCpJNd/2O+kCGvsywS4AeunfmiybQahr6TCtViymNB/Qbv/iK4VLMXPNKLypzkEyaBLoEyqWgOMnAuH4ytXNNolGVDiatJDHQtLaiwo=
+  bucket: gui.kalabox.io
+  local-dir: dev_build
+  acl: public_read
+  region: us-west-2
+  skip_cleanup: true
+  on:
+    repo: kalabox/kalabox-ui
+    branch: v0.12

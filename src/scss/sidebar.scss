@@ -79,7 +79,9 @@
     margin-bottom: 0px;
     margin-right: 5px;
   }
-
+  form.provider-search .form-group .form-control {
+    background: #1D2E3D;
+  }
   form {
     padding: 15px;
     .form-group {
@@ -89,7 +91,7 @@
       .form-control {
         border: none;
         border-bottom: 1px grey solid;
-        background: #1D2E3D;
+        background: #23374A;
         box-shadow: none;
         border-radius: 0px;
         color: #ccc;
@@ -122,7 +124,7 @@
   }
 }
 
-.authForm {
+.authForm, .app-create-pantheon, .app-create {
   .alert {
     margin: 15px;
     text-align: left;

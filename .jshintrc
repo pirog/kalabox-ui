@@ -32,6 +32,8 @@
     "$": false,
     "expect": false,
     "by": false,
-    "element": false
+    "element": false,
+    "protractor": false,
+    "RC": false
   }
 }
