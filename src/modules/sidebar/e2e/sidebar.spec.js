@@ -129,12 +129,14 @@ describe('sidebar module tests', function() {
     console.log('testing-1 ' + new Date());
     var siteName = 'testd8site';
     var siteEnv = 'dev';
-    createD8Site(siteName, siteEnv).then(function() {
+    createD8Site(siteName, siteEnv)
+    /*.then(function() {
       console.log('testing-2 ' + new Date());
       // Start creating.
       return browser.wait(protractor.until.elementLocated(
         by.css('.site-wrapper.overlay-active')));
-    }).then(function() {
+    })*/
+    .then(function() {
       console.log('testing-3 ' + new Date());
       // Make sure progress bar shows up.
       return showsProgress();
