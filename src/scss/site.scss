@@ -152,47 +152,18 @@
     position: absolute;
     background: aliceblue;
     z-index: 10;
-    opacity: .9;
-  }
-  #loader {
-    position: absolute;
-    left: 50%;
-    top: 40%;
-    margin: -50px -50px;
-    z-index: 15;
+    opacity: .95;
   }
 
-  @-webkit-keyframes loader {
-    100% { transform: rotate(360deg)}
-  }
-
-  #c_shape {
-    -webkit-animation: loader 1.5s linear infinite;
-    transform-origin: 62.1px 60.3px;
-    animation-play-state: running!important;
-  }
-
-  #background {
-     background: linear-gradient(270deg, #4cb8c4, #3cd3ad);
-    background-size: 400% 400%;
-
-    -webkit-animation: AnimationName 1.5s ease infinite;
-  }
-
-  @-webkit-keyframes AnimationName {
-      0%{fill:#4cb8c4}
-      50%{fill:#3cd3ad}
-      100%{fill:#4cb8c4}
-  }
-  h2.site-action {
-    text-transform: uppercase;
+  h3.site-action {
     z-index: 100;
     position: relative;
     text-align: center;
-    top: 80px;
+    top: 40px;
     opacity: 1;
     font-weight: 400;
-    font-size: $font-size-h3;
+    font-size: 1.5em;
+    padding: .5em;
   }
 }
 
@@ -218,4 +189,9 @@
   h3 {
     margin-top: -10px;
   }
+}
+
+.progress-bar {
+  background: linear-gradient(to left, #4CB8C4 , #3CD3AD);
+  height: .5em;
 }

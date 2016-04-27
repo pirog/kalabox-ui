@@ -1,12 +1,12 @@
 'use strict';
 
 var path = require('path');
-var pconfig = require('./pconfig');
-var baseUrl = 'file://'+ path.resolve('../src/index.html') + '#';
+var pconfig = require('./test/pconfig');
+var baseUrl = 'file://'+ path.resolve('build/index.html') + '#';
 
 exports.config = {
 
-  chromeDriver: './support/chromedriver',
+  chromeDriver: './test/support/chromedriver',
   chromeOnly: true,
   capabilities: {
     browserName: 'chrome',
@@ -16,10 +16,14 @@ exports.config = {
   },
 
   specs: [
-    './e2e/**/*.spec.js',
-    '../src/modules/*/e2e/**/*.spec.js'
+    'src/modules/*/e2e/*.spec.js'
   ],
-
+  jasmineNodeOpts: {
+    showColors: true,
+    defaultTimeoutInterval: 1000000,
+    isVerbose: true,
+    includeStackTrace: true,
+  },
   baseUrl: baseUrl,
   rootElement: 'body',
 
