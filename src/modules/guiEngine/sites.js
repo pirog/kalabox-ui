@@ -582,7 +582,7 @@ angular.module('kalabox.sites', [])
                   var container = parts[1];
 
                   // Only events with a container of appserver are interesting.
-                  if (parts.length === 3 && container === 'appserver') {
+                  if (parts.length === 3 && container === 'token') {
                     if (action === 'create') {
                       // App created, so add to list of app states.
                       self.apps[app] = false;
