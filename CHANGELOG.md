@@ -13,4 +13,6 @@ v0.12.15
 
 #### Bug fixes
 
+* Changed GUI to pre-load sites before navigating to the dashboard so sites are available immediately. [#1229](https://github.com/kalabox/kalabox/issues/1229)
+
 * Prevented submission of site create form if no site name is submitted or the site name already exists on Kalabox. [#1258](https://github.com/kalabox/kalabox/issues/1258)
