@@ -13,7 +13,7 @@
           <br>
         </div>
       </div>
-      <div class="service database col-xs-6" ng-if="service.name == 'db'">
+      <div class="service database col-xs-6" ng-if="service.name == 'db' && service.external_connection_info">
         <h2>Database Browsing Connection Info</h2>
         <p>Use to connect with your database via a SQL browser like SequelPro or the command line.</p>
         <label>Command Line</label>
@@ -44,7 +44,7 @@
         <br>
         <input ng-model="service.external_connection_info.database" readonly select-on-click>
       </div>
-      <div class="service database col-xs-6" ng-if="service.name == 'db'">
+      <div class="service database col-xs-6" ng-if="service.name == 'db' && service.internal_connection_info">
         <h2>Database Credentials</h2>
         <p>Use when installing your Drupal, Wordpress, or Backdrop on Kalabox.</p>
         <label>Host</label>
