@@ -212,17 +212,17 @@ angular.module('kalabox.dashboard', [
   });
 
   // Update site states whenever an update event occurs.
-  siteStates.on('update', function(apps) {
+  siteStates().on('update', function(apps) {
     $scope.ui.states = apps;
   });
 
   // Reload sites when a new site is created.
-  siteStates.on('create', function() {
+  siteStates().on('create', function() {
     reloadSites();
   });
 
   // Reload sites when a site is destroyed.
-  siteStates.on('destroy', function() {
+  siteStates().on('destroy', function() {
     reloadSites();
   });
 
