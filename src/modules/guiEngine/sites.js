@@ -35,30 +35,47 @@ angular.module('kalabox.sites', [])
     var self = this;
     // Get app.
     kbox.then(function(kbox) {
-      return kbox.app.get(self.name)
-      .catch(function() {})
-      // If app exists then handle status messages.
+      // Recursive method to get app object.
+      var getApp = function() {
+        // Get app.
+        return kbox.app.get(self.name)
+        // Ignore errors.
+        .catch(function() {})
+        .then(function(app) {
+          if (app) {
+            // Return app.
+            return app;
+          } else {
+            // Take a short delay then try again.
+            return $q.delay(5 * 1000)
+            .then(function() {
+              return getApp();
+            });
+          }
+        });
+      };
+      // Get app object.
+      return getApp()
+      // Subscribe to status message updates.
       .then(function(app) {
-        if (app) {
-          // Create a throttled event emitter.
-          var throttledEvents = new kbox.util.ThrottledEvents({
-            throttle: function(size) {
-              return size < 5 ? 0.5 : size / 2;
-            }
-          });
-          // When a status update happens, update site status and progress.
-          throttledEvents.on('status', function(msg) {
-            // Update status message.
-            self.status = msg;
-            // Increase progress.
-            var step = (1 - self.progress) / 8;
-            self.progress += step;
-          });
-          // Emit a status update to be handled above.
-          app.events.on('status', function(msg) {
-            throttledEvents.emit('status', msg);
-          });
-        }
+        // Create a throttled event emitter.
+        var throttledEvents = new kbox.util.ThrottledEvents({
+          throttle: function(size) {
+            return size < 5 ? 0.5 : size / 2;
+          }
+        });
+        // When a status update happens, update site status and progress.
+        throttledEvents.on('status', function(msg) {
+          // Update status message.
+          self.status = msg;
+          // Increase progress.
+          var step = (1 - self.progress) / 8;
+          self.progress += step;
+        });
+        // Emit a status update to be handled above.
+        app.events.on('status', function(msg) {
+          throttledEvents.emit('status', msg);
+        });
       });
     });
   };
