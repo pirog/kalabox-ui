@@ -20,3 +20,5 @@ v0.12.15
 * Changed error modal angular repeater to track by index due to sometimes duplicate errors being added. [#1291](https://github.com/kalabox/kalabox/issues/1291)
 
 * Fixed bug where apps being created in parallel weren't properly showing status message updates. [#1276](https://github.com/kalabox/kalabox/issues/1276)
+
+* Lazy loading siteStates service to prevent a race condition around starting the engine. [#1314](https://github.com/kalabox/kalabox/issues/1314)
