@@ -160,6 +160,11 @@ Run all the tests via:
 This task should automatically configure your system to run the Protractor
 tests.
 
+If you're testing locally and only want to run one test, you can run Protractor
+directly from inside the /test directory:
+
+`protractor --specs='../src/modules/yourmodule/e2e/yourmodule.spec.js' --grep=“name of your it() statement"`
+
 #### Writing Tests
 
 Tests are included in the "e2e" folders found in each module. For example,
