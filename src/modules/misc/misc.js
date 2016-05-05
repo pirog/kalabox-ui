@@ -27,7 +27,17 @@ angular.module('kalabox.misc', [
     'Slicing, dicing, and making french fries',
     'Improving your child\'s SAT score',
     'Teaching the virtue of patience',
-    'Nurturing your web projects'
+    'Nurturing your web projects',
+    'Fixing the flux capacitor',
+    'Repairing the warp coil',
+    'Wiping the transporter buffer',
+    'Restoring your faith in humanity',
+    'Investing in your future',
+    'Giving hope to a new generation',
+    'Celebrating slack',
+    'Groking in fullness',
+    'Climbing it because it\'s there',
+    'Stacking containers'
   ];
   var rotateMessage = function() {
     setTimeout(function() {

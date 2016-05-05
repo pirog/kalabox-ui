@@ -1,73 +1,41 @@
-body.installer, body.initialize, body.dashboard-shutdown {
+body.initialize, body.dashboard-shutdown {
   overflow: hidden;
   margin: 0;
   padding: 0;
   text-align: center;
-  background:$dark-bg;
-}
-
-body.installer {
-  -webkit-animation: bgChange 300s linear infinite;
-   -moz-animation: bgChange 300s linear infinite;
-     -o-animation: bgChange 300s linear infinite;
-        animation: bgChange 300s linear infinite;
-  h1 {
-    -webkit-animation: headerChange 300s linear infinite;
-     -moz-animation: headerChange 300s linear infinite;
-       -o-animation: headerChange 300s linear infinite;
-          animation: headerChange 300s linear infinite;
-  }
-
-  h2 {
-    -webkit-animation: subHeaderChange 300s linear infinite;
-     -moz-animation: subHeaderChange 300s linear infinite;
-       -o-animation: subHeaderChange 300s linear infinite;
-          animation: subHeaderChange 300s linear infinite;
-  }
 }
 
 body.initialize {
-  -webkit-animation: bgChange 60s linear infinite;
-   -moz-animation: bgChange 60s linear infinite;
-     -o-animation: bgChange 60s linear infinite;
-        animation: bgChange 60s linear infinite;
+  background: $body-bg;
+  -webkit-animation: bgChange 80s;
+          animation: bgChange 80s;
   h1 {
-    -webkit-animation: headerChange 60s linear infinite;
-     -moz-animation: headerChange 60s linear infinite;
-       -o-animation: headerChange 60s linear infinite;
-          animation: headerChange 60s linear infinite;
+    -webkit-animation: headerChange 80s;
+            animation: headerChange 80s;
   }
 
   h2 {
-    -webkit-animation: subHeaderChange 60s linear infinite;
-     -moz-animation: subHeaderChange 60s linear infinite;
-       -o-animation: subHeaderChange 60s linear infinite;
-          animation: subHeaderChange 60s linear infinite;
+    -webkit-animation: subHeaderChange 80s;
+            animation: subHeaderChange 80s;
   }
 }
 
 body.dashboard-shutdown {
-  background: $body-bg;
-  -webkit-animation: bgChangeInverted 60s linear infinite;
-   -moz-animation: bgChangeInverted 60s linear infinite;
-     -o-animation: bgChangeInverted 60s linear infinite;
-        animation: bgChangeInverted 60s linear infinite;
+  background: $dark-bg;
+  -webkit-animation: bgChangeInverted 60s;
+          animation: bgChangeInverted 60s;
   h1 {
-    -webkit-animation: headerChangeInverted 60s linear infinite;
-     -moz-animation: headerChangeInverted 60s linear infinite;
-       -o-animation: headerChangeInverted 60s linear infinite;
-          animation: headerChangeInverted 60s linear infinite;
+    -webkit-animation: headerChangeInverted 60s;
+            animation: headerChangeInverted 60s;
   }
   h2 {
-    -webkit-animation: subHeaderChangeInverted 60s linear infinite;
-     -moz-animation: subHeaderChangeInverted 60s linear infinite;
-       -o-animation: subHeaderChangeInverted 60s linear infinite;
-          animation: subHeaderChangeInverted 60s linear infinite;
+    -webkit-animation: subHeaderChangeInverted 60s;
+            animation: subHeaderChangeInverted 60s;
   }
 
 }
 
-.initialize, .install, .shutdown {
+.initialize, .shutdown {
   text-align: center;
   margin: 80px 0px;
 
@@ -190,32 +158,26 @@ body.dashboard-shutdown {
 @mixin bgChange-keyframes($name, $startColor, $middleColor, $endColor) {
   @keyframes #{$name} {
     0% {background-color:$startColor;}
-    50% {background-color:$endColor;}
-    100% {background-color:$startColor;}
+    100% {background-color:$endColor;}
   }
 
   @-webkit-keyframes #{$name} {
     0% {background-color:$startColor;}
-    25% {background-color:$middleColor;}
-    50% {background-color:$endColor;}
-    75% {background-color:$middleColor;}
-    100% {background-color:$startColor;}
+    50% {background-color:$middleColor;}
+    100% {background-color:$endColor;}
   }
 }
 
 @mixin colorChange-keyframes($name, $startColor, $middleColor, $endColor) {
   @keyframes #{$name} {
     0% {color:$startColor;}
-    50% {color:$endColor;}
-    100% {color:$startColor;}
+    100% {color:$endColor;}
   }
 
   @-webkit-keyframes #{$name} {
     0% {color:$startColor;}
-    25% {color:$middleColor;}
-    50% {color:$endColor;}
-    75% {color:$middleColor;}
-    100% {color:$startColor;}
+    50% {color:$middleColor;}
+    100% {color:$endColor;}
   }
 }
 
