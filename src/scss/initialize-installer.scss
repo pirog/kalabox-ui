@@ -3,10 +3,10 @@ body.initialize, body.dashboard-shutdown {
   margin: 0;
   padding: 0;
   text-align: center;
-  background:$dark-bg;
 }
 
 body.initialize {
+  background: $body-bg;
   -webkit-animation: bgChange 80s;
           animation: bgChange 80s;
   h1 {
@@ -21,7 +21,7 @@ body.initialize {
 }
 
 body.dashboard-shutdown {
-  background: $body-bg;
+  background: $dark-bg;
   -webkit-animation: bgChangeInverted 60s;
           animation: bgChangeInverted 60s;
   h1 {
