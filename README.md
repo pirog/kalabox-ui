@@ -10,7 +10,7 @@ Go to http://kalabox.io/download
 
 ## More info
 
-Check out the [Kalabox wiki](https://github.com/kalabox/kalabox/wiki) for more info on various things.
+Check out the [Kalabox wiki](http://support.kalabox.io/solution/categories) for more info on various things.
 
 ## Other Resources
 
