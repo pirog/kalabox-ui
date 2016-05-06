@@ -1,13 +1,12 @@
 # Kalabox UI
 
 This is the UI component to the Kalabox. By itself it doesn't do much of
-anything. The easiest way to get it right now is to request an access code at
-http://kalabox.io. That said we will soon be releasing manual install scripts.
-So check back in a bit!
+anything. The easiest way to get it right now is to download the full installer
+for Kalabox at http://kalabox.io/download.
 
 ## Installation
 
-Go to kalabox.io and request an access code!
+Go to http://kalabox.io/download
 
 ## More info
 
