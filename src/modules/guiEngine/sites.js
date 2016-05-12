@@ -362,7 +362,7 @@ angular.module('kalabox.sites', [])
   Site.add = function(opts) {
     // Add job to queue.
     return guiEngine.queue.add('Adding site: ' + opts.site,
-      opts.site,
+      {name: opts.name},
       function() {
       return kbox.then(function(kbox) {
         // Get config.
