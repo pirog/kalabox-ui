@@ -247,15 +247,6 @@ function removeSite(siteName) {
   });
 }
 
-function showsProgress() {
-  // Both progress bar and messages shown on at least one site.
-  var progressBar = $('.site-wrapper .progress-bar');
-  var progressBarShown = EC.presenceOf(progressBar);
-  var messages = $('.site-wrapper h3.site-action');
-  var messageShown = EC.presenceOf(messages);
-  return browser.wait(EC.and(progressBarShown, messageShown));
-}
-
 describe('sidebar module tests', function() {
 
   beforeAll(function(done) {
@@ -409,30 +400,6 @@ describe('sidebar module tests', function() {
     });
   });
 
-  it('can pull down a Pantheon D8 site', function() {
-    var siteName = 'testd8site';
-    var siteEnv = 'dev';
-    return createD8Site(siteName, siteEnv)
-    .then(function() {
-      // Start creating.
-      return browser.wait(protractor.until.elementLocated(
-        by.css('.site-wrapper.overlay-active')));
-    })
-    .then(function() {
-      // Make sure progress bar shows up.
-      return showsProgress();
-    })
-    .then(function() {
-      return waitOnSiteAction(siteName);
-    })
-    .then(function() {
-      // Check for presence of new site.
-      var newSite = element(by.cssContainingText('.site-name', siteName));
-      var newSiteExists = EC.presenceOf(newSite);
-      return expect(newSiteExists);
-    });
-  });
-
   it('throws an error when trying to use duplicate app name', function() {
     var siteName = 'testpantheonsite';
     var siteEnv = 'dev';
@@ -462,7 +429,7 @@ describe('sidebar module tests', function() {
   }, 30 * 1000);
 
   it('app has connection info', function() {
-    var siteName = 'testd8site';
+    var siteName = 'unicornsite1';
 
     // Open connection modal.
     var newSite = findSite(siteName);
