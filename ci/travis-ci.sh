@@ -49,7 +49,12 @@ before-install() {
 # Before tests run
 #
 before-script() {
-  echo
+
+  # Install kalabox
+  sudo apt-get -y update
+  sudo apt-get -y install iptables cgroup-bin bridge-utils curl git
+  curl -fsSL -o /tmp/kalabox.deb "http://installer.kalabox.io/kalabox-latest.deb"
+  sudo dpkg -i /tmp/kalabox.deb
 }
 
 # script
