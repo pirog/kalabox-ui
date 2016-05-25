@@ -5,7 +5,7 @@ var username = process.env.PANTHEON_USER;
 var password = process.env.PANTHEON_PASSWORD;
 
 function closeSidebar() {
-  var sidebar = $('#addSite');
+  var sidebar = element.all(by.css('#addSite')).first();
   return sidebar.isDisplayed().then(function(sidebarIsDisplayed) {
     if (sidebarIsDisplayed) {
       var closeSidebarX = $('.fa-times');
@@ -26,7 +26,7 @@ function openSidebar() {
     return browser.sleep(1 * 1000);
   })
   .then(function() {
-    var sidebar = $('#addSite');
+    var sidebar = element.all(by.css('#addSite')).first();
     return sidebar.isDisplayed().then(function(sidebarIsDisplayed) {
       if (!sidebarIsDisplayed) {
         var addSite = $('div.site.add a');
@@ -82,14 +82,14 @@ function getToUserPantheonSites() {
       });
     }).then(function() {
       // Wait for sites to load.
-      var sitesLoaded = EC.presenceOf($('ul.provider-sites .new-site'));
+      var sitesLoaded = EC.presenceOf($('ul.provider-sites'));
       return browser.wait(sitesLoaded);
     });
   }
 
   return openSidebar()
   .then(function() {
-    var newSiteList = $('ul.provider-sites .new-site');
+    var newSiteList = $("ul.provider-sites");
     return newSiteList.isPresent().then(function(isPresent) {
       if (!isPresent) {
         return doit();
@@ -120,27 +120,11 @@ function createPantheonSiteForm(opts) {
   });
 }
 
-function createPantheonDrupal8Form() {
-  return getToUserPantheonSites().then(function() {
-    return browser.sleep(1 * 1000)
-    .then(function() {
-      var site = element(by.cssContainingText('.new-site', 'kalabox-drupal8'));
-      return site.click();
-    });
-  })
-  .then(function() {
-    // Wait for the form.
-    var siteAddFormPresent = EC.presenceOf($('div.app-create-pantheon'));
-    return browser.wait(siteAddFormPresent);
-  });
-}
-
 function createD8Site(siteName, siteEnv) {
   var opts = {
     pantheonSiteName: 'kalabox-drupal8'
   };
   return createPantheonSiteForm(opts)
-  //return createPantheonDrupal8Form()
   .then(function() {
     // Insert sitename
     var sitenameInput = $('#appName');
@@ -327,7 +311,10 @@ describe('sidebar module tests', function() {
 
   it('dont allow a blank Pantheon sitename', function() {
     // Click on the kalabox-drupal8.
-    return createPantheonDrupal8Form()
+    var opts = {
+      pantheonSiteName: 'kalabox-drupal8'
+    };
+    return createPantheonSiteForm(opts)
     .then(function() {
       return browser.sleep(2 * 1000);
     })
