@@ -89,7 +89,7 @@ function getToUserPantheonSites() {
 
   return openSidebar()
   .then(function() {
-    var newSiteList = $("ul.provider-sites");
+    var newSiteList = $('ul.provider-sites');
     return newSiteList.isPresent().then(function(isPresent) {
       if (!isPresent) {
         return doit();
@@ -117,26 +117,6 @@ function createPantheonSiteForm(opts) {
     // Wait for the form.
     var siteAddFormPresent = EC.presenceOf($('div.app-create-pantheon'));
     return browser.wait(siteAddFormPresent);
-  });
-}
-
-function createD8Site(siteName, siteEnv) {
-  var opts = {
-    pantheonSiteName: 'kalabox-drupal8'
-  };
-  return createPantheonSiteForm(opts)
-  .then(function() {
-    // Insert sitename
-    var sitenameInput = $('#appName');
-    sitenameInput.clear().then(function() {
-      sitenameInput.sendKeys(siteName);
-    });
-
-    // Insert environment
-    element(by.cssContainingText('#appEnv option', siteEnv)).click();
-
-    // Try submitting the form.
-    return element(by.buttonText('Submit')).click();
   });
 }
 
