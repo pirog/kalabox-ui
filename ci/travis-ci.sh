@@ -49,7 +49,12 @@ before-install() {
 # Before tests run
 #
 before-script() {
-  echo
+
+  # Install kalabox
+  sudo apt-get -y update
+  sudo apt-get -y install iptables cgroup-bin bridge-utils curl git
+  curl -fsSL -o /tmp/kalabox.deb "http://installer.kalabox.io/kalabox-latest.deb"
+  sudo dpkg -i /tmp/kalabox.deb
 }
 
 # script
@@ -60,9 +65,12 @@ script() {
   # Basic Grunt testing
   run_command grunt test
 
+  # Install dependencies
+  npm install
+
   # Run protractor tests
   # Disabling protractor tests for now until they work on travis.
-  #DISPLAY=:99.0 grunt e2e --verbose
+  DISPLAY=:99.0 grunt e2e --verbose
 }
 
 # after-script

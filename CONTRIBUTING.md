@@ -161,9 +161,9 @@ This task should automatically configure your system to run the Protractor
 tests.
 
 If you're testing locally and only want to run one test, you can run Protractor
-directly from inside the /test directory:
+directly from the root of the kalabox-ui project:
 
-`protractor --specs='../src/modules/yourmodule/e2e/yourmodule.spec.js' --grep=“name of your it() statement"`
+`protractor --specs='src/modules/yourmodule/e2e/yourmodule.spec.js' --grep="name of your it() statement"`
 
 #### Writing Tests
 

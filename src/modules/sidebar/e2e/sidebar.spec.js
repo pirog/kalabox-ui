@@ -3,175 +3,166 @@
 var EC = protractor.ExpectedConditions;
 var username = process.env.PANTHEON_USER;
 var password = process.env.PANTHEON_PASSWORD;
-
-function getToUserPantheonSites() {
-   // Click on PANTHEON_USER's account.
-  var account = element(by.cssContainingText('.provider-name', username));
-  var accountClickable = EC.elementToBeClickable(account);
-  return browser.wait(accountClickable).then(function() {
-    return account.click();
-  }).then(function() {
-    // Wait for sites to load.
-    var sitesLoaded = EC.presenceOf($('ul.provider-sites .new-site'));
-    return browser.wait(sitesLoaded);
-  });
-}
-
-function createPantheonDrupal8Form() {
-  return getToUserPantheonSites().then(function() {
-    var site = element(by.cssContainingText('.new-site', 'kalabox-drupal8'));
-    return site.click();
-  })
-  .then(function() {
-    // Wait for the form.
-    var siteAddFormPresent = EC.presenceOf($('div.app-create-pantheon'));
-    return browser.wait(siteAddFormPresent);
-  });
-}
-
-function createD8Site(siteName, siteEnv) {
-  return createPantheonDrupal8Form().then(function() {
-    // Insert sitename
-    var sitenameInput = $('#appName');
-    sitenameInput.clear().then(function() {
-      sitenameInput.sendKeys(siteName);
-    });
-
-    // Insert environment
-    element(by.cssContainingText('#appEnv option', siteEnv)).click();
-
-    // Try submitting the form.
-    return element(by.buttonText('Submit')).click();
-  });
-}
-
-function openSidebar() {
-  var addSite = $('div.site.add a');
-  var isClickable = EC.elementToBeClickable(addSite);
-  return browser.wait(isClickable).then(function() {
-    browser.sleep(5000);
-    addSite.click();
-  });
-}
-
-function showsProgress() {
-  // Both progress bar and messages shown on at least one site.
-  var progressBar = $('.site-wrapper .progress-bar');
-  var progressBarShown = EC.presenceOf(progressBar);
-  var messages = $('.site-wrapper h3.site-action');
-  var messageShown = EC.presenceOf(messages);
-  return browser.wait(EC.and(progressBarShown, messageShown));
-}
-
-function findSite(siteName) {
-  var newSiteH3 = element(by.cssContainingText('.site-name', siteName));
-  return newSiteH3.element(by.xpath('..'));
-}
+var util = require('./sidebar.util.js');
 
 describe('sidebar module tests', function() {
-  beforeEach(function() {
-    browser.get('/dashboard');
-    openSidebar();
+
+  beforeAll(function(done) {
+    return browser.sleep(15 * 1000)
+    .then(function() {
+      return browser.get('/initialize');
+    })
+    .then(function() {
+      var addSite = $('div.site.add a');
+      return browser.wait(EC.presenceOf(addSite));
+    })
+    .then(function() {
+      done();
+    });
+  });
+
+  beforeEach(function(done) {
+    return browser.sleep(1 * 1000)
+    .then(function() {
+      return util.closeSidebar();
+    })
+    .then(function() {
+      return browser.sleep(1 * 1000);
+    })
+    .then(done);
   });
 
   it('allow Pantheon sign-in', function() {
     var addPantheon = $('ul.providers-next a', 'Pantheon');
     var addPantheonClickable = EC.elementToBeClickable(addPantheon);
-    browser.wait(addPantheonClickable).then(function() {
+    return util.openSidebar()
+    .then(function() {
+      return browser.wait(addPantheonClickable);
+    })
+    .then(function() {
       return addPantheon.click();
-    }).then(function() {
+    })
+    .then(function() {
       var authPage = $('div.pantheon-authorization');
       var authPageLoaded = EC.presenceOf(authPage);
       return browser.wait(authPageLoaded);
-    }).then(function() {
+    })
+    .then(function() {
       return expect($('h4').getText()).toBe('AUTHENTICATE WITH PANTHEON');
-    }).then(function() {
+    })
+    .then(function() {
       $('input#authEmail').sendKeys(username);
       // Need to figure out secret key sending.
       $('input#authPassword').sendKeys(password);
       return $('button.btn-primary').click();
-    }).then(function() {
+    })
+    .then(function() {
       var loaderPresent = EC.presenceOf($('div.loader'));
       return browser.wait(loaderPresent);
-    }).then(function() {
+    })
+    .then(function() {
       return expect($('.loader h4').getText())
       .toBe('AUTHENTICATING');
-    }).then(function() {
+    })
+    .then(function() {
       var backToSidebar = EC.presenceOf($('h4.add-account'));
       return browser.wait(backToSidebar);
     });
-  });
+  }, 30 * 1000);
 
   it('show sites associated with PANTHEON_USER', function() {
-    getToUserPantheonSites().then(function() {
-      // @todo: May want to verify specific sites show up.
-      return element.all(by.css('ul.provider-sites .new-site'))
-      .getText().then(function(providerSites) {
-        return expect(providerSites.length).toBeGreaterThan(3);
+    return util.getToUserPantheonSites().then(function() {
+      return browser.sleep(2 * 1000)
+      .then(function() {
+        // @todo: May want to verify specific sites show up.
+        return element.all(by.css('ul.provider-sites .new-site'))
+        .getText().then(function(providerSites) {
+          return expect(providerSites.length).toBeGreaterThan(3);
+        });
       });
     });
-  });
+  }, 30 * 1000);
 
-  it('don\t allow a blank Pantheon sitename', function() {
+  it('dont allow a blank Pantheon sitename', function() {
     // Click on the kalabox-drupal8.
-    createPantheonDrupal8Form().then(function() {
+    var opts = {
+      pantheonSiteName: 'kalabox-drupal8'
+    };
+    return util.createPantheonSiteForm(opts)
+    .then(function() {
+      return browser.sleep(2 * 1000);
+    })
+    .then(function() {
       // Try submitting the form blank.
+      // Get site name input.
       var sitenameInput = $('#appName');
-      sitenameInput.sendKeys('');
+      // Clear the site name input.
+      sitenameInput.clear();
+      // Make sure site name input is set to empty string.
+      expect(sitenameInput.getAttribute('value')).toEqual('');
+      // Set env to dev.
+      element(by.cssContainingText('#appEnv option', 'dev')).click();
+      // Make sure env is set to dev.
+      expect($('#appEnv').getAttribute('value')).toEqual('dev');
       // Make sure submit is not clickable
       var submit = element(by.buttonText('Submit'));
       return expect(EC.not(EC.elementToBeClickable(submit)));
     });
+  }, 30 * 1000);
+
+  it('can pull down a pantheon site', function() {
+    var opts = {
+      siteName: 'testpantheonsite',
+      siteEnv: 'dev',
+      pantheonSiteName: 'kalabox-drupal8'
+    };
+    return util.createPantheonSiteWait(opts);
   });
 
-  it('can pull down a Pantheon D8 site', function() {
-    var siteName = 'testd8site';
-    var siteEnv = 'dev';
-    createD8Site(siteName, siteEnv).then(function() {
-      // Start creating.
-      return browser.wait(protractor.until.elementLocated(
-        by.css('.site-wrapper.overlay-active')));
-    }).then(function() {
-      // Make sure progress bar shows up.
-      return showsProgress();
-    }).then(function() {
-      // Wait until done creating.
-      var busySites = $('.site-wrapper.overlay-active');
-      var noBusySites = EC.not(EC.presenceOf(busySites));
-      return browser.wait(noBusySites);
-    }).then(function() {
-      // Check for presence of new site.
-      var newSite = element(by.cssContainingText('.site-name', siteName));
-      var newSiteExists = EC.presenceOf(newSite);
-      return expect(newSiteExists);
+  it('can remove a site', function() {
+    var siteName = 'testpantheonsite';
+    return util.removeSite(siteName)
+    .then(function() {
+      return util.waitOnSiteAction(siteName);
+    })
+    .then(function() {
+      var site = util.findSite(siteName);
+      expect(site.isPresent()).toEqual(false);
     });
   });
 
-  it('throw error on trying to use a taken app name', function() {
-    var siteName = 'testd8site';
-    var siteEnv = 'dev';
-
-      // Try pulling same site with same name.
-    createD8Site(siteName, siteEnv).then(function() {
-      // Should receive a validation error.
-      var errorPresent = EC.presenceOf($('.app-create-pantheon .alert-error'));
-      return browser.wait(errorPresent);
+  it('can pull down sites in parallel', function() {
+    var sites = [
+      {
+        siteName: 'unicornsite1',
+        siteEnv: 'dev',
+        pantheonSiteName: 'kalabox-drupal8'
+      },
+      {
+        siteName: 'unicornsite2',
+        siteEnv: 'dev',
+        pantheonSiteName: 'kalabox-drupal8'
+      }
+    ];
+    return util.createPantheonSite(sites[0])
+    .then(function() {
+      return browser.sleep(2 * 1000);
+    })
+    .then(function() {
+      return util.createPantheonSite(sites[1]);
+    })
+    .then(function() {
+      return util.waitOnSiteAction(sites[0].siteName);
+    })
+    .then(function() {
+      return util.waitOnSiteAction(sites[1].siteName);
+    })
+    .then(function() {
+      return util.ensureSiteExists(sites[0].siteName);
+    })
+    .then(function() {
+      return util.ensureSiteExists(sites[1].siteName);
     });
   });
 
-  it('app has connection info', function() {
-    var siteName = 'cvtenrollee';
-
-    // Open connection modal.
-    var newSite = findSite(siteName);
-    newSite.element(by.css('.site-actions-dropdown')).click().then(function() {
-      return newSite.element(by.css('.site-connection')).click();
-    }).then(function() {
-      var databaseFields = element.all(by.css('.service.database input'));
-      return databaseFields.getText();
-    }).then(function(databaseText) {
-      console.log(databaseText);
-      expect(databaseText.count()).toEqual(11);
-    });
-  });
 });

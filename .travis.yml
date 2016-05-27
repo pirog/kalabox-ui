@@ -1,5 +1,5 @@
 language: node_js
-sudo: false
+sudo: required
 node_js:
 - '4.2'
 addons:
@@ -41,8 +41,8 @@ notifications:
 env:
   global:
   - CXX=g++-4.8
-  - secure: bkvWAvTyM1Dq2rzPeXHidK9HNhBGpI3O0vO61/kVcDg0qYL5BXqzWb8/2po6jezoS4iM3eO3CXCs2SK/coa21S6wWw7m/03RGyAc6NTq0kCLWNytAlTKD4FEolt6yjRnEizdQ9FcsZKuuo4aIFIS9ZDAMf6DOB94h2jOaYSsENA=
-  - secure: K+Q5Ai/0z0RWFtvFBHMQhgT1oIpL5TGLxqBHU+1AtjTZbWJuzP7l0UIjIBvvSQ/3tRP+Eqlzvkjj0d8Dzbo45x+S77ZICL1Ov0+ElYlWX/xdxzJdzMBZOlCN+PTFr4omHXcjTTBmPkDhMcLAUaZXk99oEmZBBhTsTlEnX2MuwSg=
+  - secure: XFRqHdx/NSdUtvJ/DC6MknLoH/CcO9ElpeeGEYM32rtIX+M3LW86PGkQZWRi1fwtouYntXZwhuxnyc1jr8kxPT/7odvM3pa2E6mQOhvQSJac/DFaDrFEv1yzfU9S/G0+kGMy9ni/19n+Zgd8wjqwpNMMQAGs1vhISbCj/LUHXH0=
+  - secure: PTmPM5vO1RS7ql4EVts2ojSv9XdNrwTkjh2GgCYxK5LoD2sOB0RACKr/NAewiTzWwd/1rd/fgx8NNbXjMoHGXA2ZDlYRzVrsoN7NxpfVJA/lRrLdG1UGOJa/izXdOEdZlOuqGoLIoM7J0+fmUS/Sm7uBSsjv2FkJEBO7wVGj2mc=
 deploy:
 - provider: releases
   api_key:
