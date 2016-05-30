@@ -36,19 +36,16 @@ angular.module('kalabox.dashboard')
 
 .controller(
   'SiteConnectModal',
-  function($scope, $uibModalInstance, _, modalData, guiEngine) {
+  function($scope, $uibModalInstance, _, modalData) {
 
-    guiEngine.try(function() {
-      $scope.services = modalData.services;
-      $scope.site = modalData.site;
-      $scope.ok = function() {
-        $uibModalInstance.close();
-      };
-      $scope.cancel = function() {
-        $uibModalInstance.close();
-      };
-    });
-
+    $scope.services = modalData.services;
+    $scope.site = modalData.site;
+    $scope.ok = function() {
+      $uibModalInstance.close();
+    };
+    $scope.cancel = function() {
+      $uibModalInstance.close();
+    };
   }
 )
 

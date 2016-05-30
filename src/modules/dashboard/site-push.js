@@ -24,22 +24,19 @@ angular.module('kalabox.dashboard')
   'SitePushModal',
   function($scope, $uibModalInstance, _, modalData, guiEngine) {
 
-    guiEngine.try(function() {
-      $scope.errorMessage = false;
-      $scope.ok = function(message, database, files) {
-        guiEngine.try(function() {
-          $uibModalInstance.close();
-          var site = modalData.site;
-          return site.push({
-            message: message || 'No commit message was given',
-            database: database,
-            files: files
-          });
-        });
-      };
-      $scope.cancel = function() {
+    $scope.ok = function(message, database, files) {
+      guiEngine.try(function() {
         $uibModalInstance.close();
-      };
-    });
+        var site = modalData.site;
+        return site.push({
+          message: message || 'No commit message was given',
+          database: database,
+          files: files
+        });
+      });
+    };
+    $scope.cancel = function() {
+      $uibModalInstance.close();
+    };
   }
 );

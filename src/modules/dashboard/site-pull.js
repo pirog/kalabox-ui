@@ -32,25 +32,22 @@ angular.module('kalabox.dashboard')
   'SitePullModal',
   function($scope, $uibModalInstance, _, modalData, guiEngine) {
 
-    guiEngine.try(function() {
-      $scope.site = modalData.site;
-      $scope.environments = modalData.environments;
-      $scope.errorMessage = false;
-      $scope.ok = function(database, createBackup, files) {
-        guiEngine.try(function() {
-          $uibModalInstance.close();
-          var site = modalData.site;
-          return site.pull({
-            createBackup: createBackup,
-            database: database,
-            files: files
-          });
-        });
-      };
-      $scope.cancel = function() {
+    $scope.site = modalData.site;
+    $scope.environments = modalData.environments;
+    $scope.errorMessage = false;
+    $scope.ok = function(database, createBackup, files) {
+      guiEngine.try(function() {
         $uibModalInstance.close();
-      };
-    });
-
+        var site = modalData.site;
+        return site.pull({
+          createBackup: createBackup,
+          database: database,
+          files: files
+        });
+      });
+    };
+    $scope.cancel = function() {
+      $uibModalInstance.close();
+    };
   }
 );
