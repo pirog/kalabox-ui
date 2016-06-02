@@ -40,7 +40,7 @@ angular.module('kalabox.misc', [
     'Stacking containers'
   ];
   var rotateMessage = $interval(function() {
-    $scope.evalAsync(function($scope) {
+    $scope.$evalAsync(function($scope) {
       $scope.ui.randomMessage = randomMessages[
         Math.floor(Math.random() * randomMessages.length)
       ];
@@ -60,6 +60,4 @@ angular.module('kalabox.misc', [
     randomMessage: 'Let\'s get this party started'
   };
 
-  // Start message rotating.
-  rotateMessage();
 });

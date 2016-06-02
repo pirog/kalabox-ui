@@ -177,9 +177,11 @@ angular.module('kalabox.dashboard', [
 
   var siteUpdate = $interval(function() {
     // Update site properties once a second.
-    var sites = $scope.ui.sites;
-    _.each(sites, function(site) {
-      site.update();
+    $scope.$evalAsync(function($scope) {
+      var sites = $scope.ui.sites;
+      _.each(sites, function(site) {
+        site.update();
+      });
     });
   }, 1000);
 
