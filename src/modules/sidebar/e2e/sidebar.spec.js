@@ -165,4 +165,34 @@ describe('sidebar module tests', function() {
     });
   });
 
+  it('throw error on trying to use a taken app name', function() {
+    var site = {
+      siteName: 'unicornsite1',
+      siteEnv: 'dev',
+      pantheonSiteName: 'kalabox-drupal8'
+    };
+
+      // Try pulling same site with same name.
+    util.createPantheonSite(site).then(function() {
+      // Should receive a validation error.
+      var errorPresent = EC.presenceOf($('.app-create-pantheon .alert-danger'));
+      return browser.wait(errorPresent);
+    });
+  });
+
+  it('app has connection info', function() {
+    var siteName = 'unicornsite1';
+
+    // Open connection modal.
+    var newSite = util.findSite(siteName);
+    newSite.element(by.css('.site-actions-dropdown')).click().then(function() {
+      return newSite.element(by.css('.site-connection')).click();
+    }).then(function() {
+      var databaseFields = element.all(by.css('.service.database input'));
+      return databaseFields.getText();
+    }).then(function(databaseText) {
+      console.log(databaseText);
+      expect(databaseText.count()).toEqual(11);
+    });
+  });
 });

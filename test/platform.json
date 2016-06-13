@@ -5,9 +5,9 @@
     "win64"
   ],
   "chromedriverDownload": [
-    "http://dl.nwjs.io/v0.12.3/chromedriver-nw-v0.12.3-osx-x64.zip",
-    "http://dl.nwjs.io/v0.12.3/chromedriver-nw-v0.12.3-linux-x64.tar.gz",
-    "http://dl.nwjs.io/v0.12.3/chromedriver-nw-v0.12.3-win-x64.zip"
+    "http://dl.nwjs.io/v0.14.5/nwjs-sdk-v0.14.5-osx-x64.zip",
+    "http://dl.nwjs.io/v0.14.5/nwjs-sdk-v0.14.5-linux-x64.tar.gz",
+    "http://dl.nwjs.io/v0.14.5/nwjs-sdk-v0.14.5-win-x64.zip"
   ],
   "devBinary": [
     "node_modules/.bin/nw",
