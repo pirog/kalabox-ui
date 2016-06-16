@@ -141,7 +141,8 @@ module.exports = {
             binary: pconfig.devBinary
           }
         },
-        baseUrl: 'file://' + path.resolve('build/index.html') + '#',
+        baseUrl: 'chrome-extension://noakblofbajciaghholgljpkieiennnn/' +
+        'index.html',
         rootElement: 'body'
       }
     },

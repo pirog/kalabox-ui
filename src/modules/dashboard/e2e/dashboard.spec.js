@@ -2,17 +2,16 @@
 
 describe('dashboard module tests', function() {
   beforeEach(function() {
-    browser.get('/dashboard');
+    browser.get(browser.baseUrl + '#/dashboard');
   });
   afterEach(function() {
   });
   it('should have an add site button', function() {
-    browser.get('/dashboard');
+    browser.get(browser.baseUrl + '#/dashboard');
     var message = $('div.site.add h3');
     expect(message.getText()).toBe('Add new site');
   });
   it('should link to the sidebar from add site button', function() {
-    browser.get('/dashboard');
     var addSite = $('div.site.add a');
     addSite.click().then(function() {
       var provider = $('h4');

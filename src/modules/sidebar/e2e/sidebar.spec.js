@@ -10,7 +10,7 @@ describe('sidebar module tests', function() {
   beforeAll(function(done) {
     return browser.sleep(15 * 1000)
     .then(function() {
-      return browser.get('/initialize');
+      return browser.get(browser.baseUrl + '#/initialize');
     })
     .then(function() {
       var addSite = $('div.site.add a');

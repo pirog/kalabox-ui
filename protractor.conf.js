@@ -2,7 +2,7 @@
 
 var path = require('path');
 var pconfig = require('./test/pconfig');
-var baseUrl = 'file://'+ path.resolve('build/index.html') + '#';
+var baseUrl = 'chrome-extension://noakblofbajciaghholgljpkieiennnn/index.html';
 
 exports.config = {
 
@@ -29,8 +29,8 @@ exports.config = {
   rootElement: 'body',
 
   onPrepare: function() {
-    browser.resetUrl = 'file://';
-    browser.driver.get('file://');
+    browser.resetUrl = 'chrome-extension://noakblofbajciaghholgljpkieiennnn/index.html';
+    browser.driver.get('chrome-extension://noakblofbajciaghholgljpkieiennnn/index.html');
   }
 
 };
