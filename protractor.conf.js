@@ -11,6 +11,7 @@ exports.config = {
   capabilities: {
     browserName: 'chrome',
     chromeOptions: {
+      args: ['nwapp=build'],
       binary: pconfig.devBinary
     }
   },
