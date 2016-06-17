@@ -8,8 +8,7 @@ var util = require('./sidebar.util.js');
 describe('sidebar module tests', function() {
 
   beforeAll(function(done) {
-    browser.ignoreSynchronization = true;
-    return browser.sleep(20 * 1000)
+    return browser.sleep(15 * 1000)
     .then(function() {
       return browser.get(browser.baseUrl + '#/initialize');
     })
@@ -69,7 +68,7 @@ describe('sidebar module tests', function() {
       var backToSidebar = EC.presenceOf($('h4.add-account'));
       return browser.wait(backToSidebar);
     });
-  }, 30 * 1000);
+  });
 
   it('show sites associated with PANTHEON_USER', function() {
     return util.getToUserPantheonSites().then(function() {
@@ -82,7 +81,7 @@ describe('sidebar module tests', function() {
         });
       });
     });
-  }, 30 * 1000);
+  });
 
   it('dont allow a blank Pantheon sitename', function() {
     // Click on the kalabox-drupal8.
@@ -109,7 +108,7 @@ describe('sidebar module tests', function() {
       var submit = element(by.buttonText('Submit'));
       return expect(EC.not(EC.elementToBeClickable(submit)));
     });
-  }, 30 * 1000);
+  });
 
   it('can pull down a pantheon site', function() {
     var opts = {
