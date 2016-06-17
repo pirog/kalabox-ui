@@ -175,13 +175,15 @@ angular.module('kalabox.dashboard', [
     });
   });
 
-  // Update site properties once a second.
-  guiEngine.loop.add({interval: 1 * 1000}, function() {
-    var sites = $scope.ui.sites;
-    _.each(sites, function(site) {
-      site.update();
+  var siteUpdate = $interval(function() {
+    // Update site properties once a second.
+    $scope.$evalAsync(function($scope) {
+      var sites = $scope.ui.sites;
+      _.each(sites, function(site) {
+        site.update();
+      });
     });
-  });
+  }, 1000);
 
   // Helper function for reloading list of sites.
   function reloadSites() {
@@ -227,27 +229,36 @@ angular.module('kalabox.dashboard', [
   });
 
   // Poll list of errors.
-  guiEngine.loop.add({interval: 0.25 * 100}, function() {
+  var errorPoll = $interval(function() {
     $scope.ui.errors = guiEngine.errors.list();
-  });
+  }, 250);
 
   // Open error modal.
-  guiEngine.loop.add({interval: 0.3 * 1000}, function() {
+  $scope.$watch('ui.errors', function(errors) {
     // If we have new errors and modal isn't already open.
-    if ($scope.ui.errors.length > $scope.errorCount && !$scope.isModalOpen) {
+    if (errors && errors.length > $scope.errorCount && !$scope.isModalOpen) {
       // Open modal.
       $scope.isModalOpen = true;
       $scope.open(
         'modules/dashboard/error-modal.html.tmpl',
         'ErrorModal',
-        {errors: $scope.ui.errors, parentScope: $scope}
+        {errors: errors, parentScope: $scope}
       ).result.then(function() {
         // After modal is closed, set the error count.
         $scope.isModalOpen = false;
-        $scope.errorCount = $scope.ui.errors.length;
+        $scope.errorCount = errors.length;
       });
     }
   });
+
+  // Destroy error and site update intervals.
+  $scope.$on(
+    '$destroy',
+    function() {
+      $interval.cancel(errorPoll);
+      $interval.cancel(siteUpdate);
+    }
+  );
 
 })
 .controller(

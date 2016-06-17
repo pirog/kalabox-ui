@@ -8,9 +8,10 @@ var util = require('./sidebar.util.js');
 describe('sidebar module tests', function() {
 
   beforeAll(function(done) {
+    browser.ignoreSynchronization = true;
     return browser.sleep(15 * 1000)
     .then(function() {
-      return browser.get('/initialize');
+      return browser.get(browser.baseUrl + '#/initialize');
     })
     .then(function() {
       var addSite = $('div.site.add a');
@@ -68,11 +69,11 @@ describe('sidebar module tests', function() {
       var backToSidebar = EC.presenceOf($('h4.add-account'));
       return browser.wait(backToSidebar);
     });
-  }, 30 * 1000);
+  });
 
   it('show sites associated with PANTHEON_USER', function() {
     return util.getToUserPantheonSites().then(function() {
-      return browser.sleep(2 * 1000)
+      return browser.sleep(5 * 1000)
       .then(function() {
         // @todo: May want to verify specific sites show up.
         return element.all(by.css('ul.provider-sites .new-site'))
@@ -81,7 +82,7 @@ describe('sidebar module tests', function() {
         });
       });
     });
-  }, 30 * 1000);
+  });
 
   it('dont allow a blank Pantheon sitename', function() {
     // Click on the kalabox-drupal8.
@@ -108,7 +109,7 @@ describe('sidebar module tests', function() {
       var submit = element(by.buttonText('Submit'));
       return expect(EC.not(EC.elementToBeClickable(submit)));
     });
-  }, 30 * 1000);
+  });
 
   it('can pull down a pantheon site', function() {
     var opts = {
@@ -165,4 +166,41 @@ describe('sidebar module tests', function() {
     });
   });
 
+  it('throw error on trying to use a taken app name', function() {
+    var site = {
+      siteName: 'unicornsite1',
+      siteEnv: 'dev',
+      pantheonSiteName: 'kalabox-drupal8'
+    };
+
+      // Try pulling same site with same name.
+    util.createPantheonSite(site).then(function() {
+      // Should receive a validation error.
+      var errorPresent = EC.presenceOf($('.app-create-pantheon .alert-danger'));
+      return browser.wait(errorPresent);
+    });
+  });
+
+  it('app has connection info', function() {
+    var siteName = 'unicornsite1';
+
+    // Open connection modal.
+    return util.getSite(siteName)
+    .then(function(site) {
+      return site.element(by.css('.site-actions-dropdown')).click()
+      .then(function() {
+        return browser.sleep(20 * 1000);
+      })
+      .then(function() {
+        return site.element(by.css('a.site-connection')).click();
+      })
+      .then(function() {
+        return browser.sleep(5 * 1000);
+      })
+      .then(function() {
+        var databaseFields = element.all(by.css('.service.database input'));
+        expect(databaseFields.count()).toBeGreaterThan(0);
+      });
+    });
+  });
 });

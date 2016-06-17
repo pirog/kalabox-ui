@@ -5,7 +5,7 @@ angular.module('kalabox.misc', [
   'kalabox.nodewrappers'
 ])
 .controller('RandomMessageCtrl',
-  function($scope) {
+  function($scope, $interval) {
   var randomMessages = [
     'Reticulating splines',
     'Realizing the power of now',
@@ -39,21 +39,25 @@ angular.module('kalabox.misc', [
     'Climbing it because it\'s there',
     'Stacking containers'
   ];
-  var rotateMessage = function() {
-    setTimeout(function() {
+  var rotateMessage = $interval(function() {
+    $scope.$evalAsync(function($scope) {
       $scope.ui.randomMessage = randomMessages[
         Math.floor(Math.random() * randomMessages.length)
       ];
-      $scope.$digest();
-      rotateMessage();
-    }, 3000);
-  };
+    });
+  }, 3000);
+
+  // Destroy rotateMessage.
+  $scope.$on(
+    '$destroy',
+    function() {
+      $interval.cancel(rotateMessage);
+    }
+  );
 
   // Best practices is to manage our data in a scope object
   $scope.ui = {
     randomMessage: 'Let\'s get this party started'
   };
 
-  // Start message rotating.
-  rotateMessage();
 });

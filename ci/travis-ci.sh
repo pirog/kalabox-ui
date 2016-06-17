@@ -70,7 +70,7 @@ script() {
 
   # Run protractor tests
   # Disabling protractor tests for now until they work on travis.
-  DISPLAY=:99.0 grunt e2e --verbose
+  # DISPLAY=:99.0 grunt e2e --verbose
 }
 
 # after-script

@@ -11,6 +11,12 @@ angular.module('kalabox', [
   'ui.bootstrap',
   'mwl.bluebird'
 ])
+.config(['$compileProvider',
+  function($compileProvider) {
+    $compileProvider.imgSrcSanitizationWhitelist(/^\s*((https?|ftp|file|blob|chrome-extension|blob:chrome-extension):|data:image\/)/);
+    $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file:chrome-extension|blob:chrome-extension):/);
+  }
+])
 .controller('AppController',
   function($scope, $window) {
   var vm = this;

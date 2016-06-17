@@ -93,9 +93,10 @@ angular.module('kalabox.sites', [])
    */
   Site.prototype.updateScreenshotUrl = function() {
     var timestamp = new Date().getTime();
-    this.image = this.opts.folder ?
+    var imagePath = this.opts.folder ?
       path.join(this.opts.folder, 'screenshot.png') + '?' + timestamp :
       this.opts.image;
+    this.image = 'file://' + imagePath;
   };
 
   /*

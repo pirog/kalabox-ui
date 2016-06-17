@@ -90,27 +90,17 @@ var nwBuilder = function(grunt) {
     builder[platform] = {
       options: {
         // DO NOT CHANGE THE VERSION BELOW!!!
-        version: '0.12.3',
-        platforms: [platform],
-        buildDir: 'nw',
-        macIcns: './build/images/kalabox.icns',
-        zip: false
+        version: '0.14.6-sdk',
+        platforms: platform,
+        outputDir: 'nw',
+        macIcns: './build/images/kalabox.icns'
         // @todo: Breaks mac build, see kalabox/kalabox#929
         //winIco: './build/images/kalabox.ico'
       },
       src: [
-        './build/*',
-        './build/assets/**/*',
-        './build/deps/iso/*',
-        './build/deps/' + platform + '/*',
-        './build/deps/images/*',
-        './build/images/**/*',
-        './build/node_modules/**/*',
-        './build/src/**/*',
-        './build/fonts/*'
+        './build/'
       ]
     };
-
   });
 
   // And finally return the nwjs-builder commands.

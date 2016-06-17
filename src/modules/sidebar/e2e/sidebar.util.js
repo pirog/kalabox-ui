@@ -223,5 +223,6 @@ module.exports = {
   createPantheonSite: createPantheonSite,
   ensureSiteExists: ensureSiteExists,
   createPantheonSiteWait: createPantheonSiteWait,
-  removeSite: removeSite
+  removeSite: removeSite,
+  getSite: getSite
 };

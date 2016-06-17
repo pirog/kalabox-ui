@@ -1,3 +1,11 @@
+v0.12.17
+========
+
+### Bug fixes
+
+* Performance issue with nwjs helper process. [#1368](https://github.com/kalabox/kalabox/issues/1368)
+* Upgrade to NWJS 0.14.6. [#1399](https://github.com/kalabox/kalabox/issues/1399)
+
 v0.12.16
 ========
 

@@ -2,18 +2,19 @@
 
 var path = require('path');
 var pconfig = require('./test/pconfig');
-var baseUrl = 'file://'+ path.resolve('build/index.html') + '#';
+var baseUrl = 'chrome-extension://noakblofbajciaghholgljpkieiennnn/index.html';
 
 exports.config = {
-
   chromeDriver: './test/support/chromedriver',
   chromeOnly: true,
   capabilities: {
     browserName: 'chrome',
     chromeOptions: {
+      args: ['nwapp=build'],
       binary: pconfig.devBinary
     }
   },
+  framework: 'jasmine',
 
   specs: [
     'src/modules/*/e2e/*.spec.js'
@@ -28,8 +29,8 @@ exports.config = {
   rootElement: 'body',
 
   onPrepare: function() {
-    browser.resetUrl = 'file://';
-    browser.driver.get('file://');
+    browser.resetUrl = 'chrome-extension://noakblofbajciaghholgljpkieiennnn/index.html';
+    browser.driver.get('chrome-extension://noakblofbajciaghholgljpkieiennnn/index.html');
   }
 
 };
