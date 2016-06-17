@@ -8,7 +8,8 @@ var util = require('./sidebar.util.js');
 describe('sidebar module tests', function() {
 
   beforeAll(function(done) {
-    return browser.sleep(15 * 1000)
+    browser.ignoreSynchronization = true;
+    return browser.sleep(20 * 1000)
     .then(function() {
       return browser.get(browser.baseUrl + '#/initialize');
     })

@@ -16,7 +16,7 @@ before_install:
 before_script:
 - "$HOME/travis-ci.sh before-script"
 script:
-- "$HOME/travis-ci.sh script"
+- "travis_wait $HOME/travis-ci.sh script"
 after_script:
 - "$HOME/travis-ci.sh after-script"
 after_success:

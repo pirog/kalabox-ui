@@ -141,6 +141,13 @@ module.exports = {
             binary: pconfig.devBinary
           }
         },
+        jasmineNodeOpts: {
+          showColors: true,
+          defaultTimeoutInterval: 3000000,
+          isVerbose: true,
+          includeStackTrace: true,
+        },
+        framework: 'jasmine',
         baseUrl: 'chrome-extension://noakblofbajciaghholgljpkieiennnn/' +
         'index.html',
         rootElement: 'body'

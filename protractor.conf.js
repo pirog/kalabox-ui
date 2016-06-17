@@ -5,7 +5,6 @@ var pconfig = require('./test/pconfig');
 var baseUrl = 'chrome-extension://noakblofbajciaghholgljpkieiennnn/index.html';
 
 exports.config = {
-
   chromeDriver: './test/support/chromedriver',
   chromeOnly: true,
   capabilities: {
@@ -15,6 +14,7 @@ exports.config = {
       binary: pconfig.devBinary
     }
   },
+  framework: 'jasmine',
 
   specs: [
     'src/modules/*/e2e/*.spec.js'
