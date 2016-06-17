@@ -8,6 +8,7 @@ var util = require('./sidebar.util.js');
 describe('sidebar module tests', function() {
 
   beforeAll(function(done) {
+    browser.ignoreSynchronization = true;
     return browser.sleep(15 * 1000)
     .then(function() {
       return browser.get(browser.baseUrl + '#/initialize');
@@ -72,7 +73,7 @@ describe('sidebar module tests', function() {
 
   it('show sites associated with PANTHEON_USER', function() {
     return util.getToUserPantheonSites().then(function() {
-      return browser.sleep(2 * 1000)
+      return browser.sleep(5 * 1000)
       .then(function() {
         // @todo: May want to verify specific sites show up.
         return element.all(by.css('ul.provider-sites .new-site'))
@@ -184,15 +185,22 @@ describe('sidebar module tests', function() {
     var siteName = 'unicornsite1';
 
     // Open connection modal.
-    var newSite = util.findSite(siteName);
-    newSite.element(by.css('.site-actions-dropdown')).click().then(function() {
-      return newSite.element(by.css('.site-connection')).click();
-    }).then(function() {
-      var databaseFields = element.all(by.css('.service.database input'));
-      return databaseFields.getText();
-    }).then(function(databaseText) {
-      console.log(databaseText);
-      expect(databaseText.count()).toEqual(11);
+    return util.getSite(siteName)
+    .then(function(site) {
+      return site.element(by.css('.site-actions-dropdown')).click()
+      .then(function() {
+        return browser.sleep(20 * 1000);
+      })
+      .then(function() {
+        return site.element(by.css('a.site-connection')).click();
+      })
+      .then(function() {
+        return browser.sleep(5 * 1000);
+      })
+      .then(function() {
+        var databaseFields = element.all(by.css('.service.database input'));
+        expect(databaseFields.count()).toBeGreaterThan(0);
+      });
     });
   });
 });
